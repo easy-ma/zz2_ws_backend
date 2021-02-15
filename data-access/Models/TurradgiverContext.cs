@@ -15,6 +15,7 @@ namespace DAL.Models
         }
 
         public virtual DbSet<Test> Tests { get; set; }
+        public virtual DbSet<User> Users { get; set; }
        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

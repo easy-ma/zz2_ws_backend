@@ -1,5 +1,6 @@
 using DAL;
 using DAL.Models;
+using DAL.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,7 @@ namespace turradgiver_api
             services.AddSwaggerGen();
             services.AddDbContext<TurradgiverContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Turradgiver")));
             services.AddScoped<IRepository, TurradgiverRepository>();
+            services.AddScoped<IGenericRepository<User>, UserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,7 +38,7 @@ namespace turradgiver_api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
 
