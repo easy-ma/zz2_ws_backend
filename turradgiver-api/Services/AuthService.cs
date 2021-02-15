@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using DAL.Models;
 using DAL.Repositories;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using turradgiver_api.Utils;
@@ -46,27 +46,52 @@ namespace turradgiver_api.Services
 
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             return tokenHandler.WriteToken(tokenHandler.CreateToken(token));
+            
         }
-
+       
 
         private byte[] HashPassword (string password) {
             return SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(password));
             
         }
 
-        public byte[] Register(User user, string password){
-            // if (_userRepository.GetUserByEmail(user.Email) != null){
-            //     return new BadRequest("User already exists");
-            // }
+          private Boolean CheckPassword (string password, byte[] userHashPassword) {
+            string hashPassword = Encoding.UTF8.GetString(HashPassword(password));
+            string userPassword = Encoding.UTF8.GetString(userHashPassword);
+
+            return hashPassword.CompareTo(userPassword)==0;
+        }
+
+        public async Task<Response<string>> Register(User user, string password){
+           Response<string> res = new Response<string>();
+
+            User checkUser =_userRepository.GetByCondition((u=> u.Email.CompareTo(user.Email)== 0)).FirstOrDefault();
+            if (checkUser != null){
+                res.Success=false;
+                res.Message="User already exists";
+                return res;
+            }
+            user.Password = HashPassword(password);
             
-            return HashPassword(password);
+            _userRepository.Create(user);
+            res.Data= CreateJsonWebToken(user);
+            return res;
         }
 
 
          public async Task<Response<string>>  Login(string email, string password){
             Response<string> res = new Response<string>();
-            // _userRepository.Get
+            User user =_userRepository.GetByCondition((u=> u.Email.CompareTo(email)== 0)).FirstOrDefault();
             
+            if(user == null) {
+                res.Success=false;
+                res.Message= "User not found";
+            } else if (CheckPassword(password,user.Password)) {
+                res.Success=false;
+                res.Message= "Invalid Password";
+            } else {
+                res.Data = CreateJsonWebToken(user);
+            }
             return res;
         }
   }

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using turradgiver_api.Dtos.UserSignInDto;
 using turradgiver_api.Services;
+using System.Threading.Tasks;
+using turradgiver_api.Utils;
 
 namespace turradgiver_api.Controllers
 {
@@ -36,18 +38,14 @@ namespace turradgiver_api.Controllers
         }
 
         [HttpPost("sign-up")]
-        public IActionResult SignUp(UserSignUpDto userSignUpDto)
+        public async Task<IActionResult> SignUp(UserSignUpDto userSignUpDto)
         {
-            if (userSignUpDto is null)
-            {
-                BadRequest();
-            }
-
-        //    _authService.
             _logger.LogInformation("UserSignUpDto",userSignUpDto);
-            return Ok(_authService.Register(new User(userSignUpDto.Username, userSignUpDto.Email), userSignUpDto.Password));
-            
-            // return this._repo.GetTestByID("12345");
+            Response<string> res = await _authService.Register(new User(userSignUpDto.Username, userSignUpDto.Email), userSignUpDto.Password);
+            if (! res.Success){
+                return BadRequest(res.Message);
+            }
+            return Ok(res);
         }
 
         [HttpPost("sign-in")]

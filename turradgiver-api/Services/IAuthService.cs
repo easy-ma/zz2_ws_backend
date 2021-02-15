@@ -7,7 +7,7 @@ namespace turradgiver_api.Services
 {
     public interface IAuthService
     {
-        byte[] Register(User user, string password);
+        Task<Response<string>> Register(User user, string password);
         Task<Response<string>> Login(string email, string password);
 
         

@@ -59,3 +59,6 @@ Example with user:
 //       return _context.Users.FirstOrDefault(u => u.Email.CompareTo(email)==0);
 //     }
 ```
+
+
+> error: Le package Microsoft.AspNetCore.Authentication.JwtBearer 5.0.2 n'est pas compatible avec netcoreapp3.1 (.NETCoreApp,Version=v3.1). Le package Microsoft.AspNetCore.Authentication.JwtBearer 5.0.2 prend en charge : net5.0 (.NETCoreApp,Version=v5.0)
