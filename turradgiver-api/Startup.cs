@@ -26,7 +26,6 @@ namespace turradgiver_api
             services.AddControllers();
             services.AddSwaggerGen();
             services.AddDbContext<TurradgiverContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Turradgiver")));
-            services.AddScoped<IRepository, TurradgiverRepository>();
             services.AddScoped<IGenericRepository<User>, UserRepository>();
         }
 
