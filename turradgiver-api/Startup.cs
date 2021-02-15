@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using turradgiver_api.Services;
 
 namespace turradgiver_api
 {
@@ -26,7 +27,10 @@ namespace turradgiver_api
             services.AddControllers();
             services.AddSwaggerGen();
             services.AddDbContext<TurradgiverContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Turradgiver")));
-            services.AddScoped<IGenericRepository<User>, UserRepository>();
+            services.AddScoped(typeof(IRepository< >), typeof(Repository< >));
+            services.AddScoped<IAuthService, AuthService>();
+            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

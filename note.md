@@ -50,3 +50,12 @@ Example with user:
         '-(          ).-'
             '-.( ).-'
 ```
+
+
+
+```
+ public User GetUserByEmail(string email)
+//     {
+//       return _context.Users.FirstOrDefault(u => u.Email.CompareTo(email)==0);
+//     }
+```
