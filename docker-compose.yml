@@ -1,0 +1,15 @@
+version: "3.6"
+
+services:
+  turradgiverapi:
+    build:
+      context: .
+      dockerfile: turradgiver-api/Dockerfile
+      target: dev
+    container_name: turrad
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    volumes:
+      - "./turradgiver-api/:/src/turradgiver-api"
+      - "./data-access/:/src/data-access"
