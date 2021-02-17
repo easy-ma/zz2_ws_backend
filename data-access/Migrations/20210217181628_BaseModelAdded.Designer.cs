@@ -2,15 +2,17 @@
 using DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace data_access.Migrations
 {
     [DbContext(typeof(TurradgiverContext))]
-    partial class TurradgiverContextModelSnapshot : ModelSnapshot
+    [Migration("20210217181628_BaseModelAdded")]
+    partial class BaseModelAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
