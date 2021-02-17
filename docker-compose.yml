@@ -4,7 +4,7 @@ services:
   turradgiverapi:
     build:
       context: .
-      dockerfile: turradgiver-api/Dockerfile
+      dockerfile: turradgiver-api/Dockerfile.Net5
       target: dev
     container_name: turrad
     ports:
