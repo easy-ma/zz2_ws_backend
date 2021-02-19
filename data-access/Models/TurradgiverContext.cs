@@ -13,6 +13,8 @@ namespace DAL.Models
             : base(options)
         {
         }
+
+         public virtual DbSet<User> Users { get; set; }
        
         public virtual DbSet<User> Users { get; set; }
 
@@ -24,7 +26,7 @@ namespace DAL.Models
                 optionsBuilder.UseNpgsql("Server = tai.db.elephantsql.com; Port = 5432; Database = qrmsywrc; User Id = qrmsywrc; Password = 6bJzafq21RcePD2Md6WG-pcfiDqF8dzV");
             }
         }
-        
+
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
