@@ -7,6 +7,7 @@ using turradgiver_api.Dtos.UserSignInDto;
 using turradgiver_api.Services;
 using System.Threading.Tasks;
 using turradgiver_api.Utils;
+using Microsoft.AspNetCore.Authorization;
 
 namespace turradgiver_api.Controllers
 {
@@ -28,6 +29,7 @@ namespace turradgiver_api.Controllers
             _userRepo=userRepo;
         }
 
+        [Authorize]
         [HttpGet("getAll")]
         public IActionResult GetAll()
         {

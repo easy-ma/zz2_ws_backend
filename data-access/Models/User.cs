@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAL.Models
 {
-  [Table("users")]
+  [Table("Users")]
     public class User :BaseModel
     {
         public User(string username, string email) 
