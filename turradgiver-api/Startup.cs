@@ -68,6 +68,7 @@ namespace turradgiver_api
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:JWTKey").Value)),
+                        // Could be good to add the ValidateIssuer and Validate Audience once we know the url
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };

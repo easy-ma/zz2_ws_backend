@@ -44,7 +44,7 @@ namespace turradgiver_api.Controllers
             _logger.LogInformation("UserSignUpDto",userSignUpDto);
             Response<string> res = await _authService.Register(new User(userSignUpDto.Username, userSignUpDto.Email), userSignUpDto.Password);
             if (! res.Success){
-                return BadRequest(res.Message);
+                return Unauthorized(res.Message);
             }
             return Ok(res);
         }
