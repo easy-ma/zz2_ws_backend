@@ -26,19 +26,18 @@ namespace turradgiver_api
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            // services.AddSwaggerGen();
             services.AddSwaggerGen(c => {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Turradgiver API", Version = "v1",Description="APi about turradgiver wich is a TripAdvisor lite" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Turradgiver API", Version = "v1",Description="APi about turradgiver" });
                  c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
-                    In = ParameterLocation.Header, 
                     Description = "Please insert JWT with Bearer into field",
-                    Name = "Bearer",
+                    Name = "Authorization",  
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
                     BearerFormat = "JWT",
-                    Type = SecuritySchemeType.ApiKey 
+                    In = ParameterLocation.Header, 
                 });
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement {
                 { 
@@ -59,16 +58,21 @@ namespace turradgiver_api
             services.AddScoped(typeof(IRepository< >), typeof(Repository< >));
             services.AddScoped<IAuthService, AuthService>();
 
-             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:JWTKey").Value)),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
+            services.AddAuthentication(options=> {
+                // options.AuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme =  JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;  
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;  
+                }).AddJwtBearer(options => {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:JWTKey").Value)),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                }
+            );
 
         }
 
@@ -84,6 +88,9 @@ namespace turradgiver_api
 
             // app.UseHttpsRedirection();
             app.UseRouting();
+
+            // Weird behavior happend if UseAuthorization is placed after UseAuthentification
+            // Thing is that every end point with bearer auth will get a 401 instead of a valid authentfication
             app.UseAuthorization();
             app.UseAuthentication();
 

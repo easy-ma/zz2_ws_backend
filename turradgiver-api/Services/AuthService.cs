@@ -86,7 +86,7 @@ namespace turradgiver_api.Services
             if(user == null) {
                 res.Success=false;
                 res.Message= "User not found";
-            } else if (CheckPassword(password,user.Password)) {
+            } else if (!CheckPassword(password,user.Password)) {
                 res.Success=false;
                 res.Message= "Invalid Password";
             } else {

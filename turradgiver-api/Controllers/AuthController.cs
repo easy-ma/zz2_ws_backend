@@ -8,6 +8,7 @@ using turradgiver_api.Services;
 using System.Threading.Tasks;
 using turradgiver_api.Utils;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace turradgiver_api.Controllers
 {
@@ -33,11 +34,12 @@ namespace turradgiver_api.Controllers
         [HttpGet("getAll")]
         public IActionResult GetAll()
         {
+            // _logger.LogInformation("Object",o);
             return Ok(_userRepo.GetAll());
         }
 
         [HttpPost("sign-up")]
-        public async Task<IActionResult> SignUp(UserSignUpDto userSignUpDto)
+        public async Task<IActionResult> SignUp([FromBody] UserSignUpDto userSignUpDto)
         {
             _logger.LogInformation("UserSignUpDto",userSignUpDto);
             Response<string> res = await _authService.Register(new User(userSignUpDto.Username, userSignUpDto.Email), userSignUpDto.Password);
@@ -48,15 +50,18 @@ namespace turradgiver_api.Controllers
         }
 
         [HttpPost("sign-in")]
-        public IActionResult SignIn(UserSignInDto userSignInDto)
+        public async Task<IActionResult> SignIn([FromBody] UserSignInDto userSignInDto)
         {
             if (userSignInDto is null)
             {
                 BadRequest();
             }
-
-         _logger.LogInformation("Get user");
-            return Ok("ok");
+            Response<string> res = await _authService.Login(userSignInDto.Email,userSignInDto.Password);
+             if (! res.Success){
+                return BadRequest(res.Message);
+            }
+            return Ok(res);
+            
             
         }
 
