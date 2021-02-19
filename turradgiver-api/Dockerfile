@@ -9,6 +9,9 @@ COPY ["data-access/data-access.csproj", "data-access/"]
 # Commented because of the volume mount
 # COPY . .
 
+RUN dotnet tool install --global dotnet-ef
+RUN export PATH="$PATH:/root/.dotnet/tools"
+
 RUN dotnet restore "turradgiver-api/turradgiver-api.csproj"
 WORKDIR "/src/turradgiver-api"
 

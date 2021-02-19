@@ -7,7 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-// using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.IdentityModel.Tokens;
+using System.Text;
 using turradgiver_api.Services;
 
 namespace turradgiver_api
@@ -30,16 +32,16 @@ namespace turradgiver_api
             services.AddScoped(typeof(IRepository< >), typeof(Repository< >));
             services.AddScoped<IAuthService, AuthService>();
 
-            //  services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-            // {
-            //     options.TokenValidationParameters = new TokenValidationParameters
-            //     {
-            //         ValidateIssuerSigningKey = true,
-            //         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
-            //         ValidateIssuer = false,
-            //         ValidateAudience = false
-            //     };
-            // });
+             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    // ValidateIssuerSigningKey = true,
+                    // IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+                    // ValidateIssuer = false,
+                    // ValidateAudience = false
+                };
+            });
 
         }
 

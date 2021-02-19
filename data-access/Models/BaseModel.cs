@@ -15,7 +15,5 @@ namespace DAL.Models
 
         [Column("createdDate")]
         public DateTime CreatedDate {get; set;}
-
-        
     }
 }

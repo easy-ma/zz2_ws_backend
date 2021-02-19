@@ -14,11 +14,14 @@ namespace DAL.Models
         {
         }
        
+        public virtual DbSet<User> Users { get; set; }
+
+       
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql("Server = kandula.db.elephantsql.com; Port = 5432; Database = vktoegob; User Id = vktoegob; Password = sCropnv82b1-7h4jNW3WC96AZNI9ub3d");
+                optionsBuilder.UseNpgsql("Server = tai.db.elephantsql.com; Port = 5432; Database = qrmsywrc; User Id = qrmsywrc; Password = 6bJzafq21RcePD2Md6WG-pcfiDqF8dzV");
             }
         }
         
