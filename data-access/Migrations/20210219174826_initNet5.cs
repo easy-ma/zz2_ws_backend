@@ -4,11 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace data_access.Migrations
 {
-<<<<<<< HEAD:data-access/Migrations/20210219133332_init.cs
-    public partial class init : Migration
-=======
     public partial class initNet5 : Migration
->>>>>>> migration-net5:data-access/Migrations/20210219174826_initNet5.cs
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

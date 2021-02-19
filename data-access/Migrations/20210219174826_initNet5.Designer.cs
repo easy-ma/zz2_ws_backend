@@ -10,25 +10,16 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace data_access.Migrations
 {
     [DbContext(typeof(TurradgiverContext))]
-<<<<<<< HEAD:data-access/Migrations/20210219133332_init.Designer.cs
-    [Migration("20210219133332_init")]
-    partial class init
-=======
     [Migration("20210219174826_initNet5")]
     partial class initNet5
->>>>>>> migration-net5:data-access/Migrations/20210219174826_initNet5.Designer.cs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-<<<<<<< HEAD:data-access/Migrations/20210219133332_init.Designer.cs
-                .HasAnnotation("ProductVersion", "5.0.2");
-=======
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
->>>>>>> migration-net5:data-access/Migrations/20210219174826_initNet5.Designer.cs
 
             modelBuilder.Entity("DAL.Models.User", b =>
                 {

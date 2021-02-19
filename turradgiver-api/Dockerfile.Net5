@@ -12,7 +12,6 @@ COPY ["data-access/data-access.csproj", "data-access/"]
 RUN dotnet restore "turradgiver-api/turradgiver-api.csproj"
 WORKDIR "/src/turradgiver-api"
 
-
 RUN dotnet tool install --global dotnet-ef
 RUN export PATH="$PATH:/root/.dotnet/tools"
 

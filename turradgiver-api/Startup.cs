@@ -92,8 +92,8 @@ namespace turradgiver_api
 
             // Weird behavior happend if UseAuthorization is placed after UseAuthentification
             // Thing is that every end point with bearer auth will get a 401 instead of a valid authentfication
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
