@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Models
 {
@@ -17,26 +14,15 @@ namespace DAL.Models
         {
         }
 
-        public virtual DbSet<Test> Tests { get; set; }
+        public virtual DbSet<User> Users { get; set; }
        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql("Server = kandula.db.elephantsql.com; Port = 5432; Database = vktoegob; User Id = vktoegob; Password = sCropnv82b1-7h4jNW3WC96AZNI9ub3d");
+                optionsBuilder.UseNpgsql("Server = tai.db.elephantsql.com; Port = 5432; Database = qrmsywrc; User Id = qrmsywrc; Password = 6bJzafq21RcePD2Md6WG-pcfiDqF8dzV");
             }
         }
-
-        /*protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            Debug.WriteLine("coucou");
-
-            modelBuilder.Entity<Tests>(entity =>
-            {
-                entity.Property(e => e.Id).HasColumnName("id");
-            });
-
-        }*/
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
