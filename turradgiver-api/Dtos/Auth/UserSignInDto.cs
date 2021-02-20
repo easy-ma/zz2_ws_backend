@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace turradgiver_api.Dtos.UserSignInDto
+namespace turradgiver_api.Dtos.Auth
 {
     public class UserSignInDto
     {
