@@ -19,7 +19,7 @@ namespace data_access.Migrations
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-            modelBuilder.Entity("DAL.Models.Adds", b =>
+            modelBuilder.Entity("DAL.Models.Add", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

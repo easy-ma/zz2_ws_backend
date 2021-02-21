@@ -17,9 +17,9 @@ namespace turradgiver_api.Controllers
     public class HomeController : ControllerBase
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IRepository<Adds> _addsRepo;
+        private readonly IRepository<Add> _addsRepo;
         private readonly IAddsService _addsService;
-        public HomeController(ILogger<HomeController> logger, IRepository<Adds> addsRepo, IAddsService addsService)
+        public HomeController(ILogger<HomeController> logger, IRepository<Add> addsRepo, IAddsService addsService)
         {
             _logger = logger;
             _addsRepo = addsRepo;
@@ -40,7 +40,8 @@ namespace turradgiver_api.Controllers
             // if (! res.Success){
             //     return Unauthorized(res.Message);
             // }
-            return Ok(await _addsService.Create(new Adds(addsDto.name, addsDto.description, addsDto.price)));
+            
+            return Ok(await _addsService.Create(new Add(addsDto.name, addsDto.description, addsDto.price)));
         }
 
 

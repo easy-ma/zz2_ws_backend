@@ -11,8 +11,8 @@ namespace turradgiver_api.Services
     public interface IAddsService
     {
         // Task<Response<AddsDto>> Filter(string text);
-        Task<IQueryable<Adds>> Filter(string text);
-        Task<Response<Adds>> Create(Adds adds);
+        Task<IQueryable<Add>> Filter(string text);
+        Task<Response<Add>> Create(Add adds);
     }
 
 }

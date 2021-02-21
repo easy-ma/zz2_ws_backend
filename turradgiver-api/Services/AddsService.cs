@@ -17,23 +17,23 @@ namespace turradgiver_api.Services
     /// </summary>
     public class AddsService : IAddsService
     {
-        private readonly IRepository<Adds> _addsRepository;
+        private readonly IRepository<Add> _addsRepository;
         
-        public AddsService(IRepository<Adds> addsRepository)
+        public AddsService(IRepository<Add> addsRepository)
         {
             _addsRepository = addsRepository;
         }
 
-        public async Task<Response<Adds>> Create(Adds add){
+        public async Task<Response<Add>> Create(Add add){
 
-           Response<Adds> res = new Response<Adds>();
+           Response<Add> res = new Response<Add>();
            
             res.Data = add;
             _addsRepository.Create(add);
             return res;
         }        
         
-        public async Task<IQueryable<Adds>> Filter( string text){
+        public async Task<IQueryable<Add>> Filter( string text){
              // if (add.Name.CompareTo("") == 0){
             //     res.Success = false;
             //     return res;
