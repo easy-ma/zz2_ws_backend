@@ -55,8 +55,11 @@ namespace turradgiver_api
 
             });
             services.AddDbContext<TurradgiverContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Turradgiver")));
+
             services.AddScoped(typeof(IRepository< >), typeof(Repository< >));
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IAddsService, AddsService>();
+
 
             services.AddAuthentication(options=> {
                 // options.AuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

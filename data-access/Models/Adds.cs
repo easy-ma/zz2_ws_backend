@@ -6,10 +6,13 @@ namespace DAL.Models
   [Table("Adds")]
     public class Adds :BaseModel
     {
-        public Adds(string name, string description) 
+        public Adds(){}
+        public Adds(string name, string description, float price) 
         {
             Name = name;
             Description = description;
+            Rate = 0;
+            Price = price;
         }
 
         [Column("name")]
@@ -19,6 +22,12 @@ namespace DAL.Models
         public string Description { get; set; }
 
         [Column("rate")]
-        public int Rate { get; set; }
+        public float Rate { get; set; }
+
+        [Column("price")]
+        public float Price {get;set;}
+        
     }
+
+    
 }

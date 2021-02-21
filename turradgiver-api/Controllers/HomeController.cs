@@ -18,36 +18,52 @@ namespace turradgiver_api.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IRepository<Adds> _addsRepo;
-        private readonly IHomeService _homeService;
-        public HomeController(ILogger<HomeController> logger, IRepository<Adds> addsRepo, IHomeService homeService)
+        private readonly IAddsService _addsService;
+        public HomeController(ILogger<HomeController> logger, IRepository<Adds> addsRepo, IAddsService addsService)
         {
             _logger = logger;
             _addsRepo = addsRepo;
-            _homeService = homeService;
+            _addsService = addsService;
         }
 
-        [Authorize]
         [HttpGet("get-all")]
         public IActionResult GetAll()
         {
             // _logger.LogInformation("Object",o);
             return Ok(_addsRepo.GetAll());
         }
+        // [Authorize]
+        [HttpPost("createAdds")]
+         public async Task<IActionResult> CreateAdds([FromBody] AddsDto addsDto)
+        {
+            _logger.LogInformation("AddsDto",addsDto);   
+            // if (! res.Success){
+            //     return Unauthorized(res.Message);
+            // }
+            return Ok(await _addsService.Create(new Adds(addsDto.name, addsDto.description, addsDto.price)));
+        }
+
+
 
         [HttpPost("{search}")]
         // [ProducesResponseType(StatusCodes.Status200Ok, Type = typeof(Adds))]
         // [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Search([FromBody] SearchDto searchDto)
         {
-            _logger.LogInformation("SearchDto",searchDto);
-            Response<AddsDto> res = await _homeService.Filter(searchDto.text);
-            
+            _logger.LogInformation("SearchDto",searchDto);            
             
             //if (! res.Success){
             //    return Unauthorized(res.Message);
             //}
 
-            return Ok(res);
+            return Ok(await _addsService.Filter(searchDto.text));
         }
+
+        // [HttpPost("{search}")]
+        // public async Task<IActionResult> Search([FromBody] SearchDto searchDto)
+        // {
+        //     return Ok(await _addsService.Filter(searchDto.text));   
+        // }
     }
 }
+
