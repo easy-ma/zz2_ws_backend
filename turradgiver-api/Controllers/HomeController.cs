@@ -29,7 +29,6 @@ namespace turradgiver_api.Controllers
         [HttpGet("get-all")]
         public IActionResult GetAll()
         {
-            // _logger.LogInformation("Object",o);
             return Ok(_addsRepo.GetAll());
         }
         // [Authorize]
@@ -37,34 +36,23 @@ namespace turradgiver_api.Controllers
          public async Task<IActionResult> CreateAdds([FromBody] AddsDto addsDto)
         {
             _logger.LogInformation("AddsDto",addsDto);   
-            // if (! res.Success){
-            //     return Unauthorized(res.Message);
-            // }
-            
             return Ok(await _addsService.Create(new Add(addsDto.name, addsDto.description, addsDto.price)));
         }
 
+        // [Authorize]
+        [HttpPost("removeAdd")]
+         public async Task<IActionResult> RemoveAdds([FromBody] Add add)
+        {
+            _logger.LogInformation("Add",add);   
+            return Ok(await _addsService.Remove(add));
+        }
 
-
-        [HttpPost("{search}")]
-        // [ProducesResponseType(StatusCodes.Status200Ok, Type = typeof(Adds))]
-        // [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost("search")]
         public async Task<IActionResult> Search([FromBody] SearchDto searchDto)
         {
             _logger.LogInformation("SearchDto",searchDto);            
-            
-            //if (! res.Success){
-            //    return Unauthorized(res.Message);
-            //}
-
             return Ok(await _addsService.Filter(searchDto.text));
         }
-
-        // [HttpPost("{search}")]
-        // public async Task<IActionResult> Search([FromBody] SearchDto searchDto)
-        // {
-        //     return Ok(await _addsService.Filter(searchDto.text));   
-        // }
     }
 }
 

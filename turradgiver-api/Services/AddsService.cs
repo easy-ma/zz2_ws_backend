@@ -27,21 +27,38 @@ namespace turradgiver_api.Services
         public async Task<Response<Add>> Create(Add add){
 
            Response<Add> res = new Response<Add>();
-           
+           if (add.Name.CompareTo("") == 0){
+                res.Success = false;
+                res.Message = "Please insert title";
+                return res;
+            }
             res.Data = add;
             _addsRepository.Create(add);
             return res;
         }        
+
+
+        public async Task<Response<Add>> Remove(Add add){
+
+           Response<Add> res = new Response<Add>();
+            _addsRepository.Delete(add);
+            res.Message = "Remove succeed";
+            return res;
+        }        
         
-        public async Task<IQueryable<Add>> Filter( string text){
-             // if (add.Name.CompareTo("") == 0){
-            //     res.Success = false;
-            //     return res;
-            // }
-            return _addsRepository.GetByCondition(e => e.Description.Contains(text) || e.Name.Contains(text));
+        public async Task<Response<IQueryable<Add>>> Filter( string text){
+            Response<IQueryable<Add>> res = new Response<IQueryable<Add>>();
+
+            IQueryable<Add> data = _addsRepository.GetByCondition(e => (e.Name).Contains(text) == true || (e.Description).Contains(text) == true);
+            
+            if(data == null){
+                res.Success = false;
+                res.Message = "No adds find";
+            }
+            res.Data = data;
+            res.Message = $"hmm {text} nice choice ;)";
+            return  res;  
         } 
-
-
   }
 
 }
