@@ -10,5 +10,7 @@ namespace DAL.Repositories{
     void Create(T entity);
     void Update(T entity);
     void Delete(T entity);
+    void DeleteById(int id);
+    IQueryable<T> GetByRange(int skip, int number);
   }
 }

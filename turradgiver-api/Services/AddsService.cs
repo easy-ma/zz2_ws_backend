@@ -38,10 +38,10 @@ namespace turradgiver_api.Services
         }        
 
 
-        public async Task<Response<Add>> Remove(Add add){
+        public async Task<Response<Add>> Remove(int id){
 
            Response<Add> res = new Response<Add>();
-            _addsRepository.Delete(add);
+            _addsRepository.DeleteById(id);
             res.Message = "Remove succeed";
             return res;
         }        

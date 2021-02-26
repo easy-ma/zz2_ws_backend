@@ -32,6 +32,13 @@ namespace DAL.Repositories {
       _context.SaveChanges();
     }
 
+    public void DeleteById(int id)
+    { 
+      T entity = GetById(id);
+      entities.Remove(entity);  
+      _context.SaveChanges();
+    }
+
     public T GetById(int id)
     {
       return entities.FirstOrDefault(entity => entity.Id == id);
@@ -41,6 +48,12 @@ namespace DAL.Repositories {
     {
       return entities.ToList().AsQueryable();
     }
+
+    public IQueryable<T> GetByRange(int skip, int number)
+    {
+      return entities.Skip(skip).Take(number);
+    }
+
 
     public IQueryable<T> GetByCondition(Expression<Func<T, bool>> expression){
         // Doc about AsNoTracking 

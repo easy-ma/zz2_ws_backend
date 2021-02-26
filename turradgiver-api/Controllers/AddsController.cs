@@ -14,22 +14,24 @@ namespace turradgiver_api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class HomeController : ControllerBase
+    public class AddsController : ControllerBase
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<AddsController> _logger;
         private readonly IRepository<Add> _addsRepo;
         private readonly IAddsService _addsService;
-        public HomeController(ILogger<HomeController> logger, IRepository<Add> addsRepo, IAddsService addsService)
+        public AddsController(ILogger<AddsController> logger, IRepository<Add> addsRepo, IAddsService addsService)
         {
             _logger = logger;
             _addsRepo = addsRepo;
             _addsService = addsService;
         }
 
-        [HttpGet("get-all")]
-        public IActionResult GetAll()
+        [HttpPost("get-all")]
+        public IActionResult GetAll([FromBody] PageDto page)
         {
-            return Ok(_addsRepo.GetAll());
+            return Ok(_addsRepo.GetByRange(10*(page.page-1),10));
+            // return Ok(_addsRepo.GetAll());
+
         }
         // [Authorize]
         [HttpPost("createAdds")]
@@ -41,10 +43,10 @@ namespace turradgiver_api.Controllers
 
         // [Authorize]
         [HttpPost("removeAdd")]
-         public async Task<IActionResult> RemoveAdds([FromBody] Add add)
+         public async Task<IActionResult> RemoveAdds([FromBody] AddsIdDto id)
         {
-            _logger.LogInformation("Add",add);   
-            return Ok(await _addsService.Remove(add));
+            _logger.LogInformation("Id",id);   
+            return Ok(await _addsService.Remove(id.id));
         }
 
         [HttpPost("search")]
