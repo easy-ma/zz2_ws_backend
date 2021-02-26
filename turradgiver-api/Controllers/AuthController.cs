@@ -19,11 +19,11 @@ namespace turradgiver_api.Controllers
         private readonly IRepository<User> _userRepo;
         private readonly IAuthService _authService;
 
-        public AuthController(ILogger<AuthController> logger,IAuthService authService, IRepository<User> userRepo)
+        public AuthController(ILogger<AuthController> logger, IAuthService authService, IRepository<User> userRepo)
         {
             _logger = logger;
             _authService = authService;
-            _userRepo=userRepo;
+            _userRepo = userRepo;
         }
 
         [Authorize]
@@ -37,9 +37,10 @@ namespace turradgiver_api.Controllers
         [HttpPost("sign-up")]
         public async Task<IActionResult> SignUp([FromBody] UserSignUpDto userSignUpDto)
         {
-            _logger.LogInformation("UserSignUpDto",userSignUpDto);
+            _logger.LogInformation("UserSignUpDto", userSignUpDto);
             Response<AuthCredential> res = await _authService.Register(new User(userSignUpDto.Username, userSignUpDto.Email), userSignUpDto.Password);
-            if (! res.Success){
+            if (!res.Success)
+            {
                 return Unauthorized(res.Message);
             }
             return Ok(res);
@@ -48,15 +49,12 @@ namespace turradgiver_api.Controllers
         [HttpPost("sign-in")]
         public async Task<IActionResult> SignIn([FromBody] UserSignInDto userSignInDto)
         {
-            if (userSignInDto is null)
+            Response<AuthCredential> res = await _authService.Login(userSignInDto.Email, userSignInDto.Password);
+            if (!res.Success)
             {
-                BadRequest();
-            }
-            Response<AuthCredential> res = await _authService.Login(userSignInDto.Email,userSignInDto.Password);
-             if (! res.Success){
                 return BadRequest(res.Message);
             }
-            return Ok(res);   
+            return Ok(res);
         }
     }
 }
