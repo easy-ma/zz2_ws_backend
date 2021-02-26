@@ -1,19 +1,16 @@
-using DAL;
+﻿using System.Text;
 using DAL.Models;
 using DAL.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using turradgiver_api.Services;
-using System.Text;
-using System.Linq;
-using System.Collections;
 using Microsoft.OpenApi.Models;
+using turradgiver_api.Services;
 
 namespace turradgiver_api
 {
@@ -29,53 +26,57 @@ namespace turradgiver_api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSwaggerGen(c => {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Turradgiver API", Version = "v1",Description="APi about turradgiver" });
-                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Turradgiver API", Version = "v1", Description = "APi about turradgiver" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
                     Description = "Please insert JWT with Bearer into field",
-                    Name = "Authorization",  
+                    Name = "Authorization",
                     Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
-                    In = ParameterLocation.Header, 
+                    In = ParameterLocation.Header,
                 });
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement {
-                { 
-                    new OpenApiSecurityScheme 
-                    { 
-                    Reference = new OpenApiReference 
-                    { 
+                {
+                    new OpenApiSecurityScheme
+                    {
+                    Reference = new OpenApiReference
+                    {
                         Type = ReferenceType.SecurityScheme,
-                        Id = "Bearer" 
-                    } 
+                        Id = "Bearer"
+                    }
                     },
-                    new string[] { } 
-                    } 
+                    new string[] { }
+                    }
                 });
 
             });
             services.AddDbContext<TurradgiverContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Turradgiver")));
 
-            services.AddScoped(typeof(IRepository< >), typeof(Repository< >));
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAddsService, AddsService>();
 
 
-            services.AddAuthentication(options=> {
+            services.AddAuthentication(options =>
+            {
                 // options.AuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultAuthenticateScheme =  JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;  
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;  
-                }).AddJwtBearer(options => {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:JWTKey").Value)),
-                        // Could be good to add the ValidateIssuer and Validate Audience once we know the url
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
-                }
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:JWTKey").Value)),
+                    // Could be good to add the ValidateIssuer and Validate Audience once we know the url
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            }
             );
 
         }

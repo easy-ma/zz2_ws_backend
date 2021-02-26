@@ -1,12 +1,11 @@
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAL.Models
 {
     [Table("Adds")]
     public class Add : BaseModel
     {
-        public Add(string name, string description, float price) 
+        public Add(string name, string description, float price)
         {
             Name = name;
             Description = description;
@@ -24,9 +23,7 @@ namespace DAL.Models
         public float Rate { get; set; }
 
         [Column("price")]
-        public float Price {get;set;}
-        
-    }
+        public float Price { get; set; }
 
-    
+    }
 }

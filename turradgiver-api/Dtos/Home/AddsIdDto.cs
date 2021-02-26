@@ -1,13 +1,11 @@
-using System;
-
-namespace turradgiver_api.Dtos.Home
+﻿namespace turradgiver_api.Dtos.Home
 {
     /// <summary>
     /// 
     /// </summary>
     public class AddsIdDto
     {
-        public int id{ get; set; }
+        public int id { get; set; }
 
     }
 }

@@ -1,12 +1,11 @@
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAL.Models
 {
-  [Table("Users")]
-    public class User :BaseModel
+    [Table("Users")]
+    public class User : BaseModel
     {
-        public User(string username, string email) 
+        public User(string username, string email)
         {
             Username = username;
             Email = email;

@@ -1,17 +1,17 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
-using System.Linq;
 using System.Text;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
+using System.Threading.Tasks;
 using DAL.Models;
 using DAL.Repositories;
-using turradgiver_api.Utils;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using turradgiver_api.Dtos.Auth;
+using turradgiver_api.Utils;
 
 namespace turradgiver_api.Services
 {
@@ -52,18 +52,20 @@ namespace turradgiver_api.Services
             };
 
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            return new AuthCredential{
-               Token= tokenHandler.WriteToken(tokenHandler.CreateToken(token)),
-               Expires = token.Expires
+            return new AuthCredential
+            {
+                Token = tokenHandler.WriteToken(tokenHandler.CreateToken(token)),
+                Expires = token.Expires
             };
         }
-       
+
         /// <summary>
         /// Hash a specific password received in parameter
         /// </summary>
         /// <param name="password">The password to hash</param>
         /// <returns>The hash of the password in bytes</returns>
-        private byte[] HashPassword (string password) {
+        private byte[] HashPassword(string password)
+        {
             return SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(password));
         }
 
@@ -73,11 +75,12 @@ namespace turradgiver_api.Services
         /// <param name="password">The raw password to test</param>
         /// <param name="userHashPassword">The user hash password use in order to test the password</param>
         /// <returns>return a boolean, true if the password is valid, false if not.</returns>
-        private Boolean CheckPassword (string password, byte[] userHashPassword) {
+        private Boolean CheckPassword(string password, byte[] userHashPassword)
+        {
             string hashPassword = Encoding.UTF8.GetString(HashPassword(password));
             string userPassword = Encoding.UTF8.GetString(userHashPassword);
 
-            return hashPassword.CompareTo(userPassword)==0;
+            return hashPassword.CompareTo(userPassword) == 0;
         }
 
         /// <summary>
@@ -90,19 +93,21 @@ namespace turradgiver_api.Services
         /// Return the AuthCredentials i.e the Jwtoken once the user will be register
         /// Return a failed Response if the user already exists in the database
         /// </returns>
-        public async Task<Response<AuthCredential>> Register(User user, string password){
-           Response<AuthCredential> res = new Response<AuthCredential>();
+        public async Task<Response<AuthCredential>> Register(User user, string password)
+        {
+            Response<AuthCredential> res = new Response<AuthCredential>();
 
-            User checkUser =_userRepository.GetByCondition((u=> u.Email.CompareTo(user.Email)== 0)).FirstOrDefault();
-            if (checkUser != null){
-                res.Success=false;
-                res.Message="User already exists";
+            User checkUser = _userRepository.GetByCondition((u => u.Email.CompareTo(user.Email) == 0)).FirstOrDefault();
+            if (checkUser != null)
+            {
+                res.Success = false;
+                res.Message = "User already exists";
                 return res;
             }
             user.Password = HashPassword(password);
-            
+
             _userRepository.Create(user);
-            res.Data= CreateJsonWebToken(user);
+            res.Data = CreateJsonWebToken(user);
             return res;
         }
 
@@ -114,21 +119,27 @@ namespace turradgiver_api.Services
         /// <returns>
         /// Return AuthCredentials i.e JWToken
         /// </returns>
-        public async Task<Response<AuthCredential>>  Login(string email, string password){
+        public async Task<Response<AuthCredential>> Login(string email, string password)
+        {
             Response<AuthCredential> res = new Response<AuthCredential>();
-            User user =_userRepository.GetByCondition((u=> u.Email.CompareTo(email)== 0)).FirstOrDefault();
-            
-            if(user == null) {
-                res.Success=false;
-                res.Message= "User not found";
-            } else if (!CheckPassword(password,user.Password)) {
-                res.Success=false;
-                res.Message= "Invalid Password";
-            } else {
+            User user = _userRepository.GetByCondition((u => u.Email.CompareTo(email) == 0)).FirstOrDefault();
+
+            if (user == null)
+            {
+                res.Success = false;
+                res.Message = "User not found";
+            }
+            else if (!CheckPassword(password, user.Password))
+            {
+                res.Success = false;
+                res.Message = "Invalid Password";
+            }
+            else
+            {
                 res.Data = CreateJsonWebToken(user);
             }
             return res;
         }
-  }
+    }
 
 }

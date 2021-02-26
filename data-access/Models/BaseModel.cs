@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAL.Models
@@ -7,13 +7,13 @@ namespace DAL.Models
     {
         public BaseModel()
         {
-            CreatedDate=DateTime.UtcNow;
+            CreatedDate = DateTime.UtcNow;
         }
 
         [Column("id")]
         public int Id { get; set; }
 
         [Column("createdDate")]
-        public DateTime CreatedDate {get; set;}
+        public DateTime CreatedDate { get; set; }
     }
 }
