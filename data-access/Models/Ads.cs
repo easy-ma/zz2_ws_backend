@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAL.Models
 {
     [Table("Adds")]
-    public class Add : BaseModel
+    public class Ads : BaseModel
     {
-        public Add(string name, string description, float price)
+        public Ads(string name, string description, float price)
         {
             Name = name;
             Description = description;

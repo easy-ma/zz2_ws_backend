@@ -17,7 +17,7 @@ namespace DAL.Models
 
         [ForeignKey("Adds")]
         public string AddId { get; set; }
-        public Add Add { get; set; }
+        public Ads Add { get; set; }
 
         [ForeignKey("userId")]
         public User User { get; set; }

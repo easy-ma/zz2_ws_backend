@@ -51,11 +51,6 @@ namespace turradgiver_api.Controllers
             Response<AuthCredential> res = await _authService.Login(userSignInDto.Email, userSignInDto.Password);
             if (!res.Success)
             {
-                BadRequest();
-            }
-            Response<AuthCredential> res = await _authService.Login(userSignInDto.Email, userSignInDto.Password);
-            if (!res.Success)
-            {
                 return BadRequest(res.Message);
             }
             return Ok(res);

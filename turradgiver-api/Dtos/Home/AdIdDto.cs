@@ -3,8 +3,9 @@
     /// <summary>
     /// 
     /// </summary>
-    public class PageDto
+    public class AdIdDto
     {
-        public int page { get; set; }
+        public int id { get; set; }
+
     }
 }

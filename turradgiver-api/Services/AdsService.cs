@@ -9,19 +9,19 @@ namespace turradgiver_api.Services
     /// <summary>
     /// Class <c>HomeService</c> provide adds according to the user input
     /// </summary>
-    public class AddsService : IAddsService
+    public class AdsService : IAdsService
     {
-        private readonly IRepository<Add> _addsRepository;
+        private readonly IRepository<Ads> _addsRepository;
 
-        public AddsService(IRepository<Add> addsRepository)
+        public AdsService(IRepository<Ads> addsRepository)
         {
             _addsRepository = addsRepository;
         }
 
-        public async Task<Response<Add>> Create(Add add)
+        public async Task<Response<Ads>> Create(Ads add)
         {
 
-            Response<Add> res = new Response<Add>();
+            Response<Ads> res = new Response<Ads>();
             if (add.Name.CompareTo("") == 0)
             {
                 res.Success = false;
@@ -33,20 +33,20 @@ namespace turradgiver_api.Services
             return res;
         }
 
-        public async Task<Response<Add>> Remove(int id)
+        public async Task<Response<Ads>> Remove(int id)
         {
 
-            Response<Add> res = new Response<Add>();
+            Response<Ads> res = new Response<Ads>();
             _addsRepository.DeleteById(id);
             res.Message = "Remove succeed";
             return res;
         }
 
-        public async Task<Response<IQueryable<Add>>> Filter(string text)
+        public async Task<Response<IQueryable<Ads>>> Filter(string text)
         {
-            Response<IQueryable<Add>> res = new Response<IQueryable<Add>>();
+            Response<IQueryable<Ads>> res = new Response<IQueryable<Ads>>();
 
-            IQueryable<Add> data = _addsRepository.GetByCondition(e => (e.Name).Contains(text) == true || (e.Description).Contains(text) == true);
+            IQueryable<Ads> data = _addsRepository.GetByCondition(e => (e.Name).Contains(text) == true || (e.Description).Contains(text) == true);
 
             if (data == null)
             {

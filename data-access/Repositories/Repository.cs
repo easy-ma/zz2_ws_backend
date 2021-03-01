@@ -77,8 +77,4 @@ namespace DAL.Repositories
             _context.SaveChanges();
         }
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> feat-home_page
