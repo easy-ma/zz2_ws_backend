@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using DAL.Models;
 using DAL.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -25,7 +25,19 @@ namespace turradgiver_api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                    {
+                        builder.WithOrigins("http://localhost:3000")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    }
+                );
+            });
+
             services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Turradgiver API", Version = "v1", Description = "API about turradgiver" });
@@ -57,7 +69,7 @@ namespace turradgiver_api
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IAddsService, AddsService>();
+            services.AddScoped<IAdsService, AdsService>();
 
 
             services.AddAuthentication(options =>
@@ -93,6 +105,8 @@ namespace turradgiver_api
 
             // app.UseHttpsRedirection();
             app.UseRouting();
+
+            app.UseCors();
 
             // Weird behavior happend if UseAuthorization is placed after UseAuthentification
             // Thing is that every end point with bearer auth will get a 401 instead of a valid authentfication
