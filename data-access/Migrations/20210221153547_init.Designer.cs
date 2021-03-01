@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace data_access.Migrations
 {
     [DbContext(typeof(TurradgiverContext))]
-    [Migration("20210219174826_initNet5")]
-    partial class initNet5
+    [Migration("20210221153547_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,39 @@ namespace data_access.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+            modelBuilder.Entity("DAL.Models.Add", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("createdDate");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<float>("Price")
+                        .HasColumnType("real")
+                        .HasColumnName("price");
+
+                    b.Property<float>("Rate")
+                        .HasColumnType("real")
+                        .HasColumnName("rate");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Adds");
+                });
 
             modelBuilder.Entity("DAL.Models.User", b =>
                 {

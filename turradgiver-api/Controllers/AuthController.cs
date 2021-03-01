@@ -1,13 +1,12 @@
+﻿using System.Threading.Tasks;
 using DAL.Models;
 using DAL.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using turradgiver_api.Services;
-using System.Threading.Tasks;
-using turradgiver_api.Utils;
 using turradgiver_api.Dtos.Auth;
+using turradgiver_api.Services;
+using turradgiver_api.Utils;
 
 namespace turradgiver_api.Controllers
 {
@@ -49,6 +48,11 @@ namespace turradgiver_api.Controllers
         [HttpPost("sign-in")]
         public async Task<IActionResult> SignIn([FromBody] UserSignInDto userSignInDto)
         {
+            Response<AuthCredential> res = await _authService.Login(userSignInDto.Email, userSignInDto.Password);
+            if (!res.Success)
+            {
+                BadRequest();
+            }
             Response<AuthCredential> res = await _authService.Login(userSignInDto.Email, userSignInDto.Password);
             if (!res.Success)
             {

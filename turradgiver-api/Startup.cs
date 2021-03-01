@@ -1,16 +1,16 @@
+using System.Text;
 using DAL.Models;
 using DAL.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using turradgiver_api.Services;
-using System.Text;
 using Microsoft.OpenApi.Models;
+using turradgiver_api.Services;
 
 namespace turradgiver_api
 {
@@ -28,7 +28,7 @@ namespace turradgiver_api
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Turradgiver API", Version = "v1", Description = "APi about turradgiver" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Turradgiver API", Version = "v1", Description = "API about turradgiver" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "Please insert JWT with Bearer into field",
@@ -39,23 +39,26 @@ namespace turradgiver_api
                     In = ParameterLocation.Header,
                 });
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                {
+                    new OpenApiSecurityScheme
                     {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        new string[] { }
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                    },
+                    new string[] { }
                     }
                 });
 
             });
             services.AddDbContext<TurradgiverContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Turradgiver")));
+
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IAddsService, AddsService>();
+
 
             services.AddAuthentication(options =>
             {
@@ -73,7 +76,8 @@ namespace turradgiver_api
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
-            });
+            }
+            );
 
         }
 
@@ -90,7 +94,7 @@ namespace turradgiver_api
             // app.UseHttpsRedirection();
             app.UseRouting();
 
-            // Weird behavior happen if UseAuthorization is placed after UseAuthentification
+            // Weird behavior happend if UseAuthorization is placed after UseAuthentification
             // Thing is that every end point with bearer auth will get a 401 instead of a valid authentfication
             app.UseAuthentication();
             app.UseAuthorization();
@@ -99,6 +103,8 @@ namespace turradgiver_api
             {
                 endpoints.MapControllers();
             });
+
+
         }
     }
 }

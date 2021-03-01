@@ -19,6 +19,39 @@ namespace data_access.Migrations
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+            modelBuilder.Entity("DAL.Models.Add", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("createdDate");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<float>("Price")
+                        .HasColumnType("real")
+                        .HasColumnName("price");
+
+                    b.Property<float>("Rate")
+                        .HasColumnType("real")
+                        .HasColumnName("rate");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Adds");
+                });
+
             modelBuilder.Entity("DAL.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -45,7 +78,7 @@ namespace data_access.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("users");
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }

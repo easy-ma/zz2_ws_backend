@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace turradgiver_api.Dtos.Auth
 {

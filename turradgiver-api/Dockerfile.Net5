@@ -13,7 +13,7 @@ RUN dotnet restore "turradgiver-api/turradgiver-api.csproj"
 WORKDIR "/src/turradgiver-api"
 
 RUN dotnet tool install --global dotnet-ef
-RUN export PATH="$PATH:/root/.dotnet/tools"
+ENV PATH="$PATH:/root/.dotnet/tools"
 
 # by default the ip is 127.0.0.1 equivalent of localhost 
 # which doesn't work when trying to access the api from the host

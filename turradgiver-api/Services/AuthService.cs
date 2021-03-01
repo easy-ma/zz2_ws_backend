@@ -1,17 +1,17 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
-using System.Linq;
 using System.Text;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
+using System.Threading.Tasks;
 using DAL.Models;
 using DAL.Repositories;
-using turradgiver_api.Utils;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using turradgiver_api.Dtos.Auth;
+using turradgiver_api.Utils;
 
 namespace turradgiver_api.Services
 {
