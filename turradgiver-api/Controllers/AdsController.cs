@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using DAL.Models;
 using DAL.Repositories;
@@ -24,7 +25,7 @@ namespace turradgiver_api.Controllers
             _addsService = addsService;
         }
 
-        [HttpGet("get-all")]
+        [HttpGet("ads")]
         public IActionResult GetAll([FromQuery] int page = 1)
         {
             //return Ok(_addsRepo.GetByRange(10 * (page.page - 1), 10));
@@ -34,25 +35,38 @@ namespace turradgiver_api.Controllers
 
             return Ok(new[] { "coucou", "c'est", "moi" });
         }
-        
+
         [Authorize]
-        [HttpPost("create-ad")]
-        public async Task<IActionResult> CreateAdds([FromBody] AdDto addsDto)
+        [HttpGet("get")]
+        public IActionResult GetAllForUser([FromQuery] int page = 1)
+        {
+            Debug.WriteLine(HttpContext.User.Identity.Name);
+            //return Ok(_addsRepo.GetByRange(10 * (page.page - 1), 10));
+            // return Ok(_addsRepo.GetAll());
+            Debug.WriteLine("LA");
+            Debug.WriteLine(page);
+
+            return Ok(new[] { "coucou", "c'est", "moi" });
+        }
+
+        [Authorize]
+        [HttpPost("create")]
+        public async Task<IActionResult> Create([FromBody] AdDto addsDto)
         {
             _logger.LogInformation("AddsDto", addsDto);
             return Ok(await _addsService.Create(new Ads(addsDto.name, addsDto.description, addsDto.price)));
         }
 
         [Authorize]
-        [HttpPost("remove-ad")]
-        public async Task<IActionResult> RemoveAdds([FromBody] AdIdDto id)
+        [HttpDelete("remove")]
+        public async Task<IActionResult> Remove([FromBody] AdIdDto id)
         {
             _logger.LogInformation("Id", id);
             return Ok(await _addsService.Remove(id.id));
         }
 
-        [HttpPost("search")]
-        public async Task<IActionResult> Search([FromBody] SearchDto searchDto)
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] SearchDto searchDto)
         {
             _logger.LogInformation("SearchDto", searchDto);
             return Ok(await _addsService.Filter(searchDto.text));
