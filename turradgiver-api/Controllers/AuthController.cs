@@ -33,6 +33,14 @@ namespace turradgiver_api.Controllers
             return Ok(_userRepo.GetAll());
         }
 
+        [Authorize]
+        [HttpGet("verify")]
+        public IActionResult Verify()
+        {
+            Response<bool> res = new Response<bool>() { Data = true };
+            return Ok(res);
+        }
+
         [HttpPost("sign-up")]
         public async Task<IActionResult> SignUp([FromBody] UserSignUpDto userSignUpDto)
         {
@@ -40,7 +48,7 @@ namespace turradgiver_api.Controllers
             Response<AuthCredential> res = await _authService.Register(new User(userSignUpDto.Username, userSignUpDto.Email), userSignUpDto.Password);
             if (!res.Success)
             {
-                return Unauthorized(res.Message);
+                return Unauthorized(res);
             }
             return Ok(res);
         }
@@ -51,7 +59,7 @@ namespace turradgiver_api.Controllers
             Response<AuthCredential> res = await _authService.Login(userSignInDto.Email, userSignInDto.Password);
             if (!res.Success)
             {
-                return BadRequest(res.Message);
+                return BadRequest(res);
             }
             return Ok(res);
         }
