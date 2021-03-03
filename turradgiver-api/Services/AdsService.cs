@@ -18,36 +18,28 @@ namespace turradgiver_api.Services
             _addsRepository = addsRepository;
         }
 
-        public async Task<Response<Ads>> Create(Ads add)
+        public async Task<Response<Ads>> CreateAsync(Ads add)
         {
-
             Response<Ads> res = new Response<Ads>();
-            if (add.Name.CompareTo("") == 0)
-            {
-                res.Success = false;
-                res.Message = "Please insert title";
-                return res;
-            }
             res.Data = add;
-            _addsRepository.Create(add);
+            await _addsRepository.CreateAsync(add);
             return res;
         }
 
-        public async Task<Response<Ads>> Remove(int id)
+        public async Task<Response<Ads>> RemoveAsync(int id)
         {
 
             Response<Ads> res = new Response<Ads>();
-            _addsRepository.DeleteById(id);
+            await _addsRepository.DeleteByIdAsync(id);
             res.Message = "Remove succeed";
             return res;
         }
 
-        public async Task<Response<IQueryable<Ads>>> Filter(string text)
+        public async Task<Response<IQueryable<Ads>>> FilterAsync(string text)
         {
             Response<IQueryable<Ads>> res = new Response<IQueryable<Ads>>();
 
-            IQueryable<Ads> data = _addsRepository.GetByCondition(e => (e.Name).Contains(text) == true || (e.Description).Contains(text) == true);
-
+            IQueryable<Ads> data = await _addsRepository.GetByConditionAsync(e => (e.Name).Contains(text) == true || (e.Description).Contains(text) == true);
             if (data == null)
             {
                 res.Success = false;

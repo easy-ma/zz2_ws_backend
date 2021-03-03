@@ -3,78 +3,78 @@ using System.Linq;
 using System.Linq.Expressions;
 using DAL.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
     public class Repository<T> : IRepository<T> where T : BaseModel
     {
 
-        protected readonly TurradgiverContext _context;
-        protected DbSet<T> entities;
+        private readonly TurradgiverContext _context;
+        private DbSet<T> _entities;
         public Repository(TurradgiverContext context)
         {
             _context = context;
-            entities = context.Set<T>();
+            _entities = context.Set<T>();
         }
-        public void Create(T entity)
+        public async Task CreateAsync(T entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException("[Add]: null entity");
             }
-            entities.Add(entity);
-            _context.SaveChanges();
+            await Task.Run(() => _entities.Add(entity));
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(T entity)
+        public async Task DeleteAsync(T entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException("[Remove]: null entity");
             }
-            entities.Remove(entity);
-            _context.SaveChanges();
+            await Task.Run(() => _entities.Remove(entity));
+            await _context.SaveChangesAsync();
         }
 
-        public void DeleteById(int id)
+        public async Task DeleteByIdAsync(int id)
         {
-            T entity = GetById(id);
-            entities.Remove(entity);
-            _context.SaveChanges();
+            T entity = await GetByIdAsync(id);
+            await DeleteAsync(entity);
         }
 
-        public T GetById(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
-            return entities.FirstOrDefault(entity => entity.Id == id);
+            return await Task.Run(() =>_entities.FirstOrDefault(entity => entity.Id == id));
         }
 
-        public IQueryable<T> GetAll()
+        public async Task<IQueryable<T>> GetAllAsync()
         {
-            return entities.ToList().AsQueryable();
+            return (await _entities.ToListAsync()).AsQueryable();
         }
 
-        public IQueryable<T> GetByRange(int skip, int number)
+        public async Task<IQueryable<T>> GetByRangeAsync(int skip, int number)
         {
-            return entities.Skip(skip).Take(number);
+            return await Task.Run(() => _entities.Skip(skip).Take(number));
         }
 
 
-        public IQueryable<T> GetByCondition(Expression<Func<T, bool>> expression)
+        public async Task<IQueryable<T>> GetByConditionAsync(Expression<Func<T, bool>> expression)
         {
             // Doc about AsNoTracking 
             //https://entityframeworkcore.com/querying-data-asnotracking
             //https://entityframeworkcore.com/draft-querying-data-asnotracking
-            return entities.Where(expression).AsNoTracking();
+            return await Task.Run(() => _entities.Where(expression).AsNoTracking());
         }
 
-        public void Update(T entity)
+        public async Task UpdateAsync(T entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException("[Update]: null entity");
             }
-            entities.Update(entity);
-            _context.SaveChanges();
+            await Task.Run(() =>_entities.Update(entity));
+            await _context.SaveChangesAsync();
         }
     }
 }

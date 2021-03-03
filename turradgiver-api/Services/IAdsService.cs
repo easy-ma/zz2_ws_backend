@@ -7,8 +7,8 @@ namespace turradgiver_api.Services
 {
     public interface IAdsService
     {
-        Task<Response<IQueryable<Ads>>> Filter(string text);
-        Task<Response<Ads>> Create(Ads add);
-        Task<Response<Ads>> Remove(int id);
+        Task<Response<IQueryable<Ads>>> FilterAsync(string text);
+        Task<Response<Ads>> CreateAsync(Ads add);
+        Task<Response<Ads>> RemoveAsync(int id);
     }
 }

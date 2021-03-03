@@ -10,7 +10,7 @@ using DAL.Models;
 using DAL.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using turradgiver_api.Dtos.Auth;
+using turradgiver_api.Responses.Auth;
 using turradgiver_api.Utils;
 
 namespace turradgiver_api.Services
@@ -93,11 +93,11 @@ namespace turradgiver_api.Services
         /// Return the AuthCredentials i.e the Jwtoken once the user will be register
         /// Return a failed Response if the user already exists in the database
         /// </returns>
-        public async Task<Response<AuthCredential>> Register(User user, string password)
+        public async Task<Response<AuthCredential>> RegisterAsync(User user, string password)
         {
             Response<AuthCredential> res = new Response<AuthCredential>();
 
-            User checkUser = _userRepository.GetByCondition((u => u.Email.CompareTo(user.Email) == 0)).FirstOrDefault();
+            User checkUser = (await _userRepository.GetByConditionAsync((u => u.Email.CompareTo(user.Email) == 0))).FirstOrDefault();
             if (checkUser != null)
             {
                 res.Success = false;
@@ -106,7 +106,7 @@ namespace turradgiver_api.Services
             }
             user.Password = HashPassword(password);
 
-            _userRepository.Create(user);
+            await _userRepository.CreateAsync(user);
             res.Data = CreateJsonWebToken(user);
             return res;
         }
@@ -119,10 +119,10 @@ namespace turradgiver_api.Services
         /// <returns>
         /// Return AuthCredentials i.e JWToken
         /// </returns>
-        public async Task<Response<AuthCredential>> Login(string email, string password)
+        public async Task<Response<AuthCredential>> LoginAsync(string email, string password)
         {
             Response<AuthCredential> res = new Response<AuthCredential>();
-            User user = _userRepository.GetByCondition((u => u.Email.CompareTo(email) == 0)).FirstOrDefault();
+            User user = (await _userRepository.GetByConditionAsync((u => u.Email.CompareTo(email) == 0))).FirstOrDefault();
 
             if (user == null)
             {

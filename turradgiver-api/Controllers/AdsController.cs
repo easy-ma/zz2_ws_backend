@@ -6,7 +6,7 @@ using DAL.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using turradgiver_api.Dtos.Home;
+using turradgiver_api.Dtos.Ads;
 using turradgiver_api.Services;
 
 namespace turradgiver_api.Controllers
@@ -54,22 +54,22 @@ namespace turradgiver_api.Controllers
         public async Task<IActionResult> Create([FromBody] AdDto addsDto)
         {
             _logger.LogInformation("AddsDto", addsDto);
-            return Ok(await _addsService.Create(new Ads(addsDto.name, addsDto.description, addsDto.price)));
+            return Ok(await _addsService.CreateAsync(new Ads(addsDto.Name, addsDto.Description, addsDto.Price)));
         }
 
         [Authorize]
         [HttpDelete("remove")]
-        public async Task<IActionResult> Remove([FromBody] AdIdDto id)
+        public async Task<IActionResult> Remove([FromBody] AdIdDto idDto)
         {
-            _logger.LogInformation("Id", id);
-            return Ok(await _addsService.Remove(id.id));
+            _logger.LogInformation("Id", idDto.Id);
+            return Ok(await _addsService.RemoveAsync(idDto.Id));
         }
 
         [HttpGet("search")]
         public async Task<IActionResult> Search([FromQuery] SearchDto searchDto)
         {
             _logger.LogInformation("SearchDto", searchDto);
-            return Ok(await _addsService.Filter(searchDto.text));
+            return Ok(await _addsService.FilterAsync(searchDto.Text));
         }
     }
 }
