@@ -97,7 +97,7 @@ namespace turradgiver_api.Services
         {
             Response<AuthCredential> res = new Response<AuthCredential>();
 
-            User checkUser = _userRepository.GetByCondition((u => u.Email.CompareTo(user.Email) == 0)).FirstOrDefault();
+            User checkUser = (await _userRepository.GetByCondition((u => u.Email.CompareTo(user.Email) == 0))).FirstOrDefault();
             if (checkUser != null)
             {
                 res.Success = false;
@@ -106,7 +106,7 @@ namespace turradgiver_api.Services
             }
             user.Password = HashPassword(password);
 
-            _userRepository.Create(user);
+            await _userRepository.Create(user);
             res.Data = CreateJsonWebToken(user);
             return res;
         }
@@ -122,7 +122,7 @@ namespace turradgiver_api.Services
         public async Task<Response<AuthCredential>> Login(string email, string password)
         {
             Response<AuthCredential> res = new Response<AuthCredential>();
-            User user = _userRepository.GetByCondition((u => u.Email.CompareTo(email) == 0)).FirstOrDefault();
+            User user = (await _userRepository.GetByCondition((u => u.Email.CompareTo(email) == 0))).FirstOrDefault();
 
             if (user == null)
             {

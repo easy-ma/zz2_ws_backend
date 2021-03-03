@@ -29,7 +29,7 @@ namespace turradgiver_api.Services
                 return res;
             }
             res.Data = add;
-            _addsRepository.Create(add);
+            await _addsRepository.Create(add);
             return res;
         }
 
@@ -37,7 +37,7 @@ namespace turradgiver_api.Services
         {
 
             Response<Ads> res = new Response<Ads>();
-            _addsRepository.DeleteById(id);
+            await _addsRepository.DeleteById(id);
             res.Message = "Remove succeed";
             return res;
         }
@@ -46,7 +46,7 @@ namespace turradgiver_api.Services
         {
             Response<IQueryable<Ads>> res = new Response<IQueryable<Ads>>();
 
-            IQueryable<Ads> data = _addsRepository.GetByCondition(e => (e.Name).Contains(text) == true || (e.Description).Contains(text) == true);
+            IQueryable<Ads> data = await _addsRepository.GetByCondition(e => (e.Name).Contains(text) == true || (e.Description).Contains(text) == true);
 
             if (data == null)
             {

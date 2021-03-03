@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using DAL.Models;
-using DAL.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -15,22 +14,12 @@ namespace turradgiver_api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly ILogger<AuthController> _logger;
-        private readonly IRepository<User> _userRepo;
         private readonly IAuthService _authService;
 
-        public AuthController(ILogger<AuthController> logger, IAuthService authService, IRepository<User> userRepo)
+        public AuthController(ILogger<AuthController> logger, IAuthService authService)
         {
             _logger = logger;
             _authService = authService;
-            _userRepo = userRepo;
-        }
-
-        [Authorize]
-        [HttpGet("get-all")]
-        public IActionResult GetAll()
-        {
-            // _logger.LogInformation("Object",o);
-            return Ok(_userRepo.GetAll());
         }
 
         [Authorize]
