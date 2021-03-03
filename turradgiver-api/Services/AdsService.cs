@@ -21,12 +21,6 @@ namespace turradgiver_api.Services
         public async Task<Response<Ads>> CreateAsync(Ads add)
         {
             Response<Ads> res = new Response<Ads>();
-            if (add.Name.CompareTo("") == 0)
-            {
-                res.Success = false;
-                res.Message = "Please insert title";
-                return res;
-            }
             res.Data = add;
             await _addsRepository.CreateAsync(add);
             return res;
@@ -46,7 +40,6 @@ namespace turradgiver_api.Services
             Response<IQueryable<Ads>> res = new Response<IQueryable<Ads>>();
 
             IQueryable<Ads> data = await _addsRepository.GetByConditionAsync(e => (e.Name).Contains(text) == true || (e.Description).Contains(text) == true);
-
             if (data == null)
             {
                 res.Success = false;
