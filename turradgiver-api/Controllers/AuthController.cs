@@ -3,6 +3,7 @@ using DAL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using turradgiver_api.Responses.Auth;
 using turradgiver_api.Dtos.Auth;
 using turradgiver_api.Services;
 using turradgiver_api.Utils;

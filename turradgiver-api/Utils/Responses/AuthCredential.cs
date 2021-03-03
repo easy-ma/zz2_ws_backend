@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace turradgiver_api.Dtos.Auth
+namespace turradgiver_api.Responses.Auth
 {
     /// <summary>
     /// AuthCredential get from the authentification of a user

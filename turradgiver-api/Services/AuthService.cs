@@ -10,7 +10,7 @@ using DAL.Models;
 using DAL.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using turradgiver_api.Dtos.Auth;
+using turradgiver_api.Responses.Auth;
 using turradgiver_api.Utils;
 
 namespace turradgiver_api.Services
