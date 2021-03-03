@@ -17,7 +17,7 @@ namespace DAL.Repositories
             _context = context;
             _entities = context.Set<T>();
         }
-        public async Task Create(T entity)
+        public async Task CreateAsync(T entity)
         {
             if (entity == null)
             {
@@ -27,7 +27,7 @@ namespace DAL.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(T entity)
+        public async Task DeleteAsync(T entity)
         {
             if (entity == null)
             {
@@ -37,29 +37,29 @@ namespace DAL.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteById(int id)
+        public async Task DeleteByIdAsync(int id)
         {
-            T entity = await GetById(id);
-            await Delete(entity);
+            T entity = await GetByIdAsync(id);
+            await DeleteAsync(entity);
         }
 
-        public async Task<T> GetById(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
             return await Task.Run(() =>_entities.FirstOrDefault(entity => entity.Id == id));
         }
 
-        public async Task<IQueryable<T>> GetAll()
+        public async Task<IQueryable<T>> GetAllAsync()
         {
             return (await _entities.ToListAsync()).AsQueryable();
         }
 
-        public async Task<IQueryable<T>> GetByRange(int skip, int number)
+        public async Task<IQueryable<T>> GetByRangeAsync(int skip, int number)
         {
             return await Task.Run(() => _entities.Skip(skip).Take(number));
         }
 
 
-        public async Task<IQueryable<T>> GetByCondition(Expression<Func<T, bool>> expression)
+        public async Task<IQueryable<T>> GetByConditionAsync(Expression<Func<T, bool>> expression)
         {
             // Doc about AsNoTracking 
             //https://entityframeworkcore.com/querying-data-asnotracking
@@ -67,7 +67,7 @@ namespace DAL.Repositories
             return await Task.Run(() => _entities.Where(expression).AsNoTracking());
         }
 
-        public async Task Update(T entity)
+        public async Task UpdateAsync(T entity)
         {
             if (entity == null)
             {
