@@ -93,7 +93,7 @@ namespace turradgiver_api.Services
         /// Return the AuthCredentials i.e the Jwtoken once the user will be register
         /// Return a failed Response if the user already exists in the database
         /// </returns>
-        public async Task<Response<AuthCredential>> Register(User user, string password)
+        public async Task<Response<AuthCredential>> RegisterAsync(User user, string password)
         {
             Response<AuthCredential> res = new Response<AuthCredential>();
 
@@ -119,7 +119,7 @@ namespace turradgiver_api.Services
         /// <returns>
         /// Return AuthCredentials i.e JWToken
         /// </returns>
-        public async Task<Response<AuthCredential>> Login(string email, string password)
+        public async Task<Response<AuthCredential>> LoginAsync(string email, string password)
         {
             Response<AuthCredential> res = new Response<AuthCredential>();
             User user = (await _userRepository.GetByCondition((u => u.Email.CompareTo(email) == 0))).FirstOrDefault();

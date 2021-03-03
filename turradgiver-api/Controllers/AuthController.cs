@@ -34,7 +34,7 @@ namespace turradgiver_api.Controllers
         public async Task<IActionResult> SignUp([FromBody] UserSignUpDto userSignUpDto)
         {
             _logger.LogInformation("UserSignUpDto", userSignUpDto);
-            Response<AuthCredential> res = await _authService.Register(new User(userSignUpDto.Username, userSignUpDto.Email), userSignUpDto.Password);
+            Response<AuthCredential> res = await _authService.RegisterAsync(new User(userSignUpDto.Username, userSignUpDto.Email), userSignUpDto.Password);
             if (!res.Success)
             {
                 return Unauthorized(res);
@@ -45,7 +45,7 @@ namespace turradgiver_api.Controllers
         [HttpPost("sign-in")]
         public async Task<IActionResult> SignIn([FromBody] UserSignInDto userSignInDto)
         {
-            Response<AuthCredential> res = await _authService.Login(userSignInDto.Email, userSignInDto.Password);
+            Response<AuthCredential> res = await _authService.LoginAsync(userSignInDto.Email, userSignInDto.Password);
             if (!res.Success)
             {
                 return BadRequest(res);
