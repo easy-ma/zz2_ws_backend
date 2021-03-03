@@ -18,7 +18,7 @@ namespace turradgiver_api.Services
             _addsRepository = addsRepository;
         }
 
-        public async Task<Response<Ads>> Create(Ads add)
+        public async Task<Response<Ads>> CreateAsync(Ads add)
         {
 
             Response<Ads> res = new Response<Ads>();
@@ -33,7 +33,7 @@ namespace turradgiver_api.Services
             return res;
         }
 
-        public async Task<Response<Ads>> Remove(int id)
+        public async Task<Response<Ads>> RemoveAsync(int id)
         {
 
             Response<Ads> res = new Response<Ads>();
@@ -42,7 +42,7 @@ namespace turradgiver_api.Services
             return res;
         }
 
-        public async Task<Response<IQueryable<Ads>>> Filter(string text)
+        public async Task<Response<IQueryable<Ads>>> FilterAsync(string text)
         {
             Response<IQueryable<Ads>> res = new Response<IQueryable<Ads>>();
 

@@ -54,7 +54,7 @@ namespace turradgiver_api.Controllers
         public async Task<IActionResult> Create([FromBody] AdDto addsDto)
         {
             _logger.LogInformation("AddsDto", addsDto);
-            return Ok(await _addsService.Create(new Ads(addsDto.name, addsDto.description, addsDto.price)));
+            return Ok(await _addsService.CreateAsync(new Ads(addsDto.name, addsDto.description, addsDto.price)));
         }
 
         [Authorize]
@@ -62,14 +62,14 @@ namespace turradgiver_api.Controllers
         public async Task<IActionResult> Remove([FromBody] AdIdDto id)
         {
             _logger.LogInformation("Id", id);
-            return Ok(await _addsService.Remove(id.id));
+            return Ok(await _addsService.RemoveAsync(id.id));
         }
 
         [HttpGet("search")]
         public async Task<IActionResult> Search([FromQuery] SearchDto searchDto)
         {
             _logger.LogInformation("SearchDto", searchDto);
-            return Ok(await _addsService.Filter(searchDto.text));
+            return Ok(await _addsService.FilterAsync(searchDto.text));
         }
     }
 }
