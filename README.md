@@ -9,3 +9,7 @@
 - [Ads] Ajouter une ad
 - [Ads] Endpoint pour récupérer les ads gloablement et sans authentification
 - [Ads] Endpoint avec Auth pour récupérer les ads d'un utilisateur
+
+# Extra
+
+- Move the api to `/v1/...` routes

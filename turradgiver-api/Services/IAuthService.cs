@@ -10,6 +10,7 @@ namespace turradgiver_api.Services
     {
         Task<Response<AuthCredential>> RegisterAsync(User user, string password);
         Task<Response<AuthCredential>> LoginAsync(string email, string password);
+        bool ValidateToken(string refreshToken);
     }
 
 }
