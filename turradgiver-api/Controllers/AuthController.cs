@@ -54,11 +54,11 @@ namespace turradgiver_api.Controllers
             return Ok(res);
         }
 
-        [HttpPost("token")]
-        public async Task<IActionResult> ExchangeRefreshToken([FromBody] ExchangeRefreshTokenDto exRefreshTokenDto)
+        [HttpPost("refresh")]
+        public async Task<IActionResult> RefreshToken([FromBody] ExchangeRefreshTokenDto exRefreshTokenDto)
         {
-            bool res= _authService.ValidateToken(exRefreshTokenDto.RefreshToken);
-            if (!res)
+            Response<AuthCredential> res= await _authService.RefreshToken(exRefreshTokenDto.RefreshToken);
+            if (!res.Success)
             {
                 return BadRequest("Invalid RefreshToken");
             }

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using turradgiver_api.Responses.Auth;
 using turradgiver_api.Utils;
+using Microsoft.Extensions.Logging;
 
 namespace turradgiver_api.Services
 {
@@ -23,12 +24,14 @@ namespace turradgiver_api.Services
         private readonly IRepository<User> _userRepository;
         private readonly IRepository<RefreshToken> _refreshTokenRepository;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AuthService> _logger;
 
-        public AuthService(IRepository<User> userRepository, IConfiguration configuration,IRepository<RefreshToken> refreshTokenRepository)
+        public AuthService(IRepository<User> userRepository, IConfiguration configuration,IRepository<RefreshToken> refreshTokenRepository, ILogger<AuthService> logger)
         {
             _userRepository = userRepository;
             _configuration = configuration;
             _refreshTokenRepository=refreshTokenRepository;
+            _logger = logger;
         }
 
         /// <summary>
@@ -49,7 +52,7 @@ namespace turradgiver_api.Services
                 Expires = DateTime.Now.AddMinutes(expMinutes),
                 SigningCredentials = credentials
             };
-
+            
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             return tokenHandler.WriteToken(tokenHandler.CreateToken(token));
         }
@@ -79,35 +82,32 @@ namespace turradgiver_api.Services
             return GenerateToken(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value), 1440);
         }
 
-        /// <summary>
-        /// Create a json web token thanks to claims of a specific user
-        /// </summary>
-        /// <param name="user">The user object from which the jwtoken is partialy generated from</param>
-        /// <returns>The JWT token</returns>
-        private AuthCredential CreateJsonWebToken(User user)
+        private string GenerateToken(User user)
         {
             List<Claim> claims = new List<Claim>{
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username)
             };
+            return GenerateToken(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value), 30,claims);
+        }
 
-            // string Token = GenerateToken(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value), 60,claims,)
-            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value));
-            SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature);
-
-            SecurityTokenDescriptor token = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddHours(1),
-                SigningCredentials = credentials
+        private async Task<AuthCredential> Authenticate(User user)
+        {
+            string token = GenerateToken(user);
+            string refreshToken = GenerateRefreshToken();
+           
+            // Create the RefreshToken 
+            RefreshToken rftoken= new RefreshToken(){ 
+                Token = refreshToken,
+                UserId = user.Id
             };
 
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            await _refreshTokenRepository.CreateAsync(rftoken);
+            
             return new AuthCredential
             {
-                Token = tokenHandler.WriteToken(tokenHandler.CreateToken(token)),
-                Expires = token.Expires,
-                RefreshToken = GenerateRefreshToken(),
+                Token=token,
+                RefreshToken=refreshToken
             };
         }
 
@@ -159,7 +159,7 @@ namespace turradgiver_api.Services
             user.Password = HashPassword(password);
 
             await _userRepository.CreateAsync(user);
-            res.Data = CreateJsonWebToken(user);
+            res.Data = await Authenticate(user);
             return res;
         }
 
@@ -188,20 +188,20 @@ namespace turradgiver_api.Services
             }
             else
             {
-                res.Data = CreateJsonWebToken(user);
+                res.Data = await Authenticate(user);
             }
             return res;
         }
 
 
-        public async Task<Response<string>> RefreshToken(string refreshToken){
-            Response<string> res = new Response<string>();
-            if(!ValidateToken(refreshToken)){
+        public async Task<Response<AuthCredential>> RefreshToken(string rToken){
+            Response<AuthCredential> res = new Response<AuthCredential>();
+            if(!ValidateToken(rToken)){
                 res.Success = false;
                 res.Message = "Invalid RefreshToken";
                 return res;
             }
-            RefreshToken refreshToken = await _refreshTokenRepository.GetByConditionAsync((r)=> r.Token.Equals(refreshToken) == 0);
+            RefreshToken refreshToken = (await _refreshTokenRepository.IncludeAsync((r)=> r.User)).Where((r)=> r.Token.CompareTo(rToken) == 0).FirstOrDefault();
             if (refreshToken == null)
             {
                 res.Success = false;
@@ -210,8 +210,9 @@ namespace turradgiver_api.Services
             }
 
             await _refreshTokenRepository.DeleteByIdAsync(refreshToken.Id);
-            // recupérer le user depuis le token 
-            // --> Generate JWT token with + new Refresh token
+            
+            res.Data = await Authenticate(refreshToken.User);
+            return res;
         }
     }
 

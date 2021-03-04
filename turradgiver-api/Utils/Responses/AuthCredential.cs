@@ -9,7 +9,7 @@ namespace turradgiver_api.Responses.Auth
     {
         public string Token { get; set; }
         public string RefreshToken { get; set; }
-        public DateTime? Expires { get; set; }
+        // public DateTime? Expires { get; set; }
         // Should add refresh token
     }
 }

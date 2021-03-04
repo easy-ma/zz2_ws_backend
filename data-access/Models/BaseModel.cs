@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace DAL.Models
 {
@@ -9,7 +10,8 @@ namespace DAL.Models
         {
             CreatedDate = DateTime.UtcNow;
         }
-
+        
+        [Key]
         [Column("id")]
         public int Id { get; set; }
 
