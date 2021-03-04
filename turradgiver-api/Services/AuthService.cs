@@ -11,7 +11,9 @@ using DAL.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using turradgiver_api.Responses.Auth;
+using turradgiver_api.Dtos.Auth;
 using turradgiver_api.Utils;
+using Microsoft.Extensions.Logging;
 
 namespace turradgiver_api.Services
 {
@@ -21,41 +23,115 @@ namespace turradgiver_api.Services
     public class AuthService : IAuthService
     {
         private readonly IRepository<User> _userRepository;
+        private readonly IRepository<RefreshToken> _refreshTokenRepository;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AuthService> _logger;
 
-        public AuthService(IRepository<User> userRepository, IConfiguration configuration)
+        public AuthService(IRepository<User> userRepository, IConfiguration configuration,IRepository<RefreshToken> refreshTokenRepository, ILogger<AuthService> logger)
         {
             _userRepository = userRepository;
             _configuration = configuration;
+            _refreshTokenRepository=refreshTokenRepository;
+            _logger = logger;
         }
 
         /// <summary>
-        /// Create a json web token thanks to claims of a specific user
+        /// Generate the token from claims provided, with a specific ammount of time for expirtation provided as parameter
+        /// And with a secretKey received as parameter
         /// </summary>
-        /// <param name="user">The user object from which the jwtoken is partialy generated from</param>
-        /// <returns>The JWT token</returns>
-        private AuthCredential CreateJsonWebToken(User user)
+        /// <param name="secretKey">The secretKey used for the creation of the singninCredentials</param>
+        /// <param name="expMinutes">Number of minutes before the expiration of the token generated</param>
+        /// <param name="claims">The claims to encode in the token, null if not provided</param>
+        /// <returns>Return the string representation of the token</returns>
+        private TokenDto GenerateToken(byte[] secretKey,double expMinutes,IEnumerable<Claim> claims=null)
         {
-            List<Claim> claims = new List<Claim>{
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username)
-            };
-
-            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value));
+            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(secretKey);
             SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature);
 
             SecurityTokenDescriptor token = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddHours(1),
+                Expires = DateTime.Now.AddMinutes(expMinutes),
                 SigningCredentials = credentials
             };
-
+            
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            return new TokenDto(){
+                Token= tokenHandler.WriteToken(tokenHandler.CreateToken(token)),
+                Expires = (DateTime)token.Expires
+            };
+        }
+
+        /// <summary>
+        /// Validate the refreshToken 
+        /// </summary>
+        /// <param name="refreshToken">RefreshToken to validate</param>
+        /// <returns>Return true if the RefreshToken is validate, false if not</returns>
+        public bool ValidateToken(string refreshToken){
+            TokenValidationParameters validationParameters= new TokenValidationParameters()
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value)),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew= TimeSpan.Zero,
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken validatedToken = null;
+            try{
+                tokenHandler.ValidateToken(refreshToken,validationParameters, out validatedToken);
+                return true;
+            }catch(Exception){
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Generate the RefreshToken
+        /// </summary>
+        /// <returns>Return the RefreshToken as string</returns>
+        private TokenDto GenerateRefreshToken()
+        {
+            return GenerateToken(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value), 1440);
+        }
+
+        /// <summary>
+        /// Generate the JWToken from the user credentials
+        /// </summary>
+        /// <param name="user">User credentials use for JWT generation</param>
+        /// <returns>Return the JWT</returns>
+        private TokenDto GenerateJWToken(User user)
+        {
+            List<Claim> claims = new List<Claim>{
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Username)
+            };
+            return GenerateToken(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value), 30,claims);
+        }
+
+        /// <summary>
+        /// Generate the Json Web token and Refresh token 
+        /// </summary>
+        /// <param name="user">The user credentials use for the JWT generation</param>
+        /// <returns>The AuthCredentials</returns>
+        private async Task<AuthCredential> Authenticate(User user)
+        {
+            string token = GenerateJWToken(user).Token;
+            string refreshToken = GenerateRefreshToken().Token;
+           
+            // Create the RefreshToken 
+            RefreshToken rftoken= new RefreshToken(){ 
+                Token = refreshToken,
+                UserId = user.Id
+            };
+
+            await _refreshTokenRepository.CreateAsync(rftoken);
+            
             return new AuthCredential
             {
-                Token = tokenHandler.WriteToken(tokenHandler.CreateToken(token)),
-                Expires = token.Expires
+                Token=token,
+                RefreshToken=refreshToken
             };
         }
 
@@ -107,7 +183,7 @@ namespace turradgiver_api.Services
             user.Password = HashPassword(password);
 
             await _userRepository.CreateAsync(user);
-            res.Data = CreateJsonWebToken(user);
+            res.Data = await Authenticate(user);
             return res;
         }
 
@@ -136,8 +212,35 @@ namespace turradgiver_api.Services
             }
             else
             {
-                res.Data = CreateJsonWebToken(user);
+                res.Data = await Authenticate(user);
             }
+            return res;
+        }
+
+        /// <summary>
+        /// Check if the RefreshToken is valid, and if it exists in the database.
+        /// If the RefreshToken is valid then it will delete it and generate a new pair Token and RefreshToken
+        /// </summary>
+        /// <param name="rToken">The refreshToken use for exchange</param>
+        /// <returns>Return authCredentials with JWT and RefreshToken</returns>
+        public async Task<Response<AuthCredential>> RefreshToken(string rToken){
+            Response<AuthCredential> res = new Response<AuthCredential>();
+            if(!ValidateToken(rToken)){
+                res.Success = false;
+                res.Message = "Invalid RefreshToken";
+                return res;
+            }
+            RefreshToken refreshToken = (await _refreshTokenRepository.IncludeAsync((r)=> r.User)).Where((r)=> r.Token.CompareTo(rToken) == 0).FirstOrDefault();
+            if (refreshToken == null)
+            {
+                res.Success = false;
+                res.Message = "Invalid RefreshToken";
+                return res;
+            }
+
+            await _refreshTokenRepository.DeleteByIdAsync(refreshToken.Id);
+            
+            res.Data = await Authenticate(refreshToken.User);
             return res;
         }
     }

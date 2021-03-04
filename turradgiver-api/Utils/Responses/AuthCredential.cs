@@ -8,7 +8,8 @@ namespace turradgiver_api.Responses.Auth
     public class AuthCredential
     {
         public string Token { get; set; }
-        public DateTime? Expires { get; set; }
+        public string RefreshToken { get; set; }
+        // public DateTime? Expires { get; set; }
         // Should add refresh token
     }
 }

@@ -15,5 +15,6 @@ namespace DAL.Repositories
         Task DeleteAsync(T entity);
         Task DeleteByIdAsync(int id);
         Task<IQueryable<T>> GetByRangeAsync(int skip, int number);
+        Task<IQueryable<T>> IncludeAsync(Expression<Func<T,object>> include);
     }
 }

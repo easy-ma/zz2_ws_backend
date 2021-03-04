@@ -19,37 +19,63 @@ namespace data_access.Migrations
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-            modelBuilder.Entity("DAL.Models.Add", b =>
+            modelBuilder.Entity("DAL.Models.Ads", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("createdDate");
+                        .HasColumnName("CreatedDate");
 
                     b.Property<string>("Description")
                         .HasColumnType("text")
-                        .HasColumnName("description");
+                        .HasColumnName("Description");
 
                     b.Property<string>("Name")
                         .HasColumnType("text")
-                        .HasColumnName("name");
+                        .HasColumnName("Name");
 
                     b.Property<float>("Price")
                         .HasColumnType("real")
-                        .HasColumnName("price");
+                        .HasColumnName("Price");
 
                     b.Property<float>("Rate")
                         .HasColumnType("real")
-                        .HasColumnName("rate");
+                        .HasColumnName("Rate");
 
                     b.HasKey("Id");
 
                     b.ToTable("Adds");
+                });
+
+            modelBuilder.Entity("DAL.Models.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("Id")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("CreatedDate");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("text")
+                        .HasColumnName("Token");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("DAL.Models.User", b =>
@@ -57,12 +83,12 @@ namespace data_access.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("createdDate");
+                        .HasColumnName("CreatedDate");
 
                     b.Property<string>("Email")
                         .HasColumnType("text")
@@ -79,6 +105,17 @@ namespace data_access.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("DAL.Models.RefreshToken", b =>
+                {
+                    b.HasOne("DAL.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

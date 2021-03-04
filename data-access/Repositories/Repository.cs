@@ -76,5 +76,10 @@ namespace DAL.Repositories
             await Task.Run(() =>_entities.Update(entity));
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IQueryable<T>> IncludeAsync(Expression<Func<T,object>> expression){
+            return await Task.Run(()=> _entities.Include(expression));
+        }
+
     }
 }

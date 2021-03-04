@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using DAL.Models;
 using DAL.Repositories;
+using System;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -86,7 +87,8 @@ namespace turradgiver_api
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:JWTKey").Value)),
                     // Could be good to add the ValidateIssuer and Validate Audience once we know the url
                     ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidateAudience = false,
+                    ClockSkew= TimeSpan.Zero,
                 };
             }
             );
