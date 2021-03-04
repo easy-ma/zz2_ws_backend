@@ -11,6 +11,7 @@ using DAL.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using turradgiver_api.Responses.Auth;
+using turradgiver_api.Dtos.Auth;
 using turradgiver_api.Utils;
 using Microsoft.Extensions.Logging;
 
@@ -42,7 +43,7 @@ namespace turradgiver_api.Services
         /// <param name="expMinutes">Number of minutes before the expiration of the token generated</param>
         /// <param name="claims">The claims to encode in the token, null if not provided</param>
         /// <returns>Return the string representation of the token</returns>
-        private string GenerateToken(byte[] secretKey,double expMinutes,IEnumerable<Claim> claims=null)
+        private TokenDto GenerateToken(byte[] secretKey,double expMinutes,IEnumerable<Claim> claims=null)
         {
             SymmetricSecurityKey securityKey = new SymmetricSecurityKey(secretKey);
             SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature);
@@ -55,7 +56,10 @@ namespace turradgiver_api.Services
             };
             
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            return tokenHandler.WriteToken(tokenHandler.CreateToken(token));
+            return new TokenDto(){
+                Token= tokenHandler.WriteToken(tokenHandler.CreateToken(token)),
+                Expires = (DateTime)token.Expires
+            };
         }
 
         /// <summary>
@@ -87,7 +91,7 @@ namespace turradgiver_api.Services
         /// Generate the RefreshToken
         /// </summary>
         /// <returns>Return the RefreshToken as string</returns>
-        private string GenerateRefreshToken()
+        private TokenDto GenerateRefreshToken()
         {
             return GenerateToken(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value), 1440);
         }
@@ -97,7 +101,7 @@ namespace turradgiver_api.Services
         /// </summary>
         /// <param name="user">User credentials use for JWT generation</param>
         /// <returns>Return the JWT</returns>
-        private string GenerateJWToken(User user)
+        private TokenDto GenerateJWToken(User user)
         {
             List<Claim> claims = new List<Claim>{
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -113,8 +117,8 @@ namespace turradgiver_api.Services
         /// <returns>The AuthCredentials</returns>
         private async Task<AuthCredential> Authenticate(User user)
         {
-            string token = GenerateJWToken(user);
-            string refreshToken = GenerateRefreshToken();
+            string token = GenerateJWToken(user).Token;
+            string refreshToken = GenerateRefreshToken().Token;
            
             // Create the RefreshToken 
             RefreshToken rftoken= new RefreshToken(){ 

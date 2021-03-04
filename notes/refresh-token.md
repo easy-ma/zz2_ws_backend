@@ -14,10 +14,10 @@ Process:
   - Generate RefreshToken then store it into the database.
 
 - JWToken expired
-  - Request with refresh token to `/Auth/refresh-token`
+  - Request with refresh token to `/Auth/refresh`
   - token is validate with `ValitationParamters`
   - Then the RefreshToken row is retrieve from the db thanks to a _"GetByToken"_
-  - User is retrieve from the UserId (ForeignKey ) in the RefreshToken row.
+  - User is retrieve from the UserId (ForeignKey --> use of Include) in the RefreshToken row.
   - Then the refresh token is deleted
   - The new JWT token + refresh token is generated with the user credentials.
 
