@@ -15,17 +15,17 @@ namespace DAL.Models
             Date = date;
         }
 
-        [ForeignKey("Adds")]
-        public string AddId { get; set; }
-        public Ads Add { get; set; }
+        [ForeignKey("AdsId")]
+        public string AdsId { get; set; }
+        public Ads Ads { get; set; }
 
-        [ForeignKey("userId")]
+        [ForeignKey("UserId")]
         public User User { get; set; }
         
-        [Column("rate")]
+        [Column("Rate")]
         public int Rate { get; set; }
 
-        [Column("date")]
+        [Column("Date")]
         public string Date { get; set; }
 
     }

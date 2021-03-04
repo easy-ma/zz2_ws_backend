@@ -12,10 +12,10 @@ namespace DAL.Models
         }
         
         [Key]
-        [Column("id")]
+        [Column("Id")]
         public int Id { get; set; }
 
-        [Column("createdDate")]
+        [Column("CreatedDate")]
         public DateTime CreatedDate { get; set; }
     }
 }

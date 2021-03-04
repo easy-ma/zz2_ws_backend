@@ -14,16 +14,16 @@ namespace DAL.Models
             Price = price;
         }
 
-        [Column("name")]
+        [Column("Name")]
         public string Name { get; set; }
 
-        [Column("description")]
+        [Column("Description")]
         public string Description { get; set; }
 
-        [Column("rate")]
+        [Column("Rate")]
         public float Rate { get; set; }
 
-        [Column("price")]
+        [Column("Price")]
         public float Price { get; set; }
 
     }

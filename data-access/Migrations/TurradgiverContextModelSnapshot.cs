@@ -24,28 +24,28 @@ namespace data_access.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("createdDate");
+                        .HasColumnName("CreatedDate");
 
                     b.Property<string>("Description")
                         .HasColumnType("text")
-                        .HasColumnName("description");
+                        .HasColumnName("Description");
 
                     b.Property<string>("Name")
                         .HasColumnType("text")
-                        .HasColumnName("name");
+                        .HasColumnName("Name");
 
                     b.Property<float>("Price")
                         .HasColumnType("real")
-                        .HasColumnName("price");
+                        .HasColumnName("Price");
 
                     b.Property<float>("Rate")
                         .HasColumnType("real")
-                        .HasColumnName("rate");
+                        .HasColumnName("Rate");
 
                     b.HasKey("Id");
 
@@ -57,12 +57,12 @@ namespace data_access.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("createdDate");
+                        .HasColumnName("CreatedDate");
 
                     b.Property<string>("Token")
                         .HasColumnType("text")
@@ -83,12 +83,12 @@ namespace data_access.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("createdDate");
+                        .HasColumnName("CreatedDate");
 
                     b.Property<string>("Email")
                         .HasColumnType("text")
