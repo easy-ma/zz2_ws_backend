@@ -10,6 +10,8 @@ using DAL.Repositories;
 using System;
 using AutoMapper;
 using turradgiver_api.Dtos.User;
+using turradgiver_api.Dtos.Ads;
+using System.Linq;
 
 namespace turradgiver_api.Controllers
 {
@@ -21,13 +23,15 @@ namespace turradgiver_api.Controllers
     {
         private readonly ILogger<UserProfileController> _logger;
         private readonly IRepository<User> _userRepository; 
+        private readonly IAdsService _adsService;
         private readonly IMapper _mapper;
 
-        public UserProfileController(IMapper mapper,ILogger<UserProfileController> logger, IRepository<User> userRepository)
+        public UserProfileController(IAdsService adsService, IMapper mapper,ILogger<UserProfileController> logger, IRepository<User> userRepository)
         {
             _logger = logger;
             _userRepository = userRepository;
             _mapper = mapper;
+            _adsService = adsService;
         }
 
         [HttpGet]
@@ -42,7 +46,12 @@ namespace turradgiver_api.Controllers
         [HttpGet("ads")]
         public async Task<IActionResult> GetAds()
         {
-            return Ok("nothing yet dude");
+            string id = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Response<IQueryable<Ads>> resAds = await _adsService.GetUserAds(Convert.ToInt32(id));
+            if (resAds.Success){
+                return Ok(resAds);
+            }
+            return NotFound(resAds);
         }
     }
 }
