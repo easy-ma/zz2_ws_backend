@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using turradgiver_api.Services;
+using AutoMapper;
 
 namespace turradgiver_api
 {
@@ -67,7 +68,6 @@ namespace turradgiver_api
 
             });
             services.AddDbContext<TurradgiverContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Turradgiver")));
-
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAdsService, AdsService>();
@@ -93,6 +93,7 @@ namespace turradgiver_api
             }
             );
 
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
