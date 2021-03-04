@@ -35,12 +35,13 @@ namespace turradgiver_api.Services
         }
 
         /// <summary>
-        /// 
+        /// Generate the token from claims provided, with a specific ammount of time for expirtation provided as parameter
+        /// And with a secretKey received as parameter
         /// </summary>
-        /// <param name="secretKey"></param>
-        /// <param name="expMinutes"></param>
-        /// <param name="claims"></param>
-        /// <returns></returns>
+        /// <param name="secretKey">The secretKey used for the creation of the singninCredentials</param>
+        /// <param name="expMinutes">Number of minutes before the expiration of the token generated</param>
+        /// <param name="claims">The claims to encode in the token, null if not provided</param>
+        /// <returns>Return the string representation of the token</returns>
         private string GenerateToken(byte[] secretKey,double expMinutes,IEnumerable<Claim> claims=null)
         {
             SymmetricSecurityKey securityKey = new SymmetricSecurityKey(secretKey);
@@ -57,6 +58,11 @@ namespace turradgiver_api.Services
             return tokenHandler.WriteToken(tokenHandler.CreateToken(token));
         }
 
+        /// <summary>
+        /// Validate the refreshToken 
+        /// </summary>
+        /// <param name="refreshToken">RefreshToken to validate</param>
+        /// <returns>Return true if the RefreshToken is validate, false if not</returns>
         public bool ValidateToken(string refreshToken){
             TokenValidationParameters validationParameters= new TokenValidationParameters()
             {
@@ -77,12 +83,21 @@ namespace turradgiver_api.Services
             }
         }
 
+        /// <summary>
+        /// Generate the RefreshToken
+        /// </summary>
+        /// <returns>Return the RefreshToken as string</returns>
         private string GenerateRefreshToken()
         {
             return GenerateToken(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value), 1440);
         }
 
-        private string GenerateToken(User user)
+        /// <summary>
+        /// Generate the JWToken from the user credentials
+        /// </summary>
+        /// <param name="user">User credentials use for JWT generation</param>
+        /// <returns>Return the JWT</returns>
+        private string GenerateJWToken(User user)
         {
             List<Claim> claims = new List<Claim>{
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -91,9 +106,14 @@ namespace turradgiver_api.Services
             return GenerateToken(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value), 30,claims);
         }
 
+        /// <summary>
+        /// Generate the Json Web token and Refresh token 
+        /// </summary>
+        /// <param name="user">The user credentials use for the JWT generation</param>
+        /// <returns>The AuthCredentials</returns>
         private async Task<AuthCredential> Authenticate(User user)
         {
-            string token = GenerateToken(user);
+            string token = GenerateJWToken(user);
             string refreshToken = GenerateRefreshToken();
            
             // Create the RefreshToken 
@@ -193,7 +213,12 @@ namespace turradgiver_api.Services
             return res;
         }
 
-
+        /// <summary>
+        /// Check if the RefreshToken is valid, and if it exists in the database.
+        /// If the RefreshToken is valid then it will delete it and generate a new pair Token and RefreshToken
+        /// </summary>
+        /// <param name="rToken">The refreshToken use for exchange</param>
+        /// <returns>Return authCredentials with JWT and RefreshToken</returns>
         public async Task<Response<AuthCredential>> RefreshToken(string rToken){
             Response<AuthCredential> res = new Response<AuthCredential>();
             if(!ValidateToken(rToken)){
