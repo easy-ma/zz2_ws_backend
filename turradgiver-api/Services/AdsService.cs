@@ -35,15 +35,30 @@ namespace turradgiver_api.Services
             return res;
         }
 
+
+        public async Task<Response<IQueryable<Ads>>> GetUserAds(int userId)
+        {
+            Response<IQueryable<Ads>> res = new Response<IQueryable<Ads>>();
+
+            IQueryable<Ads> data = await _addsRepository.GetByConditionAsync(e => e.UserId == userId);
+            if (!data.Any())
+            {
+                res.Success = false;
+                res.Message = "No ads find";
+            }
+            res.Data = data;
+            return res;
+        }
+
         public async Task<Response<IQueryable<Ads>>> FilterAsync(string text)
         {
             Response<IQueryable<Ads>> res = new Response<IQueryable<Ads>>();
 
             IQueryable<Ads> data = await _addsRepository.GetByConditionAsync(e => (e.Name).Contains(text) == true || (e.Description).Contains(text) == true);
-            if (data == null)
+            if (!data.Any())
             {
                 res.Success = false;
-                res.Message = "No adds find";
+                res.Message = "No ads find";
             }
             res.Data = data;
             res.Message = $"hmm {text} nice choice ;)";

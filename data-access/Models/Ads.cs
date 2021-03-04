@@ -26,5 +26,7 @@ namespace DAL.Models
         [Column("Price")]
         public float Price { get; set; }
 
+        [ForeignKey("User")]
+        public int UserId { get; set; }
     }
 }

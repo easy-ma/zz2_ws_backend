@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using turradgiver_api.Dtos.Ads;
 using turradgiver_api.Services;
+using AutoMapper;
+using System;
+using System.Security.Claims;
 
 namespace turradgiver_api.Controllers
 {
@@ -18,11 +21,14 @@ namespace turradgiver_api.Controllers
         private readonly ILogger<AdsController> _logger;
         private readonly IRepository<Ads> _addsRepo;
         private readonly IAdsService _addsService;
-        public AdsController(ILogger<AdsController> logger, IRepository<Ads> addsRepo, IAdsService addsService)
+        private readonly IMapper _mapper;
+
+        public AdsController(IMapper mapper, ILogger<AdsController> logger, IRepository<Ads> addsRepo, IAdsService addsService)
         {
             _logger = logger;
             _addsRepo = addsRepo;
             _addsService = addsService;
+            _mapper = mapper;
         }
 
         [HttpGet("ads")]
@@ -45,16 +51,17 @@ namespace turradgiver_api.Controllers
             // return Ok(_addsRepo.GetAll());
             Debug.WriteLine("LA");
             Debug.WriteLine(page);
-
             return Ok(new[] { "coucou", "c'est", "moi" });
         }
 
         [Authorize]
         [HttpPost("create")]
-        public async Task<IActionResult> Create([FromBody] AdDto addsDto)
+        public async Task<IActionResult> Create([FromBody] CreateAdDto createAdDto)
         {
-            _logger.LogInformation("AddsDto", addsDto);
-            return Ok(await _addsService.CreateAsync(new Ads(addsDto.Name, addsDto.Description, addsDto.Price)));
+            string id = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Ads ads = _mapper.Map<Ads>(createAdDto);
+            ads.UserId = Convert.ToInt32(id);
+            return Ok(await _addsService.CreateAsync(ads));
         }
 
         [Authorize]
