@@ -13,5 +13,6 @@ namespace turradgiver_api.Services
         Task<Response<Ads>> RemoveAsync(int id);
         Task<Response<Ads>> GetAdAsync(int id);
         Task<Response<IQueryable<Ads>>> GetUserAds(int userId);
+        Task<bool> CheckIfAdBelongToUserAsync(int adId, int userId);
     }
 }

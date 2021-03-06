@@ -19,12 +19,12 @@ namespace turradgiver_api.Controllers
     public class AdsController : ControllerBase
     {
         private readonly ILogger<AdsController> _logger;
-        private readonly IAdsService _addsService;
+        private readonly IAdsService _adService;
 
-        public AdsController(ILogger<AdsController> logger, IAdsService addsService)
+        public AdsController(ILogger<AdsController> logger, IAdsService adService)
         {
             _logger = logger;
-            _addsService = addsService;
+            _adService = adService;
         }
 
         [HttpGet("all")]
@@ -36,29 +36,32 @@ namespace turradgiver_api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAd(int id)
         {
-            return Ok(await _addsService.GetAdAsync(id));
+            return Ok(await _adService.GetAdAsync(id));
         }
 
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateAdDto createAdDto)
         {
-            int id = HttpContext.GetUserId();
-            return Ok(await _addsService.CreateAsync(createAdDto, id));
+            int userId = HttpContext.GetUserId();
+            return Ok(await _adService.CreateAsync(createAdDto, userId));
         }
 
         [Authorize]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Remove(int id)
+        public async Task<IActionResult> Remove(int adId)
         {
-            //FIXME: check if the addsBelong to the user
-            return Ok(await _addsService.RemoveAsync(id));
+            int userId = HttpContext.GetUserId();
+            if (await _adService.CheckIfAdBelongToUserAsync(adId, userId)){
+                return Ok(await _adService.RemoveAsync(adId));
+            }
+            return Unauthorized();
         }
 
         [HttpGet("search")]
         public async Task<IActionResult> Search([FromQuery] SearchDto searchDto)
         {
-            return Ok(await _addsService.FilterAsync(searchDto.Text));
+            return Ok(await _adService.FilterAsync(searchDto.Text));
         }
     }
 }

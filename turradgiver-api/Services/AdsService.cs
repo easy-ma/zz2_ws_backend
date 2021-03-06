@@ -13,12 +13,12 @@ namespace turradgiver_api.Services
     /// </summary>
     public class AdsService : IAdsService
     {
-        private readonly IRepository<Ads> _addsRepository;
+        private readonly IRepository<Ads> _adRepository;
         private readonly IMapper _mapper;
 
         public AdsService(IRepository<Ads> addsRepository, IMapper mapper)
         {
-            _addsRepository = addsRepository;
+            _adRepository = addsRepository;
             _mapper = mapper;
         }
 
@@ -27,14 +27,14 @@ namespace turradgiver_api.Services
             Response<Ads> res = new Response<Ads>();
             res.Data = _mapper.Map<Ads>(createAdDto);
             res.Data.UserId = userId;
-            await _addsRepository.CreateAsync(res.Data);
+            await _adRepository.CreateAsync(res.Data);
             return res;
         }
 
         public async Task<Response<Ads>> GetAdAsync(int id)
         {
             Response<Ads> res = new Response<Ads>();
-            res.Data = await _addsRepository.GetByIdAsync(id);
+            res.Data = await _adRepository.GetByIdAsync(id);
             res.Message = "Ad found.";
             return res;
         }
@@ -42,17 +42,25 @@ namespace turradgiver_api.Services
         public async Task<Response<Ads>> RemoveAsync(int id)
         {
             Response<Ads> res = new Response<Ads>();
-            await _addsRepository.DeleteByIdAsync(id);
+            await _adRepository.DeleteByIdAsync(id);
             res.Message = "Remove succeed";
             return res;
         }
 
+        public async Task<bool> CheckIfAdBelongToUserAsync(int adId, int userId) 
+        {
+            Ads ad = await _adRepository.GetByIdAsync(adId);
+            if(ad.UserId == userId){
+                return true;
+            }
+            return false;
+        }
 
         public async Task<Response<IQueryable<Ads>>> GetUserAds(int userId)
         {
             Response<IQueryable<Ads>> res = new Response<IQueryable<Ads>>();
 
-            IQueryable<Ads> data = await _addsRepository.GetByConditionAsync(e => e.UserId == userId);
+            IQueryable<Ads> data = await _adRepository.GetByConditionAsync(e => e.UserId == userId);
             if (!data.Any())
             {
                 res.Success = false;
@@ -66,7 +74,7 @@ namespace turradgiver_api.Services
         {
             Response<IQueryable<Ads>> res = new Response<IQueryable<Ads>>();
 
-            IQueryable<Ads> data = await _addsRepository.GetByConditionAsync(e => (e.Name).Contains(text) == true || (e.Description).Contains(text) == true);
+            IQueryable<Ads> data = await _adRepository.GetByConditionAsync(e => (e.Name).Contains(text) == true || (e.Description).Contains(text) == true);
             if (!data.Any())
             {
                 res.Success = false;
