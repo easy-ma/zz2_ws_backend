@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAL.Models
 {
-    [Table("Adds")]
+    [Table("Ads")]
     public class Ads : BaseModel
     {
         public Ads(string name, string description, float price)

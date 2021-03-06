@@ -9,7 +9,7 @@ namespace data_access.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Adds",
+                name: "Ads",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -18,11 +18,12 @@ namespace data_access.Migrations
                     Description = table.Column<string>(type: "text", nullable: true),
                     Rate = table.Column<float>(type: "real", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Adds", x => x.Id);
+                    table.PrimaryKey("PK_Ads", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -71,7 +72,7 @@ namespace data_access.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Adds");
+                name: "Ads");
 
             migrationBuilder.DropTable(
                 name: "RefreshTokens");

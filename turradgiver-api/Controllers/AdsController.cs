@@ -34,11 +34,6 @@ namespace turradgiver_api.Controllers
         [HttpGet("ads")]
         public IActionResult GetAll([FromQuery] int page = 1)
         {
-            //return Ok(_addsRepo.GetByRange(10 * (page.page - 1), 10));
-            // return Ok(_addsRepo.GetAll());
-            Debug.WriteLine("LA");
-            Debug.WriteLine(page);
-
             return Ok(new[] { "coucou", "c'est", "moi" });
         }
 
@@ -47,10 +42,6 @@ namespace turradgiver_api.Controllers
         public IActionResult GetAllForUser([FromQuery] int page = 1)
         {
             Debug.WriteLine(HttpContext.User.Identity.Name);
-            //return Ok(_addsRepo.GetByRange(10 * (page.page - 1), 10));
-            // return Ok(_addsRepo.GetAll());
-            Debug.WriteLine("LA");
-            Debug.WriteLine(page);
             return Ok(new[] { "coucou", "c'est", "moi" });
         }
 

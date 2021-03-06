@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace data_access.Migrations
 {
     [DbContext(typeof(TurradgiverContext))]
-    [Migration("20210304163451_AdsUserRef")]
-    partial class AdsUserRef
+    [Migration("20210306213129_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -54,7 +54,7 @@ namespace data_access.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Adds");
+                    b.ToTable("Ads");
                 });
 
             modelBuilder.Entity("DAL.Models.RefreshToken", b =>

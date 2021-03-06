@@ -52,7 +52,7 @@ namespace data_access.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Adds");
+                    b.ToTable("Ads");
                 });
 
             modelBuilder.Entity("DAL.Models.RefreshToken", b =>

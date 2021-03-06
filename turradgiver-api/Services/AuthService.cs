@@ -169,10 +169,10 @@ namespace turradgiver_api.Services
         /// Return the AuthCredentials i.e the Jwtoken once the user will be register
         /// Return a failed Response if the user already exists in the database
         /// </returns>
-        public async Task<Response<AuthCredential>> RegisterAsync(User user, string password)
+        public async Task<Response<AuthCredential>> RegisterAsync(UserSignUpDto userSignUpDto)
         {
             Response<AuthCredential> res = new Response<AuthCredential>();
-
+            User user = new User(userSignUpDto.Username, userSignUpDto.Email);
             User checkUser = (await _userRepository.GetByConditionAsync((u => u.Email.CompareTo(user.Email) == 0))).FirstOrDefault();
             if (checkUser != null)
             {
@@ -180,7 +180,7 @@ namespace turradgiver_api.Services
                 res.Message = "User already exists";
                 return res;
             }
-            user.Password = HashPassword(password);
+            user.Password = HashPassword(userSignUpDto.Password);
 
             await _userRepository.CreateAsync(user);
             res.Data = await Authenticate(user);
@@ -223,14 +223,14 @@ namespace turradgiver_api.Services
         /// </summary>
         /// <param name="rToken">The refreshToken use for exchange</param>
         /// <returns>Return authCredentials with JWT and RefreshToken</returns>
-        public async Task<Response<AuthCredential>> RefreshToken(string rToken){
+        public async Task<Response<AuthCredential>> RefreshToken(ExchangeRefreshTokenDto refreshDto){
             Response<AuthCredential> res = new Response<AuthCredential>();
-            if(!ValidateToken(rToken)){
+            if(!ValidateToken(refreshDto.RefreshToken)){
                 res.Success = false;
                 res.Message = "Invalid RefreshToken";
                 return res;
             }
-            RefreshToken refreshToken = (await _refreshTokenRepository.IncludeAsync((r)=> r.User)).Where((r)=> r.Token.CompareTo(rToken) == 0).FirstOrDefault();
+            RefreshToken refreshToken = (await _refreshTokenRepository.IncludeAsync((r)=> r.User)).Where((r)=> r.Token.CompareTo(refreshDto.RefreshToken) == 0).FirstOrDefault();
             if (refreshToken == null)
             {
                 res.Success = false;
