@@ -5,10 +5,10 @@ using DAL.Models;
 using DAL.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using turradgiver_api.Utils;
 using Microsoft.Extensions.Logging;
 using turradgiver_api.Dtos.Ads;
 using turradgiver_api.Services;
-using AutoMapper;
 using System;
 using System.Security.Claims;
 
@@ -19,54 +19,45 @@ namespace turradgiver_api.Controllers
     public class AdsController : ControllerBase
     {
         private readonly ILogger<AdsController> _logger;
-        private readonly IRepository<Ads> _addsRepo;
         private readonly IAdsService _addsService;
-        private readonly IMapper _mapper;
 
-        public AdsController(IMapper mapper, ILogger<AdsController> logger, IRepository<Ads> addsRepo, IAdsService addsService)
+        public AdsController(ILogger<AdsController> logger, IAdsService addsService)
         {
             _logger = logger;
-            _addsRepo = addsRepo;
             _addsService = addsService;
-            _mapper = mapper;
         }
 
-        [HttpGet("ads")]
+        [HttpGet("all")]
         public IActionResult GetAll([FromQuery] int page = 1)
         {
             return Ok(new[] { "coucou", "c'est", "moi" });
         }
 
-        [Authorize]
-        [HttpGet("get")]
-        public IActionResult GetAllForUser([FromQuery] int page = 1)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAd(int id)
         {
-            Debug.WriteLine(HttpContext.User.Identity.Name);
-            return Ok(new[] { "coucou", "c'est", "moi" });
+            return Ok(await _addsService.GetAdAsync(id));
         }
 
         [Authorize]
-        [HttpPost("create")]
+        [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateAdDto createAdDto)
         {
-            string id = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Ads ads = _mapper.Map<Ads>(createAdDto);
-            ads.UserId = Convert.ToInt32(id);
-            return Ok(await _addsService.CreateAsync(ads));
+            int id = HttpContext.GetUserId();
+            return Ok(await _addsService.CreateAsync(createAdDto, id));
         }
 
         [Authorize]
-        [HttpDelete("remove")]
-        public async Task<IActionResult> Remove([FromBody] AdIdDto idDto)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Remove(int id)
         {
-            _logger.LogInformation("Id", idDto.Id);
-            return Ok(await _addsService.RemoveAsync(idDto.Id));
+            //FIXME: check if the addsBelong to the user
+            return Ok(await _addsService.RemoveAsync(id));
         }
 
         [HttpGet("search")]
         public async Task<IActionResult> Search([FromQuery] SearchDto searchDto)
         {
-            _logger.LogInformation("SearchDto", searchDto);
             return Ok(await _addsService.FilterAsync(searchDto.Text));
         }
     }
