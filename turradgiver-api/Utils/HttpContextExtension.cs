@@ -14,12 +14,12 @@ namespace turradgiver_api.Utils
         /// </summary>
         /// <param name="httpContext">The httpContext to extends with a method</param>
         /// <returns>Return the id of the user</returns>
-        public static int GetUserId(this HttpContext httpContext ){
+        public static Guid GetUserId(this HttpContext httpContext ){
             if(httpContext.User == null){
-                return -1;
+                return Guid.Empty;
             }
 
-            return Convert.ToInt32(httpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            return new Guid(httpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
         }
     }
 }

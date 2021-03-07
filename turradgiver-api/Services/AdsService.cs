@@ -5,6 +5,8 @@ using DAL.Repositories;
 using turradgiver_api.Utils;
 using AutoMapper;
 using turradgiver_api.Dtos.Ads;
+using System;
+using Microsoft.Extensions.Logging;
 
 namespace turradgiver_api.Services
 {
@@ -15,14 +17,16 @@ namespace turradgiver_api.Services
     {
         private readonly IRepository<Ad> _adRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
-        public AdsService(IRepository<Ad> addsRepository, IMapper mapper)
+        public AdsService(IRepository<Ad> addsRepository, IMapper mapper, ILogger<AdsService> logger)
         {
             _adRepository = addsRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
-        public async Task<Response<Ad>> CreateAsync(CreateAdDto createAdDto, int userId)
+        public async Task<Response<Ad>> CreateAsync(CreateAdDto createAdDto, Guid userId)
         {
             Response<Ad> res = new Response<Ad>();
             res.Data = _mapper.Map<Ad>(createAdDto);
@@ -31,15 +35,21 @@ namespace turradgiver_api.Services
             return res;
         }
 
-        public async Task<Response<Ad>> GetAdAsync(int id)
+        public async Task<Response<Ad>> GetAdAsync(Guid id)
         {
             Response<Ad> res = new Response<Ad>();
-            res.Data = await _adRepository.GetByIdAsync(id);
+            Ad ad = await _adRepository.GetByIdAsync(id);
+            if (ad == null){
+                res.Success = false;
+                res.Message = "Ad not found.";
+                return res;
+            }
+            res.Data = ad;
             res.Message = "Ad found.";
             return res;
         }
 
-        public async Task<Response<Ad>> RemoveAsync(int id)
+        public async Task<Response<Ad>> RemoveAsync(Guid id)
         {
             Response<Ad> res = new Response<Ad>();
             await _adRepository.DeleteByIdAsync(id);
@@ -47,16 +57,16 @@ namespace turradgiver_api.Services
             return res;
         }
 
-        public async Task<bool> CheckIfAdBelongToUserAsync(int adId, int userId) 
+        public async Task<bool> CheckIfAdExistAndBelongToUserAsync(Guid adId, Guid userId) 
         {
             Ad ad = await _adRepository.GetByIdAsync(adId);
-            if(ad.UserId == userId){
+            if (ad != null && ad.UserId == userId ) {
                 return true;
             }
             return false;
         }
 
-        public async Task<Response<IQueryable<Ad>>> GetUserAds(int userId)
+        public async Task<Response<IQueryable<Ad>>> GetUserAds(Guid userId)
         {
             Response<IQueryable<Ad>> res = new Response<IQueryable<Ad>>();
 

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace turradgiver_api.Dtos.Ads
 {
@@ -7,7 +8,7 @@ namespace turradgiver_api.Dtos.Ads
     /// </summary>
     public class AdDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public float Rate { get; set; }

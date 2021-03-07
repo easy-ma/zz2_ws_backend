@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace turradgiver_api.Dtos.Ads
 {
@@ -8,8 +9,7 @@ namespace turradgiver_api.Dtos.Ads
     public class AdIdDto
     {
         [Required]
-        [Range(0, int.MaxValue, ErrorMessage = "Please enter valid integer Number")]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
     }
 }

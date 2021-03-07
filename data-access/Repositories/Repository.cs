@@ -37,13 +37,13 @@ namespace DAL.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteByIdAsync(int id)
+        public async Task DeleteByIdAsync(Guid id)
         {
             T entity = await GetByIdAsync(id);
             await DeleteAsync(entity);
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(Guid id)
         {
             return await Task.Run(() =>_entities.FirstOrDefault(entity => entity.Id == id));
         }

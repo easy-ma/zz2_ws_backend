@@ -33,15 +33,15 @@ namespace turradgiver_api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetProfile()
         {
-            int id = HttpContext.GetUserId();
-            return Ok(await _userService.GetProfile(id));
+            Guid userId = HttpContext.GetUserId();
+            return Ok(await _userService.GetProfile(userId));
         }
 
         [HttpGet("ads")]
         public async Task<IActionResult> GetAds()
         {
-            int id = HttpContext.GetUserId();
-            Response<IQueryable<Ad>> resAds = await _adsService.GetUserAds(id);
+            Guid userId = HttpContext.GetUserId();
+            Response<IQueryable<Ad>> resAds = await _adsService.GetUserAds(userId);
             if (resAds.Success){
                 return Ok(resAds);
             }

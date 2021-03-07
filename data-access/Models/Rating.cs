@@ -16,11 +16,11 @@ namespace DAL.Models
         }
 
         [ForeignKey("Ads")]
-        public string AdId { get; set; }
+        public Guid AdId { get; set; }
         public virtual Ad Ad { get; set; }
 
         [ForeignKey("User")]
-        public User User { get; set; }
+        public Guid UserId { get; set; }
         
         [Column("Rate")]
         public int Rate { get; set; }

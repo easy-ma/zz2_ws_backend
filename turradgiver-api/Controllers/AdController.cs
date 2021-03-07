@@ -31,34 +31,37 @@ namespace turradgiver_api.Controllers
         [HttpGet("all")]
         public IActionResult GetAll([FromQuery] int page = 1)
         {
-            return Ok("ok");
             return Ok(new[] { "coucou", "c'est", "moi" });
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetAd(int id)
+        [HttpGet("{adId}")]
+        public async Task<IActionResult> GetAd(Guid adId)
         {
-            _logger.LogInformation(id.ToString());
-            return Ok(await _adService.GetAdAsync(id));
+            _logger.LogInformation(adId.ToString());
+            return Ok(await _adService.GetAdAsync(adId));
         }
 
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateAdDto createAdDto)
         {
-            int userId = HttpContext.GetUserId();
+            Guid userId = HttpContext.GetUserId();
             return Ok(await _adService.CreateAsync(createAdDto, userId));
         }
 
         [Authorize]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Remove(int adId)
+        [HttpDelete("{adId}")]
+        public async Task<IActionResult> Remove(Guid adId)
         {
-            int userId = HttpContext.GetUserId();
-            if (await _adService.CheckIfAdBelongToUserAsync(adId, userId)){
+            Guid userId = HttpContext.GetUserId();
+            if (await _adService.CheckIfAdExistAndBelongToUserAsync(adId, userId)){
                 return Ok(await _adService.RemoveAsync(adId));
             }
-            return Unauthorized();
+            
+            return BadRequest(new Response<object>() { 
+                Success = false,
+                Message = "Ad not found for this user."
+            });
         }
 
         [HttpGet("search")]

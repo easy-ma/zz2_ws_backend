@@ -4,6 +4,7 @@ using DAL.Repositories;
 using turradgiver_api.Utils;
 using AutoMapper;
 using turradgiver_api.Dtos.User;
+using System;
 
 namespace turradgiver_api.Services
 {
@@ -21,7 +22,7 @@ namespace turradgiver_api.Services
             _mapper = mapper;
         }
 
-        public async Task<Response<UserDto>> GetProfile(int id)
+        public async Task<Response<UserDto>> GetProfile(Guid id)
         {
             Response<UserDto> res = new Response<UserDto>();
             User user = await _userRepository.GetByIdAsync(id);
