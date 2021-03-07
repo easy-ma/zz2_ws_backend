@@ -8,10 +8,11 @@ using turradgiver_api.Dtos.Auth;
 using turradgiver_api.Services;
 using turradgiver_api.Utils;
 
-namespace turradgiver_api.Controllers
+namespace turradgiver_api.Controllers.v1
 {
+    [ApiVersion("1.0")]
+    [Route("v{v:apiVersion}/auth")]
     [ApiController]
-    [Route("[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly ILogger<AuthController> _logger;
@@ -34,8 +35,7 @@ namespace turradgiver_api.Controllers
         [HttpPost("sign-up")]
         public async Task<IActionResult> SignUp([FromBody] UserSignUpDto userSignUpDto)
         {
-            _logger.LogInformation("UserSignUpDto", userSignUpDto);
-            Response<AuthCredential> res = await _authService.RegisterAsync(new User(userSignUpDto.Username, userSignUpDto.Email), userSignUpDto.Password);
+            Response<AuthCredential> res = await _authService.RegisterAsync(userSignUpDto);
             if (!res.Success)
             {
                 return Unauthorized(res);
@@ -49,15 +49,15 @@ namespace turradgiver_api.Controllers
             Response<AuthCredential> res = await _authService.LoginAsync(userSignInDto.Email, userSignInDto.Password);
             if (!res.Success)
             {
-                return BadRequest(res);
+                return BadRequest(res.Message);
             }
             return Ok(res);
         }
 
-        [HttpPost("refresh")]
+        [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken([FromBody] ExchangeRefreshTokenDto exRefreshTokenDto)
         {
-            Response<AuthCredential> res= await _authService.RefreshToken(exRefreshTokenDto.RefreshToken);
+            Response<AuthCredential> res= await _authService.RefreshToken(exRefreshTokenDto);
             if (!res.Success)
             {
                 return BadRequest("Invalid RefreshToken");

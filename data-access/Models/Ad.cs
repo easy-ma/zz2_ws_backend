@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAL.Models
 {
-    [Table("Adds")]
-    public class Ads : BaseModel
+    [Table("Ads")]
+    public class Ad : BaseModel
     {
-        public Ads(string name, string description, float price)
+        public Ad(string name, string description, float price)
         {
             Name = name;
             Description = description;
@@ -27,6 +27,7 @@ namespace DAL.Models
         public float Price { get; set; }
 
         [ForeignKey("User")]
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
+        public virtual User User { get; set; }
     }
 }

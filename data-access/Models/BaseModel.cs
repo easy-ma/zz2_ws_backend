@@ -13,7 +13,7 @@ namespace DAL.Models
         
         [Key]
         [Column("Id")]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Column("CreatedDate")]
         public DateTime CreatedDate { get; set; }

@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace data_access.Migrations
 {
     [DbContext(typeof(TurradgiverContext))]
-    [Migration("20210304163451_AdsUserRef")]
-    partial class AdsUserRef
+    [Migration("20210307025544_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,13 +21,12 @@ namespace data_access.Migrations
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-            modelBuilder.Entity("DAL.Models.Ads", b =>
+            modelBuilder.Entity("DAL.Models.Ad", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("Id")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("uuid")
+                        .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone")
@@ -49,21 +48,20 @@ namespace data_access.Migrations
                         .HasColumnType("real")
                         .HasColumnName("Rate");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Adds");
+                    b.ToTable("Ads");
                 });
 
             modelBuilder.Entity("DAL.Models.RefreshToken", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("Id")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("uuid")
+                        .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone")
@@ -73,8 +71,8 @@ namespace data_access.Migrations
                         .HasColumnType("text")
                         .HasColumnName("Token");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -85,11 +83,10 @@ namespace data_access.Migrations
 
             modelBuilder.Entity("DAL.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("Id")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("uuid")
+                        .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone")
