@@ -11,9 +11,8 @@ namespace turradgiver_api.Services
     {
         Task<Response<IQueryable<Ad>>> FilterAsync(string text);
         Task<Response<Ad>> CreateAsync(CreateAdDto createAdDto, Guid userId);
-        Task<Response<Ad>> RemoveAsync(Guid id);
+        Task<Response<Ad>> RemoveUserAdAsync(Guid adId,Guid userId);
         Task<Response<Ad>> GetAdAsync(Guid id);
         Task<Response<IQueryable<Ad>>> GetUserAds(Guid userId);
-        Task<bool> CheckIfAdExistAndBelongToUserAsync(Guid adId, Guid userId);
     }
 }

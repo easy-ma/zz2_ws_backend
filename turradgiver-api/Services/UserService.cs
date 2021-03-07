@@ -22,6 +22,11 @@ namespace turradgiver_api.Services
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Retrieve the user profile
+        /// </summary>
+        /// <param name="id">UserId of the user profile to return</param>
+        /// <returns>Return the UserProfileDto related to the userId provided as parameter</returns>
         public async Task<Response<UserDto>> GetProfile(Guid id)
         {
             Response<UserDto> res = new Response<UserDto>();

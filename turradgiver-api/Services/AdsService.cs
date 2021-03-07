@@ -26,6 +26,12 @@ namespace turradgiver_api.Services
             _logger = logger;
         }
 
+        /// <summary>
+        /// Create an add from the data received
+        /// </summary>
+        /// <param name="createAdDto">The data of the ad to create</param>
+        /// <param name="userId">The userId who created the add</param>
+        /// <returns>Return a success response if the ad is created</returns>
         public async Task<Response<Ad>> CreateAsync(CreateAdDto createAdDto, Guid userId)
         {
             Response<Ad> res = new Response<Ad>();
@@ -35,6 +41,11 @@ namespace turradgiver_api.Services
             return res;
         }
 
+        /// <summary>
+        /// Retrieve the ad related to the id provided as parameter
+        /// </summary>
+        /// <param name="id">The id of the ad to return</param>
+        /// <returns>Return the ad with the id provided within a success response, return a fail response if not found</returns>
         public async Task<Response<Ad>> GetAdAsync(Guid id)
         {
             Response<Ad> res = new Response<Ad>();
@@ -48,15 +59,35 @@ namespace turradgiver_api.Services
             res.Message = "Ad found.";
             return res;
         }
+        
+        /// <returns>Return a success response if deleted</returns>
 
-        public async Task<Response<Ad>> RemoveAsync(Guid id)
+        /// <summary>
+        /// Delete the ad related to the id provided as parameter
+        /// </summary>
+        /// <param name="adId">The id of the ad to delete</param>
+        /// <param name="userId">The userId who wanted to delete the ad</param>
+        /// <returns></returns>
+        public async Task<Response<Ad>> RemoveUserAdAsync(Guid adId, Guid userId)
         {
             Response<Ad> res = new Response<Ad>();
-            await _adRepository.DeleteByIdAsync(id);
-            res.Message = "Remove succeed";
-            return res;
+            if (await CheckIfAdExistAndBelongToUserAsync(adId,userId)) {
+                await _adRepository.DeleteByIdAsync(adId);
+                res.Message = "Remove succeed";
+                return res;
+            }
+            return new Response<Ad>(){ 
+                Success = false,
+                Message = "Ad not found for this user."
+            };
         }
 
+        /// <summary>
+        /// Check if an ad with adId exists and belong to the User with the userId.
+        /// </summary>
+        /// <param name="adId">The ad id</param>
+        /// <param name="userId">The user id</param>
+        /// <returns>Return true if the ad exists and belong to the user, false if not.</returns>
         public async Task<bool> CheckIfAdExistAndBelongToUserAsync(Guid adId, Guid userId) 
         {
             Ad ad = await _adRepository.GetByIdAsync(adId);

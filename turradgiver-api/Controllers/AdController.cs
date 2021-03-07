@@ -54,14 +54,11 @@ namespace turradgiver_api.Controllers
         public async Task<IActionResult> Remove(Guid adId)
         {
             Guid userId = HttpContext.GetUserId();
-            if (await _adService.CheckIfAdExistAndBelongToUserAsync(adId, userId)){
-                return Ok(await _adService.RemoveAsync(adId));
+            var res = await _adService.RemoveUserAdAsync(adId, userId);
+            if (res.Success) {
+                return Ok(res);
             }
-            
-            return BadRequest(new Response<object>() { 
-                Success = false,
-                Message = "Ad not found for this user."
-            });
+            return BadRequest(res);
         }
 
         [HttpGet("search")]
