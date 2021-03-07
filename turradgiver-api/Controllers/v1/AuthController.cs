@@ -8,7 +8,7 @@ using turradgiver_api.Dtos.Auth;
 using turradgiver_api.Services;
 using turradgiver_api.Utils;
 
-namespace turradgiver_api.Controllers
+namespace turradgiver_api.Controllers.v1
 {
     [ApiVersion("1.0")]
     [Route("v{v:apiVersion}/auth")]

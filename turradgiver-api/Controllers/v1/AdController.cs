@@ -12,7 +12,7 @@ using turradgiver_api.Services;
 using System;
 using System.Security.Claims;
 
-namespace turradgiver_api.Controllers
+namespace turradgiver_api.Controllers.v1
 {
     [ApiVersion("1.0")]
     [Route("v{v:apiVersion}/ads")]

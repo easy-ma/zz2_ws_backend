@@ -105,7 +105,7 @@ namespace turradgiver_api.Services
             if (!data.Any())
             {
                 res.Success = false;
-                res.Message = "No ads find";
+                res.Message = "Ads not found";
             }
             res.Data = data;
             return res;
@@ -119,7 +119,7 @@ namespace turradgiver_api.Services
             if (!data.Any())
             {
                 res.Success = false;
-                res.Message = "No ads find";
+                res.Message = "Ads not found";
             }
             res.Data = data;
             res.Message = $"hmm {text} nice choice ;)";

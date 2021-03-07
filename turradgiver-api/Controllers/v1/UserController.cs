@@ -10,7 +10,7 @@ using turradgiver_api.Dtos.User;
 using turradgiver_api.Dtos.Ads;
 using System.Linq;
 
-namespace turradgiver_api.Controllers
+namespace turradgiver_api.Controllers.v1
 {
     
     [Authorize]
@@ -42,10 +42,8 @@ namespace turradgiver_api.Controllers
         {
             Guid userId = HttpContext.GetUserId();
             Response<IQueryable<Ad>> resAds = await _adsService.GetUserAds(userId);
-            if (resAds.Success){
-                return Ok(resAds);
-            }
-            return NotFound(resAds);
+            return Ok(resAds);
+            
         }
     }
 }
