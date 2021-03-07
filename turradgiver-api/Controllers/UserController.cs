@@ -14,8 +14,9 @@ namespace turradgiver_api.Controllers
 {
     
     [Authorize]
+    [ApiVersion("1.0")]
+    [Route("v{v:apiVersion}/user")]
     [ApiController]
-    [Route("[controller]")]
     public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
@@ -40,7 +41,7 @@ namespace turradgiver_api.Controllers
         public async Task<IActionResult> GetAds()
         {
             int id = HttpContext.GetUserId();
-            Response<IQueryable<Ads>> resAds = await _adsService.GetUserAds(id);
+            Response<IQueryable<Ad>> resAds = await _adsService.GetUserAds(id);
             if (resAds.Success){
                 return Ok(resAds);
             }

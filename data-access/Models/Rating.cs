@@ -16,8 +16,8 @@ namespace DAL.Models
         }
 
         [ForeignKey("Ads")]
-        public string AdsId { get; set; }
-        public virtual Ads Ads { get; set; }
+        public string AdId { get; set; }
+        public virtual Ad Ad { get; set; }
 
         [ForeignKey("User")]
         public User User { get; set; }

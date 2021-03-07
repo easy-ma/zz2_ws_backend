@@ -14,14 +14,15 @@ using System.Security.Claims;
 
 namespace turradgiver_api.Controllers
 {
+    [ApiVersion("1.0")]
+    [Route("v{v:apiVersion}/ads")]
     [ApiController]
-    [Route("[controller]")]
-    public class AdsController : ControllerBase
+    public class AdController : ControllerBase
     {
-        private readonly ILogger<AdsController> _logger;
+        private readonly ILogger<AdController> _logger;
         private readonly IAdsService _adService;
 
-        public AdsController(ILogger<AdsController> logger, IAdsService adService)
+        public AdController(ILogger<AdController> logger, IAdsService adService)
         {
             _logger = logger;
             _adService = adService;
@@ -30,12 +31,14 @@ namespace turradgiver_api.Controllers
         [HttpGet("all")]
         public IActionResult GetAll([FromQuery] int page = 1)
         {
+            return Ok("ok");
             return Ok(new[] { "coucou", "c'est", "moi" });
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAd(int id)
         {
+            _logger.LogInformation(id.ToString());
             return Ok(await _adService.GetAdAsync(id));
         }
 

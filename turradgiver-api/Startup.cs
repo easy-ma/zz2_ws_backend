@@ -13,6 +13,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using turradgiver_api.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 namespace turradgiver_api
 {
@@ -71,6 +73,7 @@ namespace turradgiver_api
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAdsService, AdsService>();
+            services.AddScoped<IUserService, UserService>();
 
 
             services.AddAuthentication(options =>
@@ -94,6 +97,26 @@ namespace turradgiver_api
             );
 
             services.AddAutoMapper(typeof(Startup));
+
+            services.AddApiVersioning(options =>  
+            {  
+                options.ReportApiVersions = true;  
+                options.DefaultApiVersion = new ApiVersion(1, 0);  
+                options.AssumeDefaultVersionWhenUnspecified = true;  
+            });  
+            services.AddVersionedApiExplorer(options => {
+                    options.GroupNameFormat = "'v'VVV";
+                    options.SubstituteApiVersionInUrl = true;
+                    options.AssumeDefaultVersionWhenUnspecified = true;
+                    options.DefaultApiVersion = new ApiVersion(1, 0);
+                } 
+            );
+
+            // services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+            // services.AddSwaggerGen(c =>
+            // {
+            //     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Turradgiver api", Version = "v1" });
+            // });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -102,7 +125,7 @@ namespace turradgiver_api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
+                app.UseSwagger();                
                 app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"); });
             }
 

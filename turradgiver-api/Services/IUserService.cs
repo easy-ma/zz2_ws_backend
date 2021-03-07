@@ -7,6 +7,5 @@ namespace turradgiver_api.Services
     public interface IUserService
     {
         Task<Response<UserDto>> GetProfile(int id);
-        
     }
 }

@@ -21,7 +21,6 @@ namespace turradgiver_api.Services
             _mapper = mapper;
         }
 
-
         public async Task<Response<UserDto>> GetProfile(int id)
         {
             Response<UserDto> res = new Response<UserDto>();

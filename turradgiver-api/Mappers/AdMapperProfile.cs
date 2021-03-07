@@ -9,8 +9,8 @@ namespace turradgiver_api.Mappers
     {
         public AdsMapperProfile()
         {
-            CreateMap<CreateAdDto, Ads>();
-            CreateMap<AdDto, Ads>().ReverseMap();
+            CreateMap<CreateAdDto, Ad>();
+            CreateMap<AdDto, Ad>().ReverseMap();
         }
     }
 }

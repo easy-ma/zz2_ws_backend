@@ -10,8 +10,9 @@ using turradgiver_api.Utils;
 
 namespace turradgiver_api.Controllers
 {
+    [ApiVersion("1.0")]
+    [Route("v{v:apiVersion}/auth")]
     [ApiController]
-    [Route("[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly ILogger<AuthController> _logger;

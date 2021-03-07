@@ -8,11 +8,11 @@ namespace turradgiver_api.Services
 {
     public interface IAdsService
     {
-        Task<Response<IQueryable<Ads>>> FilterAsync(string text);
-        Task<Response<Ads>> CreateAsync(CreateAdDto createAdDto, int userId);
-        Task<Response<Ads>> RemoveAsync(int id);
-        Task<Response<Ads>> GetAdAsync(int id);
-        Task<Response<IQueryable<Ads>>> GetUserAds(int userId);
+        Task<Response<IQueryable<Ad>>> FilterAsync(string text);
+        Task<Response<Ad>> CreateAsync(CreateAdDto createAdDto, int userId);
+        Task<Response<Ad>> RemoveAsync(int id);
+        Task<Response<Ad>> GetAdAsync(int id);
+        Task<Response<IQueryable<Ad>>> GetUserAds(int userId);
         Task<bool> CheckIfAdBelongToUserAsync(int adId, int userId);
     }
 }

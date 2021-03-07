@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace DAL.Models
 {
     [Table("Ads")]
-    public class Ads : BaseModel
+    public class Ad : BaseModel
     {
-        public Ads(string name, string description, float price)
+        public Ad(string name, string description, float price)
         {
             Name = name;
             Description = description;
