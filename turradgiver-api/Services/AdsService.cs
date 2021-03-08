@@ -144,8 +144,6 @@ namespace turradgiver_api.Services
 
             }
 
-            _logger.LogInformation("Cc");
-            _logger.LogInformation(ads.FirstOrDefault().ToString());
             // Successful : no data = empty array
             Response<IEnumerable<AdDto>> res = new Response<IEnumerable<AdDto>>() { Data = _mapper.Map<List<AdDto>>(ads) };
 

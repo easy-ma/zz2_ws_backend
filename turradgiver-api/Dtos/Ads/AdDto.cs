@@ -13,6 +13,6 @@ namespace turradgiver_api.Dtos.Ads
         public string Description { get; set; }
         public float Rate { get; set; }
         public float Price { get; set; }
-        //public string ImageURL{ get; set; }
+        public string ImageURL{ get; set; }
     }
 }
