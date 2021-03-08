@@ -28,10 +28,10 @@ namespace turradgiver_api.Controllers.v1
             _adService = adService;
         }
 
-        [HttpGet("all")]
-        public IActionResult GetAll([FromQuery] int page = 1)
+        [HttpGet]
+        public async Task<IActionResult> GetAll([FromQuery] SearchDto criterias)
         {
-            return Ok(new[] { "coucou", "c'est", "moi" });
+            return Ok(await _adService.GetAdsAsync(criterias));
         }
 
         [HttpGet("{adId}")]
@@ -59,12 +59,6 @@ namespace turradgiver_api.Controllers.v1
                 return Ok(res);
             }
             return BadRequest(res);
-        }
-
-        [HttpGet("search")]
-        public async Task<IActionResult> Search([FromQuery] SearchDto searchDto)
-        {
-            return Ok(await _adService.FilterAsync(searchDto.Text));
         }
     }
 }

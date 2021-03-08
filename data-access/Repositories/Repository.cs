@@ -58,6 +58,10 @@ namespace DAL.Repositories
             return await Task.Run(() => _entities.Skip(skip).Take(number));
         }
 
+        public async Task<IQueryable<T>> GetByRangeAsync(int skip, int number, Expression<Func<T, bool>> expression)
+        {
+            return await Task.Run(() => _entities.Where(expression).Skip(skip).Take(number).AsNoTracking());
+        }
 
         public async Task<IQueryable<T>> GetByConditionAsync(Expression<Func<T, bool>> expression)
         {

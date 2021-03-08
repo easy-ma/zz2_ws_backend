@@ -4,6 +4,7 @@ using DAL.Models;
 using turradgiver_api.Utils;
 using turradgiver_api.Dtos.Ads;
 using System;
+using System.Collections.Generic;
 
 namespace turradgiver_api.Services
 {
@@ -11,8 +12,9 @@ namespace turradgiver_api.Services
     {
         Task<Response<IQueryable<Ad>>> FilterAsync(string text);
         Task<Response<Ad>> CreateAsync(CreateAdDto createAdDto, Guid userId);
-        Task<Response<Ad>> RemoveUserAdAsync(Guid adId,Guid userId);
-        Task<Response<Ad>> GetAdAsync(Guid id);
-        Task<Response<IQueryable<Ad>>> GetUserAds(Guid userId);
+        Task<Response<Ad>> RemoveUserAdAsync(Guid adId, Guid userId);
+        Task<Response<AdDto>> GetAdAsync(Guid id);
+        Task<Response<IEnumerable<AdDto>>> GetAdsAsync(SearchDto criterias);
+        Task<Response<IEnumerable<AdDto>>> GetUserAdsAsync(Guid userId, SearchDto criterias);
     }
 }

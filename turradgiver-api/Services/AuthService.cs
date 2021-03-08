@@ -130,8 +130,8 @@ namespace turradgiver_api.Services
             
             return new AuthCredential
             {
-                Token=token,
-                RefreshToken=refreshToken
+                Token = token,
+                RefreshToken = refreshToken
             };
         }
 

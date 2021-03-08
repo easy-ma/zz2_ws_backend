@@ -1,12 +1,14 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using DAL.Models;
 using DAL.Repositories;
 using turradgiver_api.Utils;
 using AutoMapper;
 using turradgiver_api.Dtos.Ads;
-using System;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace turradgiver_api.Services
 {
@@ -18,6 +20,8 @@ namespace turradgiver_api.Services
         private readonly IRepository<Ad> _adRepository;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
+
+        private readonly int itemPerPage = 4;
 
         public AdsService(IRepository<Ad> addsRepository, IMapper mapper, ILogger<AdsService> logger)
         {
@@ -46,16 +50,16 @@ namespace turradgiver_api.Services
         /// </summary>
         /// <param name="id">The id of the ad to return</param>
         /// <returns>Return the ad with the id provided within a success response, return a fail response if not found</returns>
-        public async Task<Response<Ad>> GetAdAsync(Guid id)
+        public async Task<Response<AdDto>> GetAdAsync(Guid id)
         {
-            Response<Ad> res = new Response<Ad>();
+            Response<AdDto> res = new Response<AdDto>();
             Ad ad = await _adRepository.GetByIdAsync(id);
             if (ad == null){
                 res.Success = false;
                 res.Message = "Ad not found.";
                 return res;
             }
-            res.Data = ad;
+            res.Data = _mapper.Map<AdDto>(ad);
             res.Message = "Ad found.";
             return res;
         }
@@ -97,17 +101,54 @@ namespace turradgiver_api.Services
             return false;
         }
 
-        public async Task<Response<IQueryable<Ad>>> GetUserAds(Guid userId)
+        /// <summary>
+        /// Returns all ads paginated and depending criterias
+        /// </summary>
+        /// <param name="criterias"></param>
+        /// <returns></returns>
+        public async Task<Response<IEnumerable<AdDto>>> GetAdsAsync(SearchDto criterias)
         {
-            Response<IQueryable<Ad>> res = new Response<IQueryable<Ad>>();
-
-            IQueryable<Ad> data = await _adRepository.GetByConditionAsync(e => e.UserId == userId);
-            if (!data.Any())
+            IQueryable<Ad> ads;
+            if (criterias.Search != null)
             {
-                res.Success = false;
-                res.Message = "Ads not found";
+                ads = await _adRepository.GetByRangeAsync(this.itemPerPage * (criterias.Page - 1), this.itemPerPage, e => e.Name.Contains(criterias.Search) || e.Description.Contains(criterias.Search));
+            } 
+            else
+            {
+                ads = await _adRepository.GetByRangeAsync(this.itemPerPage * (criterias.Page - 1), this.itemPerPage);
+
             }
-            res.Data = data;
+
+            // Successful : no data = empty array
+            Response<IEnumerable<AdDto>> res = new Response<IEnumerable<AdDto>>() { Data = _mapper.Map<List<AdDto>>(ads) };
+
+            return res;
+        }
+
+
+        /// <summary>
+        /// Returns all ads paginated and depending criterias for a specific User
+        /// </summary>
+        /// <param name="criterias"></param>
+        /// <returns></returns>
+        public async Task<Response<IEnumerable<AdDto>>> GetUserAdsAsync(Guid userId, SearchDto criterias)
+        {
+            IQueryable<Ad> ads;
+            if (criterias.Search != null)
+            {
+                ads = await _adRepository.GetByRangeAsync(this.itemPerPage * (criterias.Page - 1), this.itemPerPage, e => e.UserId == userId && (e.Name.Contains(criterias.Search) || e.Description.Contains(criterias.Search)));
+            }
+            else
+            {
+                ads = await _adRepository.GetByRangeAsync(this.itemPerPage * (criterias.Page - 1), this.itemPerPage, e => e.UserId == userId);
+
+            }
+
+            _logger.LogInformation("Cc");
+            _logger.LogInformation(ads.FirstOrDefault().ToString());
+            // Successful : no data = empty array
+            Response<IEnumerable<AdDto>> res = new Response<IEnumerable<AdDto>>() { Data = _mapper.Map<List<AdDto>>(ads) };
+
             return res;
         }
 

@@ -1,14 +1,12 @@
-using System.Threading.Tasks;
-using DAL.Models;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using turradgiver_api.Services;
 using turradgiver_api.Utils;
 using System;
-using turradgiver_api.Dtos.User;
 using turradgiver_api.Dtos.Ads;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace turradgiver_api.Controllers.v1
 {
@@ -38,12 +36,11 @@ namespace turradgiver_api.Controllers.v1
         }
 
         [HttpGet("ads")]
-        public async Task<IActionResult> GetAds()
+        public async Task<IActionResult> GetAds([FromQuery] SearchDto criterias)
         {
             Guid userId = HttpContext.GetUserId();
-            Response<IQueryable<Ad>> resAds = await _adsService.GetUserAds(userId);
+            Response<IEnumerable<AdDto>> resAds = await _adsService.GetUserAdsAsync(userId, criterias);
             return Ok(resAds);
-            
         }
     }
 }

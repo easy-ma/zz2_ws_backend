@@ -1,7 +1,8 @@
-using AutoMapper;
+﻿using AutoMapper;
 using turradgiver_api.Dtos.Ads;
 using DAL.Models;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace turradgiver_api.Mappers
 {
