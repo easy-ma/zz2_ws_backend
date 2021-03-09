@@ -16,6 +16,7 @@ namespace DAL.Models
 
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Ad> Ads { get; set; }
+        public virtual DbSet<Rating> Rating {get;set;}
         public virtual DbSet<RefreshToken> RefreshTokens{ get; set; }
 
 

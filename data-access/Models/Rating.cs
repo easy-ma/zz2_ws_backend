@@ -7,12 +7,13 @@ using System.Text;
 namespace DAL.Models
 {
     [Table("Ratings")]
-    class Rating
+    public class Rating : BaseModel
     {
-        public Rating(int rate, string date)
+        public Rating(int rate, string comment, string name)
         {
             Rate = rate;
-            Date = date;
+            Name = name;
+            Comment = comment;
         }
 
         [ForeignKey("Ads")]
@@ -24,9 +25,10 @@ namespace DAL.Models
         
         [Column("Rate")]
         public int Rate { get; set; }
+        [Column("Comment")]
+        public string Comment {get;set;}
 
-        [Column("Date")]
-        public string Date { get; set; }
-
+        [Column("Name")]
+        public string Name {get;set;}
     }
 }

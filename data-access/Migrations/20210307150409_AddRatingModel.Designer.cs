@@ -3,15 +3,17 @@ using System;
 using DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace data_access.Migrations
 {
     [DbContext(typeof(TurradgiverContext))]
-    partial class TurradgiverContextModelSnapshot : ModelSnapshot
+    [Migration("20210307150409_AddRatingModel")]
+    partial class AddRatingModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,42 +56,6 @@ namespace data_access.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Ads");
-                });
-
-            modelBuilder.Entity("DAL.Models.Rating", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("Id");
-
-                    b.Property<Guid>("AdId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("text")
-                        .HasColumnName("Comment");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("CreatedDate");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text")
-                        .HasColumnName("Name");
-
-                    b.Property<int>("Rate")
-                        .HasColumnType("integer")
-                        .HasColumnName("Rate");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AdId");
-
-                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("DAL.Models.RefreshToken", b =>
@@ -154,17 +120,6 @@ namespace data_access.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DAL.Models.Rating", b =>
-                {
-                    b.HasOne("DAL.Models.Ad", "Ad")
-                        .WithMany()
-                        .HasForeignKey("AdId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Ad");
                 });
 
             modelBuilder.Entity("DAL.Models.RefreshToken", b =>
