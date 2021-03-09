@@ -1,20 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// using System.ComponentModel.DataAnnotations;
 
-namespace turradgiver_api.Dtos.Auth
-{
-    public class UserSignUpDto
-    {
-        [Required]
-        [DataType(DataType.EmailAddress)]
-        [RegularExpression(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$", ErrorMessage = "Email is not valid.")]
-        public string Email { get; set; }
+// namespace turradgiver_api.Dtos.Auth
+// {
+//     public class UserSignUpDto
+//     {
+//         [Required]
+//         [DataType(DataType.EmailAddress)]
+//         [RegularExpression(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$", ErrorMessage = "Email is not valid.")]
+//         public string Email { get; set; }
 
-        [Required]
-        [DataType(DataType.Text)]
-        public string Username { get; set; }
+//         [Required]
+//         [DataType(DataType.Text)]
+//         public string Username { get; set; }
 
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-    }
-}
+//         [Required]
+//         [DataType(DataType.Password)]
+//         public string Password { get; set; }
+//     }
+// }

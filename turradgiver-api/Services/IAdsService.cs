@@ -1,9 +1,10 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using DAL.Models;
-using turradgiver_api.Utils;
 using turradgiver_api.Dtos.Ads;
 using System;
+
+using turradgiver_business.Dtos;
 
 namespace turradgiver_api.Services
 {

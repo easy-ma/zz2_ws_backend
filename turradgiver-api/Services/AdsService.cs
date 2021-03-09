@@ -2,11 +2,12 @@
 using System.Threading.Tasks;
 using DAL.Models;
 using DAL.Repositories;
-using turradgiver_api.Utils;
 using AutoMapper;
 using turradgiver_api.Dtos.Ads;
 using System;
 using Microsoft.Extensions.Logging;
+
+using turradgiver_business.Dtos;
 
 namespace turradgiver_api.Services
 {

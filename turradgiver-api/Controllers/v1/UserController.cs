@@ -9,6 +9,7 @@ using turradgiver_api.Dtos.Ads;
 using System;
 using System.Linq;
 
+using turradgiver_business.Dtos;
 using turradgiver_business.Dtos.User;
 using turradgiver_business.Services;
 
