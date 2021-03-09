@@ -14,3 +14,4 @@ services:
     volumes:
       - "./turradgiver-api/:/src/turradgiver-api"
       - "./data-access/:/src/data-access"
+      - "./turradgiver-business/:/src/turradgiver-business"

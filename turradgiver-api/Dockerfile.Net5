@@ -4,6 +4,7 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS dev
 WORKDIR /src
 COPY ["turradgiver-api/turradgiver-api.csproj", "turradgiver-api/"]
+COPY ["turradgiver-business/turradgiver-business.csproj", "turradgiver-business/"]
 COPY ["data-access/data-access.csproj", "data-access/"]
 
 # Commented because of the volume mounted

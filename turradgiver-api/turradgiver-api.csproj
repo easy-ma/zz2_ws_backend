@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\data-access\data-access.csproj" />
+    <ProjectReference Include="..\turradgiver-business\turradgiver-business.csproj" />
   </ItemGroup>
 
 
