@@ -1,20 +1,21 @@
-﻿using System.Text;
-using DAL.Models;
-using DAL.Repositories;
+﻿#region usings
 using System;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using turradgiver_api.Services;
-using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using turradgiver_bal.Mappers;
+using turradgiver_bal.Services;
+using turradgiver_dal.Models;
+using turradgiver_dal.Repositories;
+#endregion
 
 namespace turradgiver_api
 {
@@ -93,25 +94,27 @@ namespace turradgiver_api
                     // Could be good to add the ValidateIssuer and Validate Audience once we know the url
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    ClockSkew= TimeSpan.Zero,
+                    ClockSkew = TimeSpan.Zero,
                 };
             }
             );
 
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(typeof(UserMapperProfile), typeof(AdMapperProfile));
+            // services.AddAutoMapper(typeof(AdMapperProfile));
 
-            services.AddApiVersioning(options =>  
-            {  
-                options.ReportApiVersions = true;  
-                options.DefaultApiVersion = new ApiVersion(1, 0);  
-                options.AssumeDefaultVersionWhenUnspecified = true;  
-            });  
-            services.AddVersionedApiExplorer(options => {
-                    options.GroupNameFormat = "'v'VVV";
-                    options.SubstituteApiVersionInUrl = true;
-                    options.AssumeDefaultVersionWhenUnspecified = true;
-                    options.DefaultApiVersion = new ApiVersion(1, 0);
-                } 
+            services.AddApiVersioning(options =>
+            {
+                options.ReportApiVersions = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.AssumeDefaultVersionWhenUnspecified = true;
+            });
+            services.AddVersionedApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'VVV";
+                options.SubstituteApiVersionInUrl = true;
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+            }
             );
 
             // services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
@@ -127,7 +130,7 @@ namespace turradgiver_api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();                
+                app.UseSwagger();
                 app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"); });
             }
 
@@ -145,8 +148,6 @@ namespace turradgiver_api
             {
                 endpoints.MapControllers();
             });
-
-
         }
     }
 }

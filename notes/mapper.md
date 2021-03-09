@@ -39,13 +39,16 @@ namespace mynamespace
 **ReverseMap** : Bidirectional Mapping
 
 - Dto --> Model
-- Model --> Dto
+- Model --> Dto => reverseMap
 
 ## Use
 
 ```cs
 public class MyClass
 {
+
+    private readonly IMapper _mapper;
+    
     public MyClass(IMapper mapper)
     {
         _mapper = mapper;
@@ -61,3 +64,5 @@ public class MyClass
             MyDto dto = _mapper.Map<MyDto>(model);
         }
 ```
+
+**Guidelines:** https://jimmybogard.com/automapper-usage-guidelines/

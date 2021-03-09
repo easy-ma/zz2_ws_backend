@@ -1,16 +1,13 @@
-﻿using System.Diagnostics;
-using System.Security.Principal;
+﻿#region usings
+using System;
 using System.Threading.Tasks;
-using DAL.Models;
-using DAL.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using turradgiver_api.Utils;
 using Microsoft.Extensions.Logging;
-using turradgiver_api.Dtos.Ads;
-using turradgiver_api.Services;
-using System;
-using System.Security.Claims;
+using turradgiver_api.Utils;
+using turradgiver_bal.Dtos.Ads;
+using turradgiver_bal.Services;
+#endregion 
 
 namespace turradgiver_api.Controllers.v1
 {
@@ -28,10 +25,10 @@ namespace turradgiver_api.Controllers.v1
             _adService = adService;
         }
 
-        [HttpGet("all")]
-        public IActionResult GetAll([FromQuery] int page = 1)
+        [HttpGet]
+        public async Task<IActionResult> GetAll([FromQuery] SearchDto criterias)
         {
-            return Ok(new[] { "coucou", "c'est", "moi" });
+            return Ok(await _adService.GetAdsAsync(criterias));
         }
 
         [HttpGet("{adId}")]
@@ -55,16 +52,11 @@ namespace turradgiver_api.Controllers.v1
         {
             Guid userId = HttpContext.GetUserId();
             var res = await _adService.RemoveUserAdAsync(adId, userId);
-            if (res.Success) {
+            if (res.Success)
+            {
                 return Ok(res);
             }
             return BadRequest(res);
-        }
-
-        [HttpGet("search")]
-        public async Task<IActionResult> Search([FromQuery] SearchDto searchDto)
-        {
-            return Ok(await _adService.FilterAsync(searchDto.Text));
         }
     }
 }

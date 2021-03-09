@@ -1,12 +1,12 @@
-﻿using System.Threading.Tasks;
-using DAL.Models;
+﻿#region usings
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using turradgiver_api.Responses.Auth;
-using turradgiver_api.Dtos.Auth;
-using turradgiver_api.Services;
-using turradgiver_api.Utils;
+using turradgiver_bal.Dtos;
+using turradgiver_bal.Dtos.Auth;
+using turradgiver_bal.Services;
+#endregion
 
 namespace turradgiver_api.Controllers.v1
 {
@@ -35,7 +35,7 @@ namespace turradgiver_api.Controllers.v1
         [HttpPost("sign-up")]
         public async Task<IActionResult> SignUp([FromBody] UserSignUpDto userSignUpDto)
         {
-            Response<AuthCredential> res = await _authService.RegisterAsync(userSignUpDto);
+            Response<AuthCredentialDto> res = await _authService.RegisterAsync(userSignUpDto);
             if (!res.Success)
             {
                 return Unauthorized(res);
@@ -46,7 +46,7 @@ namespace turradgiver_api.Controllers.v1
         [HttpPost("sign-in")]
         public async Task<IActionResult> SignIn([FromBody] UserSignInDto userSignInDto)
         {
-            Response<AuthCredential> res = await _authService.LoginAsync(userSignInDto.Email, userSignInDto.Password);
+            Response<AuthCredentialDto> res = await _authService.LoginAsync(userSignInDto.Email, userSignInDto.Password);
             if (!res.Success)
             {
                 return BadRequest(res.Message);
@@ -57,10 +57,10 @@ namespace turradgiver_api.Controllers.v1
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken([FromBody] ExchangeRefreshTokenDto exRefreshTokenDto)
         {
-            Response<AuthCredential> res= await _authService.RefreshToken(exRefreshTokenDto);
+            Response<AuthCredentialDto> res = await _authService.RefreshToken(exRefreshTokenDto);
             if (!res.Success)
             {
-                return BadRequest("Invalid RefreshToken");
+                return BadRequest("Invalid RefreshToken"); // TODO res
             }
             return Ok(res);
         }

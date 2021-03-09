@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>turradgiver_api</RootNamespace>
+    <AssemblyName>turradgiver_api</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,11 +13,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.3" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.0.7" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.1.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\data-access\data-access.csproj" />
+    <ProjectReference Include="..\turradgiver-bal\turradgiver-bal.csproj" />
+    <ProjectReference Include="..\turradgiver-dal\turradgiver-dal.csproj" />
   </ItemGroup>
 
 
