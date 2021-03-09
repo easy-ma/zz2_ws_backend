@@ -11,7 +11,7 @@ namespace turradgiver_api.Services
     public interface IRatesService
     {
         Task<Response<IQueryable<Rating>>> GetRatesAsync( Guid AdId, int page);
-        Task<Response<Rating>> CreateAsync(CreateRateDto createRateDto, Guid userId, Guid AdId);
+        Task<Response<Rating>> CreateAsync(CreateRateDto createRateDto, Guid userId); //Guid AdId)
 
     }
 }

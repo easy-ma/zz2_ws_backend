@@ -39,13 +39,14 @@ namespace turradgiver_api.Services
         // public async Task<Response<Rating>> GetRatesAsync(Guid id){
 
         // }
-        public async Task<Response<Rating>> CreateAsync(CreateRateDto createRateDto, Guid userId, Guid adId)
+        public async Task<Response<Rating>> CreateAsync(CreateRateDto createRateDto, Guid userId) // Guid adId
         {
             Response<Rating> res = new Response<Rating>();
             res.Data = _mapper.Map<Rating>(createRateDto);
             // res.Data.AdId = adId;
             res.Data.UserId = userId;
             await _rateRepository.CreateAsync(res.Data);
+            // res.Data = _mapper.Map<RateDto>(res.Data);
             return res;
         }
 

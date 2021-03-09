@@ -10,6 +10,7 @@ namespace turradgiver_api.Mappers
         public RateMapperProfile()
         {
             CreateMap<CreateRateDto, Rating>();
+            CreateMap<RateDto, Rating>().ReverseMap();
         }
     }
 }
