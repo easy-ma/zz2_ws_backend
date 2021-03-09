@@ -1,7 +1,6 @@
-#region usings
+﻿#region usings
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Linq;
 using System;
 
 using Microsoft.AspNetCore.Authorization;
@@ -10,12 +9,9 @@ using Microsoft.Extensions.Logging;
 
 using turradgiver_api.Utils;
 
-using DAL.Models;
-
-using turradgiver_business.Dtos;
-using turradgiver_business.Dtos.User;
-using turradgiver_business.Dtos.Ads;
-using turradgiver_business.Services;
+using turradgiver_bal.Dtos;
+using turradgiver_bal.Dtos.Ads;
+using turradgiver_bal.Services;
 #endregion
 
 namespace turradgiver_api.Controllers.v1

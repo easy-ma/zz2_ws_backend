@@ -5,11 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-using DAL.Models;
-
-using turradgiver_business.Services;
-using turradgiver_business.Dtos.Auth;
-using turradgiver_business.Dtos;
+using turradgiver_bal.Services;
+using turradgiver_bal.Dtos.Auth;
+using turradgiver_bal.Dtos;
 #endregion
 
 namespace turradgiver_api.Controllers.v1

@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>turradgiver_api</RootNamespace>
+    <AssemblyName>turradgiver_api</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,8 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\data-access\data-access.csproj" />
-    <ProjectReference Include="..\turradgiver-business\turradgiver-business.csproj" />
+    <ProjectReference Include="..\turradgiver-bal\turradgiver-bal.csproj" />
+    <ProjectReference Include="..\turradgiver-dal\turradgiver-dal.csproj" />
   </ItemGroup>
 
 

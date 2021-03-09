@@ -1,20 +1,13 @@
 ﻿#region usings
-using System.Diagnostics;
-using System.Security.Principal;
 using System.Threading.Tasks;
-using System.Security.Claims;
 using System;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-using DAL.Models;
-using DAL.Repositories;
-
-using turradgiver_business.Services;
-using turradgiver_business.Dtos.Ads;
-using turradgiver_business.Dtos;
+using turradgiver_bal.Services;
+using turradgiver_bal.Dtos.Ads;
 
 using turradgiver_api.Utils;
 #endregion 

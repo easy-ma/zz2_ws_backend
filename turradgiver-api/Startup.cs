@@ -1,10 +1,8 @@
 ﻿#region usings
 using System.Text;
 using System;
-using AutoMapper;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,11 +13,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-using DAL.Models;
-using DAL.Repositories;
+using turradgiver_dal.Models;
+using turradgiver_dal.Repositories;
 
-using turradgiver_business.Services;
-using turradgiver_business.Mappers;
+using turradgiver_bal.Services;
+using turradgiver_bal.Mappers;
 #endregion
 
 namespace turradgiver_api
@@ -103,6 +101,7 @@ namespace turradgiver_api
             );
 
             services.AddAutoMapper(typeof(UserMapperProfile));
+            services.AddAutoMapper(typeof(AdMapperProfile));
 
             services.AddApiVersioning(options =>  
             {  
