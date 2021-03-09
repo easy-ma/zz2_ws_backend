@@ -4,18 +4,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace turradgiver_dal.Models
 {
+    /// <summary>
+    /// Base for all database models
+    /// </summary>
     public class BaseModel
     {
-        public BaseModel()
-        {
-            CreatedDate = DateTime.UtcNow;
-        }
-        
         [Key]
         [Column("Id")]
         public Guid Id { get; set; }
 
         [Column("CreatedDate")]
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
     }
 }

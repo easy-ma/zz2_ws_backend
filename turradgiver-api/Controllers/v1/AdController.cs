@@ -55,7 +55,8 @@ namespace turradgiver_api.Controllers.v1
         {
             Guid userId = HttpContext.GetUserId();
             var res = await _adService.RemoveUserAdAsync(adId, userId);
-            if (res.Success) {
+            if (res.Success)
+            {
                 return Ok(res);
             }
             return BadRequest(res);

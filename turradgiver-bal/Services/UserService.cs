@@ -9,7 +9,7 @@ using System;
 namespace turradgiver_bal.Services
 {
     /// <summary>
-    /// Class <c>HomeService</c> provide adds according to the user input
+    /// Provide adds according to the user input
     /// </summary>
     public class UserService : IUserService
     {
@@ -35,5 +35,4 @@ namespace turradgiver_bal.Services
             return res;
         }
     }
-
 }

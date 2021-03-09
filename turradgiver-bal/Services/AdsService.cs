@@ -19,7 +19,7 @@ using turradgiver_bal.Dtos.Ads;
 namespace turradgiver_bal.Services
 {
     /// <summary>
-    /// Class <c>HomeService</c> provide adds according to the user input
+    /// Provide adds according to the user input
     /// </summary>
     public class AdsService : IAdsService
     {
@@ -60,7 +60,8 @@ namespace turradgiver_bal.Services
         {
             Response<AdDto> res = new Response<AdDto>();
             Ad ad = await _adRepository.GetByIdAsync(id);
-            if (ad == null){
+            if (ad == null)
+            {
                 res.Success = false;
                 res.Message = "Ad not found.";
                 return res;
@@ -69,7 +70,7 @@ namespace turradgiver_bal.Services
             res.Message = "Ad found.";
             return res;
         }
-        
+
         /// <summary>
         /// Delete the ad related to the id provided as parameter
         /// </summary>
@@ -79,12 +80,14 @@ namespace turradgiver_bal.Services
         public async Task<Response<Ad>> RemoveUserAdAsync(Guid adId, Guid userId)
         {
             Response<Ad> res = new Response<Ad>();
-            if (await CheckIfAdExistAndBelongToUserAsync(adId,userId)) {
+            if (await CheckIfAdExistAndBelongToUserAsync(adId, userId))
+            {
                 await _adRepository.DeleteByIdAsync(adId);
                 res.Message = "Remove succeed";
                 return res;
             }
-            return new Response<Ad>(){ 
+            return new Response<Ad>()
+            {
                 Success = false,
                 Message = "Ad not found for this user."
             };
@@ -96,10 +99,11 @@ namespace turradgiver_bal.Services
         /// <param name="adId">The ad id</param>
         /// <param name="userId">The user id</param>
         /// <returns>Return true if the ad exists and belong to the user, false if not.</returns>
-        public async Task<bool> CheckIfAdExistAndBelongToUserAsync(Guid adId, Guid userId) 
+        public async Task<bool> CheckIfAdExistAndBelongToUserAsync(Guid adId, Guid userId)
         {
             Ad ad = await _adRepository.GetByIdAsync(adId);
-            if (ad != null && ad.UserId == userId ) {
+            if (ad != null && ad.UserId == userId)
+            {
                 return true;
             }
             return false;
@@ -109,10 +113,11 @@ namespace turradgiver_bal.Services
         /// Returns all ads paginated and depending on the expression received as parameter
         /// </summary>
         /// <param name="expression">The expression user for filtering the request</param>
-        /// <param name="page">TThe page requested by the user</param>
+        /// <param name="page">The page requested by the user</param>
         /// <param name="nb">The number of element to print in one page, <c>ITEM_PER_PAGE</<c> by default</param>
         /// <returns>Return the list of Ad that match the request</returns>
-        private async Task<Response<IEnumerable<AdDto>>> Search(Expression<Func<Ad,bool>> expression, int page, int nb = ITEM_PER_PAGE){
+        private async Task<Response<IEnumerable<AdDto>>> Search(Expression<Func<Ad, bool>> expression, int page, int nb = ITEM_PER_PAGE)
+        {
             var ads = await _adRepository.GetByRangeAsync(nb * (page - 1), nb, expression);
             Response<IEnumerable<AdDto>> res = new Response<IEnumerable<AdDto>>() { Data = _mapper.Map<List<AdDto>>(ads) };
             return res;
@@ -125,10 +130,10 @@ namespace turradgiver_bal.Services
         /// <returns></returns>
         public async Task<Response<IEnumerable<AdDto>>> GetAdsAsync(SearchDto criterias)
         {
-            Expression<Func<Ad,bool>> exp = criterias.Search != null 
+            Expression<Func<Ad, bool>> exp = criterias.Search != null
                 ? (e => e.Name.Contains(criterias.Search) || e.Description.Contains(criterias.Search))
-                : (e=> true);
-                 
+                : (e => true);
+
             return await Search(exp, criterias.Page);
         }
 
@@ -139,13 +144,18 @@ namespace turradgiver_bal.Services
         /// <returns></returns>
         public async Task<Response<IEnumerable<AdDto>>> GetUserAdsAsync(Guid userId, SearchDto criterias)
         {
-            Expression<Func<Ad,bool>> exp = criterias.Search != null 
+            Expression<Func<Ad, bool>> exp = criterias.Search != null
                 ? (e => e.UserId == userId && e.Name.Contains(criterias.Search) || e.Description.Contains(criterias.Search))
-                : (e=> e.UserId == userId);
-                
+                : (e => e.UserId == userId);
+
             return await Search(exp, criterias.Page);
         }
 
+        /// <summary>
+        /// Get adds filtered depending on a text input
+        /// </summary>
+        /// <param name="text">The text to use to filter the ads</param>
+        /// <returns>All ads that match the string condition</returns>
         public async Task<Response<IQueryable<Ad>>> FilterAsync(string text)
         {
             Response<IQueryable<Ad>> res = new Response<IQueryable<Ad>>();
@@ -161,5 +171,4 @@ namespace turradgiver_bal.Services
             return res;
         }
     }
-
 }

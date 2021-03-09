@@ -22,7 +22,7 @@ using turradgiver_bal.Dtos.Auth;
 namespace turradgiver_bal.Services
 {
     /// <summary>
-    /// Class <c>AuthService</c> provide authentification service for the API
+    /// Provide authentification service for the API
     /// </summary>
     public class AuthService : IAuthService
     {
@@ -31,11 +31,11 @@ namespace turradgiver_bal.Services
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthService> _logger;
 
-        public AuthService(IRepository<User> userRepository, IConfiguration configuration,IRepository<RefreshToken> refreshTokenRepository, ILogger<AuthService> logger)
+        public AuthService(IRepository<User> userRepository, IConfiguration configuration, IRepository<RefreshToken> refreshTokenRepository, ILogger<AuthService> logger)
         {
             _userRepository = userRepository;
             _configuration = configuration;
-            _refreshTokenRepository=refreshTokenRepository;
+            _refreshTokenRepository = refreshTokenRepository;
             _logger = logger;
         }
 
@@ -47,7 +47,7 @@ namespace turradgiver_bal.Services
         /// <param name="expMinutes">Number of minutes before the expiration of the token generated</param>
         /// <param name="claims">The claims to encode in the token, null if not provided</param>
         /// <returns>Return the string representation of the token</returns>
-        private TokenDto GenerateToken(byte[] secretKey,double expMinutes,IEnumerable<Claim> claims=null)
+        private TokenDto GenerateToken(byte[] secretKey, double expMinutes, IEnumerable<Claim> claims = null)
         {
             SymmetricSecurityKey securityKey = new SymmetricSecurityKey(secretKey);
             SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature);
@@ -58,10 +58,11 @@ namespace turradgiver_bal.Services
                 Expires = DateTime.Now.AddMinutes(expMinutes),
                 SigningCredentials = credentials
             };
-            
+
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            return new TokenDto(){
-                Token= tokenHandler.WriteToken(tokenHandler.CreateToken(token)),
+            return new TokenDto()
+            {
+                Token = tokenHandler.WriteToken(tokenHandler.CreateToken(token)),
                 Expires = (DateTime)token.Expires
             };
         }
@@ -71,22 +72,26 @@ namespace turradgiver_bal.Services
         /// </summary>
         /// <param name="refreshToken">RefreshToken to validate</param>
         /// <returns>Return true if the RefreshToken is validate, false if not</returns>
-        public bool ValidateToken(string refreshToken){
-            TokenValidationParameters validationParameters= new TokenValidationParameters()
+        public bool ValidateToken(string refreshToken)
+        {
+            TokenValidationParameters validationParameters = new TokenValidationParameters()
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value)),
                 ValidateIssuer = false,
                 ValidateAudience = false,
-                ClockSkew= TimeSpan.Zero,
+                ClockSkew = TimeSpan.Zero,
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
             SecurityToken validatedToken = null;
-            try{
-                tokenHandler.ValidateToken(refreshToken,validationParameters, out validatedToken);
+            try
+            {
+                tokenHandler.ValidateToken(refreshToken, validationParameters, out validatedToken);
                 return true;
-            }catch(Exception){
+            }
+            catch (Exception)
+            {
                 return false;
             }
         }
@@ -111,7 +116,7 @@ namespace turradgiver_bal.Services
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username)
             };
-            return GenerateToken(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value), 30,claims);
+            return GenerateToken(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value), 30, claims);
         }
 
         /// <summary>
@@ -123,15 +128,16 @@ namespace turradgiver_bal.Services
         {
             string token = GenerateJWToken(user).Token;
             string refreshToken = GenerateRefreshToken().Token;
-           
+
             // Create the RefreshToken 
-            RefreshToken rftoken= new RefreshToken(){ 
+            RefreshToken rftoken = new RefreshToken()
+            {
                 Token = refreshToken,
                 UserId = user.Id
             };
 
             await _refreshTokenRepository.CreateAsync(rftoken);
-            
+
             return new AuthCredentialDto
             {
                 Token = token,
@@ -203,7 +209,7 @@ namespace turradgiver_bal.Services
         {
             Response<AuthCredentialDto> res = new Response<AuthCredentialDto>();
             User user = (await _userRepository.GetByConditionAsync((u => u.Email.CompareTo(email) == 0))).FirstOrDefault();
-            
+
             if (user == null)
             {
                 res.Success = false;
@@ -227,14 +233,16 @@ namespace turradgiver_bal.Services
         /// </summary>
         /// <param name="rToken">The refreshToken use for exchange</param>
         /// <returns>Return AuthCredentialDtos with JWT and RefreshToken</returns>
-        public async Task<Response<AuthCredentialDto>> RefreshToken(ExchangeRefreshTokenDto refreshDto){
+        public async Task<Response<AuthCredentialDto>> RefreshToken(ExchangeRefreshTokenDto refreshDto)
+        {
             Response<AuthCredentialDto> res = new Response<AuthCredentialDto>();
-            if(!ValidateToken(refreshDto.RefreshToken)){
+            if (!ValidateToken(refreshDto.RefreshToken))
+            {
                 res.Success = false;
                 res.Message = "Invalid RefreshToken";
                 return res;
             }
-            RefreshToken refreshToken = (await _refreshTokenRepository.IncludeAsync((r)=> r.User)).Where((r)=> r.Token.CompareTo(refreshDto.RefreshToken) == 0).FirstOrDefault();
+            RefreshToken refreshToken = (await _refreshTokenRepository.IncludeAsync((r) => r.User)).Where((r) => r.Token.CompareTo(refreshDto.RefreshToken) == 0).FirstOrDefault();
             if (refreshToken == null)
             {
                 res.Success = false;
@@ -243,7 +251,7 @@ namespace turradgiver_bal.Services
             }
 
             await _refreshTokenRepository.DeleteByIdAsync(refreshToken.Id);
-            
+
             res.Data = await Authenticate(refreshToken.User);
             return res;
         }

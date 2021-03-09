@@ -7,6 +7,9 @@ using turradgiver_bal.Dtos.Ads;
 
 namespace turradgiver_bal.Mappers
 {
+    /// <summary>
+    /// Map Ads to Dto
+    /// </summary>
     public class AdMapperProfile : Profile
     {
         public AdMapperProfile()

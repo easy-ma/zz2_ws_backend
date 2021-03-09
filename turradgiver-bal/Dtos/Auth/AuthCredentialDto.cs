@@ -2,7 +2,7 @@
 namespace turradgiver_bal.Dtos.Auth
 {
     /// <summary>
-    /// AuthCredential get from the authentification of a user
+    /// DTO for AuthCredential sent back to the user after auth
     /// </summary>
     public class AuthCredentialDto
     {

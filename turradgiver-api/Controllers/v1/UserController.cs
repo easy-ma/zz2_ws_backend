@@ -16,7 +16,7 @@ using turradgiver_bal.Services;
 
 namespace turradgiver_api.Controllers.v1
 {
-    
+
     [Authorize]
     [ApiVersion("1.0")]
     [Route("v{v:apiVersion}/user")]

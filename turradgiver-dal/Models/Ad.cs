@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace turradgiver_dal.Models
 {
+    /// <summary>
+    /// Represent an Ad
+    /// </summary>
     [Table("Ads")]
     public class Ad : BaseModel
     {
