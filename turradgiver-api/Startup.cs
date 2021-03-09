@@ -101,7 +101,6 @@ namespace turradgiver_api
             );
 
             services.AddAutoMapper(typeof(UserMapperProfile),typeof(AdMapperProfile));
-            // services.AddAutoMapper(typeof(AdMapperProfile));
 
             services.AddApiVersioning(options =>  
             {  

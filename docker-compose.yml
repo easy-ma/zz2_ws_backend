@@ -15,3 +15,4 @@ services:
       - "./turradgiver-api/:/src/turradgiver-api"
       - "./turradgiver-bal/:/src/turradgiver-bal"
       - "./turradgiver-dal/:/src/turradgiver-dal"
+      - "./turradgiver-test/:/src/turradgiver-test"
