@@ -1,16 +1,23 @@
-﻿using System.Diagnostics;
+﻿#region usings
+using System.Diagnostics;
 using System.Security.Principal;
 using System.Threading.Tasks;
-using DAL.Models;
-using DAL.Repositories;
+using System.Security.Claims;
+using System;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using turradgiver_api.Utils;
 using Microsoft.Extensions.Logging;
-using turradgiver_api.Dtos.Ads;
-using turradgiver_api.Services;
-using System;
-using System.Security.Claims;
+
+using DAL.Models;
+using DAL.Repositories;
+
+using turradgiver_business.Services;
+using turradgiver_business.Dtos.Ads;
+using turradgiver_business.Dtos;
+
+using turradgiver_api.Utils;
+#endregion 
 
 namespace turradgiver_api.Controllers.v1
 {

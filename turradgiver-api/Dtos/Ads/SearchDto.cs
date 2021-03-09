@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// using System.ComponentModel.DataAnnotations;
 
-namespace turradgiver_api.Dtos.Ads
-{
-    public class SearchDto
-    {
-        [Required]
-        public string Text { get; set; }
-    }
-}
+// namespace turradgiver_api.Dtos.Ads
+// {
+//     public class SearchDto
+//     {
+//         [Required]
+//         public string Text { get; set; }
+//     }
+// }
