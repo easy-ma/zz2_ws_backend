@@ -210,7 +210,7 @@ namespace turradgiver_bal.Services
             if (user == null)
             {
                 res.Success = false;
-                res.Message = "User not found";
+                res.Message = "Invalid Email";
             }
             else if (!CheckPassword(password, user.Password))
             {
