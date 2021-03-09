@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System;
 
 
-namespace turradgiver_api.Dtos.Rates
+namespace turradgiver_bal.Dtos.Rates
 {
     public class RateDto{
         public Guid Id { get; set; }

@@ -1,15 +1,16 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using DAL.Models;
-using DAL.Repositories;
-using turradgiver_api.Utils;
+using turradgiver_dal.Models;
+using turradgiver_dal.Repositories;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
-using turradgiver_api.Dtos.Rates;
+using turradgiver_bal.Dtos;
+using turradgiver_bal.Dtos.Rates;
 
 
-namespace turradgiver_api.Services
+namespace turradgiver_bal.Services
 {
     /// <summary>
     /// Class <c>RatesService</c>   Provide rate to the corresponding ad.
@@ -46,21 +47,20 @@ namespace turradgiver_api.Services
             // res.Data.AdId = adId;
             res.Data.UserId = userId;
             await _rateRepository.CreateAsync(res.Data);
-            // res.Data = _mapper.Map<RateDto>(res.Data);
             return res;
         }
 
-        public async Task<Response<IQueryable<Rating>>> GetRatesAsync(Guid AdId, int page){
-            Response<IQueryable<Rating>> res = new Response<IQueryable<Rating>>();
+        public async Task<Response<IEnumerable<RateDto>>> GetRatesAsync(Guid AdId, int page){
+            Response<IEnumerable<RateDto>> res = new Response<IEnumerable<RateDto>>();
             Ad ad = await _adRepository.GetByIdAsync(AdId);
             if (ad == null){
                 res.Success = false;
                 res.Message = "Ad doesn't exit";
                 return res;
             }
-            IQueryable<Rating> data = await _rateRepository.GetByConditionAsync(e => e.AdId == AdId);
+            IEnumerable<Rating> data = (await _rateRepository.GetByConditionAsync(e => e.AdId == AdId));
             data = data.Skip((page-1)*2).Take(2);
-            res.Data = data;
+            res.Data = _mapper.Map<List<RateDto>>(data);
             return res;
         }
         
