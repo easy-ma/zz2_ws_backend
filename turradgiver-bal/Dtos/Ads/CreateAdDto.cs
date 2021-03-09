@@ -20,6 +20,12 @@ namespace turradgiver_bal.Dtos.Ads
         public string Description { get; set; }
 
         [Required]
+        [StringLength(200, MinimumLength = 5,
+        ErrorMessage = "Location should be minimum 5 characters and a maximum of 200 characters")]
+        [DataType(DataType.Text)]
+        public string Location { get; set; }
+
+        [Required]
         [Range(0, float.MaxValue, ErrorMessage = "Please enter valid float Number")]
         public float Price { get; set; }
 

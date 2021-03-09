@@ -15,6 +15,9 @@ namespace turradgiver_dal.Models
         [Column("Description")]
         public string Description { get; set; }
 
+        [Column("Location")]
+        public string Location { get; set; }
+
         [Column("Rate")]
         public float Rate { get; set; } = 0;
 
