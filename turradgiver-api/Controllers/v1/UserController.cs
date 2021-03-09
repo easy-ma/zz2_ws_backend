@@ -5,10 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using turradgiver_api.Services;
 using turradgiver_api.Utils;
-using System;
-using turradgiver_api.Dtos.User;
 using turradgiver_api.Dtos.Ads;
+using System;
 using System.Linq;
+
+using turradgiver_business.Dtos.User;
+using turradgiver_business.Services;
 
 namespace turradgiver_api.Controllers.v1
 {

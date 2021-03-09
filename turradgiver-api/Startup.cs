@@ -16,6 +16,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
+using turradgiver_business.Services;
+using turradgiver_business.Mappers;
+
 namespace turradgiver_api
 {
     public class Startup
@@ -96,7 +99,7 @@ namespace turradgiver_api
             }
             );
 
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(typeof(UserMapperProfile));
 
             services.AddApiVersioning(options =>  
             {  

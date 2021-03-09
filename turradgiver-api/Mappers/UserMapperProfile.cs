@@ -1,14 +1,14 @@
-using AutoMapper;
-using turradgiver_api.Dtos.User;
-using DAL.Models;
+// using AutoMapper;
+// using turradgiver_business.Dtos.User;
+// using DAL.Models;
 
-namespace turradgiver_api.Mappers
-{
-    public class UserMapperProfile : Profile
-    {
-        public UserMapperProfile()
-        {
-            CreateMap<UserDto, User>().ReverseMap();
-        }
-    }
-}
+// namespace turradgiver_api.Mappers
+// {
+//     public class UserMapperProfile : Profile
+//     {
+//         public UserMapperProfile()
+//         {
+//             CreateMap<UserDto, User>().ReverseMap();
+//         }
+//     }
+// }
