@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System;
 
-namespace turradgiver_api.Dtos.Auth
+namespace turradgiver_business.Dtos.Auth
 {
     public class ExchangeRefreshTokenDto 
     {

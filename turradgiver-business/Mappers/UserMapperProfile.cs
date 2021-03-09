@@ -1,8 +1,8 @@
 using AutoMapper;
-using turradgiver_api.Dtos.User;
 using DAL.Models;
+using turradgiver_business.Dtos.User;
 
-namespace turradgiver_api.Mappers
+namespace turradgiver_business.Mappers
 {
     public class UserMapperProfile : Profile
     {

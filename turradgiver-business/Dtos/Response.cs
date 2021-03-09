@@ -1,4 +1,4 @@
-﻿namespace turradgiver_api.Utils
+namespace turradgiver_business.Dtos
 {
     public class Response<T>
     {

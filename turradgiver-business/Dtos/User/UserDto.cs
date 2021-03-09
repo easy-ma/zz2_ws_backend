@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System;
 
-namespace turradgiver_api.Dtos.User
+namespace turradgiver_business.Dtos.User
 {
     public class UserDto 
     {

@@ -1,20 +1,26 @@
-﻿using System.Text;
-using DAL.Models;
-using DAL.Repositories;
+﻿#region usings
+using System.Text;
 using System;
+using AutoMapper;
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using turradgiver_api.Services;
-using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
+
+using DAL.Models;
+using DAL.Repositories;
+
+using turradgiver_business.Services;
+using turradgiver_business.Mappers;
+#endregion
 
 namespace turradgiver_api
 {
@@ -96,7 +102,7 @@ namespace turradgiver_api
             }
             );
 
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(typeof(UserMapperProfile));
 
             services.AddApiVersioning(options =>  
             {  

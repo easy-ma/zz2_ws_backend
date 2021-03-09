@@ -1,12 +1,12 @@
 using System.Threading.Tasks;
 using DAL.Models;
 using DAL.Repositories;
-using turradgiver_api.Utils;
+using turradgiver_business.Dtos;
 using AutoMapper;
-using turradgiver_api.Dtos.User;
+using turradgiver_business.Dtos.User;
 using System;
 
-namespace turradgiver_api.Services
+namespace turradgiver_business.Services
 {
     /// <summary>
     /// Class <c>HomeService</c> provide adds according to the user input

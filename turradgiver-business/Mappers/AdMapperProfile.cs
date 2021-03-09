@@ -1,9 +1,11 @@
+#region usings
 using AutoMapper;
-using turradgiver_api.Dtos.Ads;
-using DAL.Models;
-using System.Linq;
 
-namespace turradgiver_api.Mappers
+using DAL.Models;
+using turradgiver_business.Dtos.Ads;
+#endregion
+
+namespace turradgiver_business.Mappers
 {
     public class AdsMapperProfile : Profile
     {

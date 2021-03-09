@@ -1,11 +1,12 @@
-﻿using System.Linq;
 using System.Threading.Tasks;
-using DAL.Models;
-using turradgiver_api.Utils;
-using turradgiver_api.Dtos.Ads;
+using System.Linq;
 using System;
+using DAL.Models;
 
-namespace turradgiver_api.Services
+using turradgiver_business.Dtos;
+using turradgiver_business.Dtos.Ads;
+
+namespace turradgiver_business.Services
 {
     public interface IAdsService
     {

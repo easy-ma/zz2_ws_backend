@@ -1,15 +1,13 @@
-﻿using System;
+using System;
 
-namespace turradgiver_api.Responses.Auth
+namespace turradgiver_business.Dtos.Auth
 {
     /// <summary>
     /// AuthCredential get from the authentification of a user
     /// </summary>
-    public class AuthCredential
+    public class AuthCredentialDto
     {
         public string Token { get; set; }
         public string RefreshToken { get; set; }
-        // public DateTime? Expires { get; set; }
-        // Should add refresh token
     }
 }

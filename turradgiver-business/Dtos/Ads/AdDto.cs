@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System;
 
-namespace turradgiver_api.Dtos.Ads
+namespace turradgiver_business.Dtos.Ads
 {
     /// <summary>
     /// 

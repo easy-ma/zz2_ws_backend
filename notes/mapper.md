@@ -61,3 +61,5 @@ public class MyClass
             MyDto dto = _mapper.Map<MyDto>(model);
         }
 ```
+
+**Guidelines:** https://jimmybogard.com/automapper-usage-guidelines/

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace turradgiver_api.Dtos.Ads
+namespace turradgiver_business.Dtos.Ads
 {
     public class SearchDto
     {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -10,12 +10,13 @@ using DAL.Models;
 using DAL.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using turradgiver_api.Responses.Auth;
-using turradgiver_api.Dtos.Auth;
-using turradgiver_api.Utils;
+
+using turradgiver_business.Dtos;
+using turradgiver_business.Dtos.Auth;
+
 using Microsoft.Extensions.Logging;
 
-namespace turradgiver_api.Services
+namespace turradgiver_business.Services
 {
     /// <summary>
     /// Class <c>AuthService</c> provide authentification service for the API
@@ -114,8 +115,8 @@ namespace turradgiver_api.Services
         /// Generate the Json Web token and Refresh token 
         /// </summary>
         /// <param name="user">The user credentials use for the JWT generation</param>
-        /// <returns>The AuthCredentials</returns>
-        private async Task<AuthCredential> Authenticate(User user)
+        /// <returns>The AuthCredentialDtos</returns>
+        private async Task<AuthCredentialDto> Authenticate(User user)
         {
             string token = GenerateJWToken(user).Token;
             string refreshToken = GenerateRefreshToken().Token;
@@ -128,7 +129,7 @@ namespace turradgiver_api.Services
 
             await _refreshTokenRepository.CreateAsync(rftoken);
             
-            return new AuthCredential
+            return new AuthCredentialDto
             {
                 Token=token,
                 RefreshToken=refreshToken
@@ -161,17 +162,17 @@ namespace turradgiver_api.Services
 
         /// <summary>
         /// Register a new user if he doesn't exist yet.
-        /// If it's not the case it will return the AuthCredential i.e jwtToken 
+        /// If it's not the case it will return the AuthCredentialDto i.e jwtToken 
         /// </summary>
         /// <param name="user">The user data to register</param>
         /// <param name="password">The password which will be added to the user data before being hashed</param>
         /// <returns>
-        /// Return the AuthCredentials i.e the Jwtoken once the user will be register
+        /// Return the AuthCredentialDtos i.e the Jwtoken once the user will be register
         /// Return a failed Response if the user already exists in the database
         /// </returns>
-        public async Task<Response<AuthCredential>> RegisterAsync(UserSignUpDto userSignUpDto)
+        public async Task<Response<AuthCredentialDto>> RegisterAsync(UserSignUpDto userSignUpDto)
         {
-            Response<AuthCredential> res = new Response<AuthCredential>();
+            Response<AuthCredentialDto> res = new Response<AuthCredentialDto>();
             User user = new User(userSignUpDto.Username, userSignUpDto.Email);
             User checkUser = (await _userRepository.GetByConditionAsync((u => u.Email.CompareTo(user.Email) == 0))).FirstOrDefault();
             if (checkUser != null)
@@ -193,13 +194,13 @@ namespace turradgiver_api.Services
         /// <param name="email">The email of the user to login</param>
         /// <param name="password">The password of the user to validate</param>
         /// <returns>
-        /// Return AuthCredentials i.e JWToken
+        /// Return AuthCredentialDtos i.e JWToken
         /// </returns>
-        public async Task<Response<AuthCredential>> LoginAsync(string email, string password)
+        public async Task<Response<AuthCredentialDto>> LoginAsync(string email, string password)
         {
-            Response<AuthCredential> res = new Response<AuthCredential>();
+            Response<AuthCredentialDto> res = new Response<AuthCredentialDto>();
             User user = (await _userRepository.GetByConditionAsync((u => u.Email.CompareTo(email) == 0))).FirstOrDefault();
-
+            
             if (user == null)
             {
                 res.Success = false;
@@ -222,9 +223,9 @@ namespace turradgiver_api.Services
         /// If the RefreshToken is valid then it will delete it and generate a new pair Token and RefreshToken
         /// </summary>
         /// <param name="rToken">The refreshToken use for exchange</param>
-        /// <returns>Return authCredentials with JWT and RefreshToken</returns>
-        public async Task<Response<AuthCredential>> RefreshToken(ExchangeRefreshTokenDto refreshDto){
-            Response<AuthCredential> res = new Response<AuthCredential>();
+        /// <returns>Return AuthCredentialDtos with JWT and RefreshToken</returns>
+        public async Task<Response<AuthCredentialDto>> RefreshToken(ExchangeRefreshTokenDto refreshDto){
+            Response<AuthCredentialDto> res = new Response<AuthCredentialDto>();
             if(!ValidateToken(refreshDto.RefreshToken)){
                 res.Success = false;
                 res.Message = "Invalid RefreshToken";

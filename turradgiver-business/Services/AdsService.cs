@@ -1,14 +1,16 @@
-﻿using System.Linq;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using System.Linq;
+using System;
+using AutoMapper;
+
 using DAL.Models;
 using DAL.Repositories;
-using turradgiver_api.Utils;
-using AutoMapper;
-using turradgiver_api.Dtos.Ads;
-using System;
-using Microsoft.Extensions.Logging;
 
-namespace turradgiver_api.Services
+using turradgiver_business.Dtos;
+using turradgiver_business.Dtos.Ads;
+
+namespace turradgiver_business.Services
 {
     /// <summary>
     /// Class <c>HomeService</c> provide adds according to the user input
