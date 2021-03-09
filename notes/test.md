@@ -24,3 +24,9 @@
 - https://blog.ploeh.dk/2010/03/26/Moreaboutfrozenpizza/
 
 https://rubikscode.net/2018/04/16/implementing-and-testing-repository-pattern-using-entity-framework/
+
+# Lien interessant
+
+Pour les Asserts
+
+> http://xunitjs.shaege.com/Guide/Engine/assertions.html
