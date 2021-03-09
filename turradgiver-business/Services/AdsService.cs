@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Collections;
+using System.Linq.Expressions;
 using System.Linq;
 using System;
 
@@ -13,6 +14,7 @@ using DAL.Repositories;
 
 using turradgiver_business.Dtos;
 using turradgiver_business.Dtos.Ads;
+
 #endregion
 
 namespace turradgiver_business.Services
@@ -26,7 +28,7 @@ namespace turradgiver_business.Services
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        private readonly int itemPerPage = 4;
+        private const int ITEM_PER_PAGE = 4;
 
         public AdsService(IRepository<Ad> addsRepository, IMapper mapper, ILogger<AdsService> logger)
         {
@@ -105,27 +107,31 @@ namespace turradgiver_business.Services
         }
 
         /// <summary>
+        /// Returns all ads paginated and depending on the expression received as parameter
+        /// </summary>
+        /// <param name="expression">The expression user for filtering the request</param>
+        /// <param name="page">TThe page requested by the user</param>
+        /// <param name="nb">The number of element to print in one page, <c>ITEM_PER_PAGE</<c> by default</param>
+        /// <returns>Return the list of Ad that match the request</returns>
+        private async Task<Response<IEnumerable<AdDto>>> Search(Expression<Func<Ad,bool>> expression, int page, int nb = ITEM_PER_PAGE){
+            var ads = await _adRepository.GetByRangeAsync(nb * (page - 1), nb, expression);
+            Response<IEnumerable<AdDto>> res = new Response<IEnumerable<AdDto>>() { Data = _mapper.Map<List<AdDto>>(ads) };
+            return res;
+        }
+
+        /// <summary>
         /// Returns all ads paginated and depending criterias
         /// </summary>
         /// <param name="criterias"></param>
         /// <returns></returns>
         public async Task<Response<IEnumerable<AdDto>>> GetAdsAsync(SearchDto criterias)
         {
-            IQueryable<Ad> ads;
-            if (criterias.Search != null)
-            {
-                ads = await _adRepository.GetByRangeAsync(this.itemPerPage * (criterias.Page - 1), this.itemPerPage, e => e.Name.Contains(criterias.Search) || e.Description.Contains(criterias.Search));
-            } 
-            else
-            {
-                ads = await _adRepository.GetByRangeAsync(this.itemPerPage * (criterias.Page - 1), this.itemPerPage);
-            }
-
-            // Successful : no data = empty array
-            Response<IEnumerable<AdDto>> res = new Response<IEnumerable<AdDto>>() { Data = _mapper.Map<List<AdDto>>(ads) };
-            return res;
+            Expression<Func<Ad,bool>> exp = criterias.Search != null 
+                ? (e => e.Name.Contains(criterias.Search) || e.Description.Contains(criterias.Search))
+                : (e=> true);
+                 
+            return await Search(exp, criterias.Page);
         }
-
 
         /// <summary>
         /// Returns all ads paginated and depending criterias for a specific User
@@ -134,20 +140,11 @@ namespace turradgiver_business.Services
         /// <returns></returns>
         public async Task<Response<IEnumerable<AdDto>>> GetUserAdsAsync(Guid userId, SearchDto criterias)
         {
-            IQueryable<Ad> ads;
-            if (criterias.Search != null)
-            {
-                ads = await _adRepository.GetByRangeAsync(this.itemPerPage * (criterias.Page - 1), this.itemPerPage, e => e.UserId == userId && (e.Name.Contains(criterias.Search) || e.Description.Contains(criterias.Search)));
-            }
-            else
-            {
-                ads = await _adRepository.GetByRangeAsync(this.itemPerPage * (criterias.Page - 1), this.itemPerPage, e => e.UserId == userId);
-            }
-
-            // Successful : no data = empty array
-            Response<IEnumerable<AdDto>> res = new Response<IEnumerable<AdDto>>() { Data = _mapper.Map<List<AdDto>>(ads) };
-
-            return res;
+            Expression<Func<Ad,bool>> exp = criterias.Search != null 
+                ? (e => e.UserId == userId && e.Name.Contains(criterias.Search) || e.Description.Contains(criterias.Search))
+                : (e=> e.UserId == userId);
+                
+            return await Search(exp, criterias.Page);
         }
 
         public async Task<Response<IQueryable<Ad>>> FilterAsync(string text)

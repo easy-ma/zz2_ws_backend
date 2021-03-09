@@ -6,15 +6,6 @@ namespace DAL.Models
     [Table("Ads")]
     public class Ad : BaseModel
     {
-        //public Ad(string name, string description, float price, string imageURL)
-        //{
-        //    Name = name;
-        //    Description = description;
-        //    Rate = 0;
-        //    Price = price;
-        //    ImageURL = imageURL;
-        //}
-
         [Column("Name")]
         public string Name { get; set; }
 
