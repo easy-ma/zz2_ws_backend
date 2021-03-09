@@ -38,7 +38,7 @@ namespace turradgiver_api.Controllers.v1
             Response<AuthCredentialDto> res = await _authService.RegisterAsync(userSignUpDto);
             if (!res.Success)
             {
-                return Unauthorized(res);
+                return BadRequest(res);
             }
             return Ok(res);
         }
@@ -49,7 +49,7 @@ namespace turradgiver_api.Controllers.v1
             Response<AuthCredentialDto> res = await _authService.LoginAsync(userSignInDto.Email, userSignInDto.Password);
             if (!res.Success)
             {
-                return BadRequest(res.Message);
+                return BadRequest(res);
             }
             return Ok(res);
         }

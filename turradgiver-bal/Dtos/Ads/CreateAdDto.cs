@@ -9,7 +9,7 @@ namespace turradgiver_bal.Dtos.Ads
     {
         [Required]
         [StringLength(50, MinimumLength = 5,
-        ErrorMessage = "Name should be minimum 3 characters and a maximum of 50 characters")]
+        ErrorMessage = "Name should be minimum 5 characters and a maximum of 50 characters")]
         [DataType(DataType.Text)]
         public string Name { get; set; }
 
