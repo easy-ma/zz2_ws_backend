@@ -22,5 +22,9 @@ namespace turradgiver_business.Dtos.Ads
         [Required]
         [Range(0, float.MaxValue, ErrorMessage = "Please enter valid float Number")]
         public float Price { get; set; }
+
+        [Required]
+        [RegularExpression(@"^(https?:)?//?[^\'"" <>]+?\.(jpg|jpeg|gif|png)$", ErrorMessage = "Image URL is not valid.")]
+        public string ImageURL { get; set; }
     }
 }

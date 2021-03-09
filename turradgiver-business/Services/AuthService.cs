@@ -1,20 +1,23 @@
-using System;
-using System.Collections.Generic;
+#region usings
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Text;
+using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
-using DAL.Models;
-using DAL.Repositories;
+using System.Text;
+using System.Linq;
+using System;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Logging;
+
+using DAL.Models;
+using DAL.Repositories;
 
 using turradgiver_business.Dtos;
 using turradgiver_business.Dtos.Auth;
-
-using Microsoft.Extensions.Logging;
+#endregion
 
 namespace turradgiver_business.Services
 {
@@ -131,8 +134,8 @@ namespace turradgiver_business.Services
             
             return new AuthCredentialDto
             {
-                Token=token,
-                RefreshToken=refreshToken
+                Token = token,
+                RefreshToken = refreshToken
             };
         }
 

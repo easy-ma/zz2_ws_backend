@@ -1,4 +1,5 @@
 #region usings
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
@@ -45,12 +46,11 @@ namespace turradgiver_api.Controllers.v1
         }
 
         [HttpGet("ads")]
-        public async Task<IActionResult> GetAds()
+        public async Task<IActionResult> GetAds([FromQuery] SearchDto criterias)
         {
             Guid userId = HttpContext.GetUserId();
-            Response<IQueryable<Ad>> resAds = await _adsService.GetUserAds(userId);
+            Response<IEnumerable<AdDto>> resAds = await _adsService.GetUserAdsAsync(userId, criterias);
             return Ok(resAds);
-            
         }
     }
 }

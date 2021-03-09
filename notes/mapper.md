@@ -39,13 +39,16 @@ namespace mynamespace
 **ReverseMap** : Bidirectional Mapping
 
 - Dto --> Model
-- Model --> Dto
+- Model --> Dto => reverseMap
 
 ## Use
 
 ```cs
 public class MyClass
 {
+
+    private readonly IMapper _mapper;
+    
     public MyClass(IMapper mapper)
     {
         _mapper = mapper;

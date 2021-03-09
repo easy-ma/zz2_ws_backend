@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
+
 using DAL.Models;
 
 using turradgiver_business.Dtos;
@@ -12,8 +14,9 @@ namespace turradgiver_business.Services
     {
         Task<Response<IQueryable<Ad>>> FilterAsync(string text);
         Task<Response<Ad>> CreateAsync(CreateAdDto createAdDto, Guid userId);
-        Task<Response<Ad>> RemoveUserAdAsync(Guid adId,Guid userId);
-        Task<Response<Ad>> GetAdAsync(Guid id);
-        Task<Response<IQueryable<Ad>>> GetUserAds(Guid userId);
+        Task<Response<Ad>> RemoveUserAdAsync(Guid adId, Guid userId);
+        Task<Response<AdDto>> GetAdAsync(Guid id);
+        Task<Response<IEnumerable<AdDto>>> GetAdsAsync(SearchDto criterias);
+        Task<Response<IEnumerable<AdDto>>> GetUserAdsAsync(Guid userId, SearchDto criterias);
     }
 }
