@@ -13,5 +13,5 @@ services:
       - "5001:5001"
     volumes:
       - "./turradgiver-api/:/src/turradgiver-api"
-      - "./data-access/:/src/data-access"
-      - "./turradgiver-business/:/src/turradgiver-business"
+      - "./turradgiver-bal/:/src/turradgiver-bal"
+      - "./turradgiver-dal/:/src/turradgiver-dal"
