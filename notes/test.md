@@ -30,3 +30,7 @@ https://rubikscode.net/2018/04/16/implementing-and-testing-repository-pattern-us
 Pour les Asserts
 
 > http://xunitjs.shaege.com/Guide/Engine/assertions.html
+
+# Test private methods
+
+> https://www.teamscs.com/2017/06/unit-testing-testing-private-methods/
