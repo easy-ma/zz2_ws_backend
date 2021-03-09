@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using AutoMapper;
+using turradgiver_bal.Dtos;
+using turradgiver_bal.Dtos.User;
 using turradgiver_dal.Models;
 using turradgiver_dal.Repositories;
-using turradgiver_bal.Dtos;
-using AutoMapper;
-using turradgiver_bal.Dtos.User;
-using System;
 
 namespace turradgiver_bal.Services
 {

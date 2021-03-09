@@ -1,18 +1,15 @@
 ﻿#region usings
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq.Expressions;
-using System.Linq;
 using System;
-
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using AutoMapper;
-
-using turradgiver_dal.Models;
-using turradgiver_dal.Repositories;
-
+using Microsoft.Extensions.Logging;
 using turradgiver_bal.Dtos;
 using turradgiver_bal.Dtos.Ads;
+using turradgiver_dal.Models;
+using turradgiver_dal.Repositories;
 
 #endregion
 

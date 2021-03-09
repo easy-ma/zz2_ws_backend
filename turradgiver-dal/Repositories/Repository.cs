@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using turradgiver_dal.Models;
-using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using turradgiver_dal.Models;
 
 namespace turradgiver_dal.Repositories
 {

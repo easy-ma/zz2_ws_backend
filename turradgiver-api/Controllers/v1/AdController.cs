@@ -1,15 +1,12 @@
 ﻿#region usings
-using System.Threading.Tasks;
 using System;
-
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-
-using turradgiver_bal.Services;
-using turradgiver_bal.Dtos.Ads;
-
 using turradgiver_api.Utils;
+using turradgiver_bal.Dtos.Ads;
+using turradgiver_bal.Services;
 #endregion 
 
 namespace turradgiver_api.Controllers.v1

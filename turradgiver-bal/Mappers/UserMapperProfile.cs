@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using turradgiver_dal.Models;
 using turradgiver_bal.Dtos.User;
+using turradgiver_dal.Models;
 
 namespace turradgiver_bal.Mappers
 {

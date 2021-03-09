@@ -1,23 +1,20 @@
 ﻿#region usings
-using System.Text;
 using System;
-
-using Microsoft.AspNetCore.Mvc;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-
+using turradgiver_bal.Mappers;
+using turradgiver_bal.Services;
 using turradgiver_dal.Models;
 using turradgiver_dal.Repositories;
-
-using turradgiver_bal.Services;
-using turradgiver_bal.Mappers;
 #endregion
 
 namespace turradgiver_api

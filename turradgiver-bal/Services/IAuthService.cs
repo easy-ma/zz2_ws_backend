@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using turradgiver_bal.Dtos.Auth;
 using turradgiver_bal.Dtos;
+using turradgiver_bal.Dtos.Auth;
 
 namespace turradgiver_bal.Services
 {

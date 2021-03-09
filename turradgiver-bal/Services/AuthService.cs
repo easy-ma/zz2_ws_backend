@@ -1,22 +1,19 @@
 ﻿#region usings
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Cryptography;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Text;
-using System.Linq;
 using System;
-
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Logging;
-
-using turradgiver_dal.Models;
-using turradgiver_dal.Repositories;
-
+using Microsoft.IdentityModel.Tokens;
 using turradgiver_bal.Dtos;
 using turradgiver_bal.Dtos.Auth;
+using turradgiver_dal.Models;
+using turradgiver_dal.Repositories;
 #endregion
 
 namespace turradgiver_bal.Services
@@ -182,7 +179,7 @@ namespace turradgiver_bal.Services
         public async Task<Response<AuthCredentialDto>> RegisterAsync(UserSignUpDto userSignUpDto)
         {
             Response<AuthCredentialDto> res = new Response<AuthCredentialDto>();
-            User user = new User(userSignUpDto.Username, userSignUpDto.Email);
+            User user = new User() { Username = userSignUpDto.Username, Email = userSignUpDto.Email };
             User checkUser = (await _userRepository.GetByConditionAsync((u => u.Email.CompareTo(user.Email) == 0))).FirstOrDefault();
             if (checkUser != null)
             {
