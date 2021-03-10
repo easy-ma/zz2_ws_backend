@@ -24,6 +24,8 @@ namespace turradgiver_bal.Services
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
+        private const int ITEM_PER_PAGE = 2;
+
         public RatesService(IRepository<Rating> rateRepository, IRepository<Ad> adRepository, IMapper mapper, ILogger<RatesService> logger)
         {
             _rateRepository = rateRepository;
@@ -118,11 +120,20 @@ namespace turradgiver_bal.Services
             }
 
             Expression<Func<Rating, bool>> exp = e => e.AdId == AdId;
-            List<Rating> rates = (await _rateRepository.IncludeAsync(r => r.User)).Where(exp).OrderByDescending(x => x.CreatedDate).Skip(2 * (page.Page - 1)).Take(2).ToList();
-            res.Data = _mapper.Map<List<RateDto>>(rates);
-
+            List<Rating> rates = (await _rateRepository.IncludeAsync(r => r.User)).Where(exp).OrderByDescending(x => x.CreatedDate).Skip(ITEM_PER_PAGE * (page.Page - 1)).Take(ITEM_PER_PAGE).ToList();
+            
+            // Should be using automapper. But no working.
+            // See: https://stackoverflow.com/questions/34271334/automapper-how-to-map-nested-object
+            List <RateDto> rateDtos = new List<RateDto>();
+            RateDto rateDto;
+            foreach (var r in rates)
+            {
+                rateDto = _mapper.Map<RateDto>(r);
+                rateDto.Username = r.User.Username;
+                rateDtos.Add(rateDto);
+            }
+            res.Data = rateDtos;
             return res;
         }
-
     }
 }

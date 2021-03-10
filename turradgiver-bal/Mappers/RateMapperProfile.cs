@@ -9,14 +9,12 @@ namespace turradgiver_bal.Mappers
         public RateMapperProfile()
         {
             CreateMap<CreateRateDto, Rating>();
-            CreateMap<RateDto, Rating>().ForPath(
-                dest => dest.User.Username,
-                opt => opt.MapFrom(src => src.UserName)
-            ).ReverseMap();
-            CreateMap<Rating, RateDto>().ForPath(
-                dest => dest.UserName,
-                opt => opt.MapFrom(src => src.User.Username)
-            );
+            CreateMap<User, RateDto>();
+            
+            //CreateMap<Rating, RateDto>().ForMember(
+            //    dest => dest.Username,
+            //    opt => opt.MapFrom(src => src.User.Username)
+            //);
             CreateMap<RateDto, Rating>().ReverseMap();
         }
     }
