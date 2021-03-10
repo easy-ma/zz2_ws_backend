@@ -236,14 +236,14 @@ namespace turradgiver_bal.Services
             if (!ValidateToken(refreshDto.RefreshToken))
             {
                 res.Success = false;
-                res.Message = "Invalid RefreshToken";
+                res.Message = "Invalid RefreshToken validate";
                 return res;
             }
             RefreshToken refreshToken = (await _refreshTokenRepository.IncludeAsync((r) => r.User)).Where((r) => r.Token.CompareTo(refreshDto.RefreshToken) == 0).FirstOrDefault();
             if (refreshToken == null)
             {
                 res.Success = false;
-                res.Message = "Invalid RefreshToken";
+                res.Message = "Invalid RefreshToken null";
                 return res;
             }
 

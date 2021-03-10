@@ -139,7 +139,7 @@ namespace turradgiver_bal.Services
         public async Task<Response<IEnumerable<AdDto>>> GetAdsAsync(SearchDto criterias)
         {
             Expression<Func<Ad, bool>> exp = criterias.Search != null
-                ? (e => CaseInsensitiveContains(e.Name, criterias.Search) || CaseInsensitiveContains(e.Description, criterias.Search) || CaseInsensitiveContains(e.Location, criterias.Search))
+                ? (e => (e.Name ?? string.Empty).ToLower().Contains(criterias.Search) || (e.Description ?? string.Empty).ToLower().Contains(criterias.Search) || (e.Location ?? string.Empty).ToLower().Contains(criterias.Search))
                 : (e => true);
 
             return await Search(exp, criterias.Page);
@@ -153,7 +153,7 @@ namespace turradgiver_bal.Services
         public async Task<Response<IEnumerable<AdDto>>> GetUserAdsAsync(Guid userId, SearchDto criterias)
         {
             Expression<Func<Ad, bool>> exp = criterias.Search != null
-                ? (e => e.UserId == userId && (CaseInsensitiveContains(e.Name, criterias.Search) || CaseInsensitiveContains(e.Description, criterias.Search) || CaseInsensitiveContains(e.Location, criterias.Search)))
+                ? (e => e.UserId == userId && ((e.Name ?? string.Empty).ToLower().Contains(criterias.Search) || (e.Description ?? string.Empty).ToLower().Contains(criterias.Search) || (e.Location ?? string.Empty).ToLower().Contains(criterias.Search)))
                 : (e => e.UserId == userId);
 
             return await Search(exp, criterias.Page);

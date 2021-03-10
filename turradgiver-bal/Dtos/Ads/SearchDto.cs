@@ -7,7 +7,19 @@ namespace turradgiver_bal.Dtos.Ads
     /// </summary>
     public class SearchDto
     {
-        public string Search { get; set; }
+        private string _search;
+        public string Search
+        {
+            get
+            {
+                return this._search;
+
+            }
+            set
+            {
+                this._search = value.ToLower();
+            }
+        }
 
         [Range(1, float.MaxValue, ErrorMessage = "Please enter valid page Number")]
         public int Page { get; set; } = 1;

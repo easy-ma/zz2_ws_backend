@@ -9,7 +9,6 @@ namespace turradgiver_bal.Dtos.Auth
     public class ExchangeRefreshTokenDto
     {
         [Required]
-        [DataType(DataType.Text)]
         public string RefreshToken { get; set; }
     }
 

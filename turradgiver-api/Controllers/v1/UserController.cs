@@ -42,8 +42,7 @@ namespace turradgiver_api.Controllers.v1
         public async Task<IActionResult> GetAds([FromQuery] SearchDto criterias)
         {
             Guid userId = HttpContext.GetUserId();
-            Response<IEnumerable<AdDto>> resAds = await _adsService.GetUserAdsAsync(userId, criterias);
-            return Ok(resAds);
+            return Ok(await _adsService.GetUserAdsAsync(userId, criterias));
         }
     }
 }
