@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace turradgiver_dal.Models
 {
+    /// <summary>
+    /// Represent an Ad
+    /// </summary>
     [Table("Ads")]
     public class Ad : BaseModel
     {
@@ -11,6 +14,9 @@ namespace turradgiver_dal.Models
 
         [Column("Description")]
         public string Description { get; set; }
+
+        [Column("Location")]
+        public string Location { get; set; }
 
         [Column("Rate")]
         public float Rate { get; set; } = 0;

@@ -2,6 +2,9 @@
 
 namespace turradgiver_dal.Models
 {
+    /// <summary>
+    /// Represent a User
+    /// </summary>
     [Table("Users")]
     public class User : BaseModel
     {

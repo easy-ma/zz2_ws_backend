@@ -2,6 +2,9 @@
 
 namespace turradgiver_bal.Dtos.Auth
 {
+    /// <summary>
+    /// DTO for the user sign-up DTO
+    /// </summary>
     public class UserSignUpDto
     {
         [Required]

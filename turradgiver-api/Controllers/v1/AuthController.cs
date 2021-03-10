@@ -1,13 +1,11 @@
 ﻿#region usings
 using System.Threading.Tasks;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-
-using turradgiver_bal.Services;
-using turradgiver_bal.Dtos.Auth;
 using turradgiver_bal.Dtos;
+using turradgiver_bal.Dtos.Auth;
+using turradgiver_bal.Services;
 #endregion
 
 namespace turradgiver_api.Controllers.v1
@@ -40,7 +38,7 @@ namespace turradgiver_api.Controllers.v1
             Response<AuthCredentialDto> res = await _authService.RegisterAsync(userSignUpDto);
             if (!res.Success)
             {
-                return Unauthorized(res);
+                return BadRequest(res);
             }
             return Ok(res);
         }
@@ -51,7 +49,7 @@ namespace turradgiver_api.Controllers.v1
             Response<AuthCredentialDto> res = await _authService.LoginAsync(userSignInDto.Email, userSignInDto.Password);
             if (!res.Success)
             {
-                return BadRequest(res.Message);
+                return BadRequest(res);
             }
             return Ok(res);
         }
@@ -59,10 +57,10 @@ namespace turradgiver_api.Controllers.v1
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken([FromBody] ExchangeRefreshTokenDto exRefreshTokenDto)
         {
-            Response<AuthCredentialDto> res= await _authService.RefreshToken(exRefreshTokenDto);
+            Response<AuthCredentialDto> res = await _authService.RefreshToken(exRefreshTokenDto);
             if (!res.Success)
             {
-                return BadRequest("Invalid RefreshToken"); // TODO res
+                return BadRequest(res); 
             }
             return Ok(res);
         }

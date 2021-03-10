@@ -18,7 +18,7 @@ namespace turradgiver_dal.Models
 
         [ForeignKey("User")]
         public Guid UserId { get; set; }
-        
+
         [Column("Rate")]
         public int Rate { get; set; }
 

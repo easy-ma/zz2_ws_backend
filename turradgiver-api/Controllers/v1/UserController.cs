@@ -1,14 +1,11 @@
 ﻿#region usings
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-
 using turradgiver_api.Utils;
-
 using turradgiver_bal.Dtos;
 using turradgiver_bal.Dtos.Ads;
 using turradgiver_bal.Services;
@@ -16,7 +13,7 @@ using turradgiver_bal.Services;
 
 namespace turradgiver_api.Controllers.v1
 {
-    
+
     [Authorize]
     [ApiVersion("1.0")]
     [Route("v{v:apiVersion}/user")]
@@ -45,8 +42,7 @@ namespace turradgiver_api.Controllers.v1
         public async Task<IActionResult> GetAds([FromQuery] SearchDto criterias)
         {
             Guid userId = HttpContext.GetUserId();
-            Response<IEnumerable<AdDto>> resAds = await _adsService.GetUserAdsAsync(userId, criterias);
-            return Ok(resAds);
+            return Ok(await _adsService.GetUserAdsAsync(userId, criterias));
         }
     }
 }

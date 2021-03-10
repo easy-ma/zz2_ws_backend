@@ -4,7 +4,6 @@ namespace turradgiver_dal.Models
 {
     public partial class TurradgiverContext : DbContext
     {
-
         public TurradgiverContext()
         {
         }
@@ -16,8 +15,7 @@ namespace turradgiver_dal.Models
 
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Ad> Ads { get; set; }
-        public virtual DbSet<RefreshToken> RefreshTokens{ get; set; }
-
+        public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -26,7 +24,5 @@ namespace turradgiver_dal.Models
                 optionsBuilder.UseNpgsql("Server = tai.db.elephantsql.com; Port = 5432; Database = qrmsywrc; User Id = qrmsywrc; Password = 6bJzafq21RcePD2Md6WG-pcfiDqF8dzV");
             }
         }
-
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

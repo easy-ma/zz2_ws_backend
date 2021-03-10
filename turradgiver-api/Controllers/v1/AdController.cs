@@ -1,15 +1,12 @@
 ﻿#region usings
-using System.Threading.Tasks;
 using System;
-
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-
-using turradgiver_bal.Services;
-using turradgiver_bal.Dtos.Ads;
-
 using turradgiver_api.Utils;
+using turradgiver_bal.Dtos.Ads;
+using turradgiver_bal.Services;
 #endregion 
 
 namespace turradgiver_api.Controllers.v1
@@ -37,7 +34,6 @@ namespace turradgiver_api.Controllers.v1
         [HttpGet("{adId}")]
         public async Task<IActionResult> GetAd(Guid adId)
         {
-            _logger.LogInformation(adId.ToString());
             return Ok(await _adService.GetAdAsync(adId));
         }
 
@@ -55,7 +51,8 @@ namespace turradgiver_api.Controllers.v1
         {
             Guid userId = HttpContext.GetUserId();
             var res = await _adService.RemoveUserAdAsync(adId, userId);
-            if (res.Success) {
+            if (res.Success)
+            {
                 return Ok(res);
             }
             return BadRequest(res);

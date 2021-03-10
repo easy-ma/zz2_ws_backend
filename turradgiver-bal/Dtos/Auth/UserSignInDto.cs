@@ -2,6 +2,9 @@
 
 namespace turradgiver_bal.Dtos.Auth
 {
+    /// <summary>
+    /// DTO for the user sign-in data
+    /// </summary>
     public class UserSignInDto
     {
         [Required]

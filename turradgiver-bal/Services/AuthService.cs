@@ -1,28 +1,25 @@
 ﻿#region usings
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Cryptography;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Text;
-using System.Linq;
 using System;
-
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Logging;
-
-using turradgiver_dal.Models;
-using turradgiver_dal.Repositories;
-
+using Microsoft.IdentityModel.Tokens;
 using turradgiver_bal.Dtos;
 using turradgiver_bal.Dtos.Auth;
+using turradgiver_dal.Models;
+using turradgiver_dal.Repositories;
 #endregion
 
 namespace turradgiver_bal.Services
 {
     /// <summary>
-    /// Class <c>AuthService</c> provide authentification service for the API
+    /// Provide authentification service for the API
     /// </summary>
     public class AuthService : IAuthService
     {
@@ -38,7 +35,6 @@ namespace turradgiver_bal.Services
             _refreshTokenRepository=refreshTokenRepository;
             _jwtService = jwtService;
         }
-
 
         /// <summary>
         /// Generate the RefreshToken
@@ -60,6 +56,7 @@ namespace turradgiver_bal.Services
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username)
             };
+            
             return _jwtService.GenerateToken(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value), 30,claims);
         }
 
@@ -72,15 +69,16 @@ namespace turradgiver_bal.Services
         {
             string token = GenerateJWToken(user).Token;
             string refreshToken = GenerateRefreshToken().Token;
-           
+
             // Create the RefreshToken 
-            RefreshToken rftoken= new RefreshToken(){ 
+            RefreshToken rftoken = new RefreshToken()
+            {
                 Token = refreshToken,
                 UserId = user.Id
             };
 
             await _refreshTokenRepository.CreateAsync(rftoken);
-            
+
             return new AuthCredentialDto
             {
                 Token = token,
@@ -125,7 +123,7 @@ namespace turradgiver_bal.Services
         public async Task<Response<AuthCredentialDto>> RegisterAsync(UserSignUpDto userSignUpDto)
         {
             Response<AuthCredentialDto> res = new Response<AuthCredentialDto>();
-            User user = new User(userSignUpDto.Username, userSignUpDto.Email);
+            User user = new User() { Username = userSignUpDto.Username, Email = userSignUpDto.Email };
             User checkUser = (await _userRepository.GetByConditionAsync((u => u.Email.CompareTo(user.Email) == 0))).FirstOrDefault();
             if (checkUser != null)
             {
@@ -152,11 +150,11 @@ namespace turradgiver_bal.Services
         {
             Response<AuthCredentialDto> res = new Response<AuthCredentialDto>();
             User user = (await _userRepository.GetByConditionAsync((u => u.Email.CompareTo(email) == 0))).FirstOrDefault();
-            
+
             if (user == null)
             {
                 res.Success = false;
-                res.Message = "User not found";
+                res.Message = "Invalid Email";
             }
             else if (!CheckPassword(password, user.Password))
             {
@@ -176,23 +174,25 @@ namespace turradgiver_bal.Services
         /// </summary>
         /// <param name="rToken">The refreshToken use for exchange</param>
         /// <returns>Return AuthCredentialDtos with JWT and RefreshToken</returns>
-        public async Task<Response<AuthCredentialDto>> RefreshToken(ExchangeRefreshTokenDto refreshDto){
+        public async Task<Response<AuthCredentialDto>> RefreshToken(ExchangeRefreshTokenDto refreshDto)
+        {
             Response<AuthCredentialDto> res = new Response<AuthCredentialDto>();
-            if(! _jwtService.ValidateToken(refreshDto.RefreshToken,Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value) )){
+            if(! _jwtService.ValidateToken(refreshDto.RefreshToken,Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value) ))
+            {
                 res.Success = false;
-                res.Message = "Invalid RefreshToken";
+                res.Message = "Invalid RefreshToken validate";
                 return res;
             }
-            RefreshToken refreshToken = (await _refreshTokenRepository.IncludeAsync((r)=> r.User)).Where((r)=> r.Token.CompareTo(refreshDto.RefreshToken) == 0).FirstOrDefault();
+            RefreshToken refreshToken = (await _refreshTokenRepository.IncludeAsync((r) => r.User)).Where((r) => r.Token.CompareTo(refreshDto.RefreshToken) == 0).FirstOrDefault();
             if (refreshToken == null)
             {
                 res.Success = false;
-                res.Message = "Invalid RefreshToken";
+                res.Message = "Invalid RefreshToken null";
                 return res;
             }
 
             await _refreshTokenRepository.DeleteByIdAsync(refreshToken.Id);
-            
+
             res.Data = await Authenticate(refreshToken.User);
             return res;
         }

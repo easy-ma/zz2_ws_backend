@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System;
-
-using turradgiver_dal.Models;
-
+using System.Threading.Tasks;
 using turradgiver_bal.Dtos;
 using turradgiver_bal.Dtos.Ads;
+using turradgiver_dal.Models;
 
 namespace turradgiver_bal.Services
 {

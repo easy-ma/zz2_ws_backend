@@ -1,15 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using AutoMapper;
+using turradgiver_bal.Dtos;
+using turradgiver_bal.Dtos.User;
 using turradgiver_dal.Models;
 using turradgiver_dal.Repositories;
-using turradgiver_bal.Dtos;
-using AutoMapper;
-using turradgiver_bal.Dtos.User;
-using System;
 
 namespace turradgiver_bal.Services
 {
     /// <summary>
-    /// Class <c>HomeService</c> provide adds according to the user input
+    /// Provide adds according to the user input
     /// </summary>
     public class UserService : IUserService
     {
@@ -35,5 +35,4 @@ namespace turradgiver_bal.Services
             return res;
         }
     }
-
 }
