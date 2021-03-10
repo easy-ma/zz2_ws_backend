@@ -31,7 +31,12 @@ namespace turradgiver_bal.Services
             _mapper = mapper;
             _logger = logger;
         }
-
+        /// <summary>
+        /// Create a rate/comment from the data receive
+        /// </summary>
+        /// <param name="userId">The id of the user who made the request</param>
+        /// <param name="createRateDto">Data for create a rate/comment</param>
+        /// <returns>Return a success response if the rate/comment is created and the corresponding rate/comment</returns>
         public async Task<Response<RateDto>> CreateAsync(CreateRateDto createRateDto, Guid userId)
         {
             Response<RateDto> res = new Response<RateDto>();
@@ -50,7 +55,12 @@ namespace turradgiver_bal.Services
             res.Success = succes;
             return res;
         }
-
+        /// <summary>
+        /// Update the rate of an ad
+        /// </summary>
+        /// <param name="AdId">The id of the ad the user wants to comment</param>
+        /// <param name="newRate">rate choose by the user</param>
+        /// <returns>Return true if the ad has been update and false if not </returns>
         public async Task<bool> HandleRate(Guid AdId, int newRate)
         {
             IEnumerable<RateDto> rates = (await GetRatesbyAdId(AdId)).Data;
@@ -72,6 +82,11 @@ namespace turradgiver_bal.Services
             return true;
 
         }
+        /// <summary>
+        /// Provide the comments correponding to an ad
+        /// </summary>
+        /// <param name="AdId">The id of the ad the user wants to get comments</param>
+        /// <returns>Return a response of a list of comments/rate</returns>
         public async Task<Response<IEnumerable<RateDto>>> GetRatesbyAdId(Guid AdId)
         {
             Response<IEnumerable<RateDto>> res = new Response<IEnumerable<RateDto>>();
@@ -79,6 +94,12 @@ namespace turradgiver_bal.Services
             res.Data = _mapper.Map<List<RateDto>>(rates);
             return res;
         }
+        /// <summary>
+        /// Retrieve one or two rates/comments corresponding to an ad according to the page
+        /// </summary>
+        /// <param name="AdId">The id of the ad the user wants to get comments</param>
+        /// <param name="page">The number of the page</param>
+        /// <returns>Return a response of a list (length between 1 and 2)of comments/rate</returns>
         public async Task<Response<IEnumerable<RateDto>>> GetRatesAsync(Guid AdId, GetCommentsDto page)
         {
             Response<IEnumerable<RateDto>> res = new Response<IEnumerable<RateDto>>();
