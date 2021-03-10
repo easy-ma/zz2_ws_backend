@@ -31,7 +31,7 @@ namespace turradgiver_bal.Services
             _mapper = mapper;
             _logger = logger;
         }
-		
+
         /// <summary>
         /// Create a rate/comment from the data receive
         /// </summary>

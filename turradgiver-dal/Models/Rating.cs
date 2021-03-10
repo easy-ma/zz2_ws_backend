@@ -12,7 +12,7 @@ namespace turradgiver_dal.Models
 
         [ForeignKey("User")]
         public Guid UserId { get; set; }
-        public virtual User User{ get; set; }
+        public virtual User User { get; set; }
 
         [Column("Rate")]
         public int Rate { get; set; }

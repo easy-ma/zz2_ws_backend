@@ -1,17 +1,13 @@
 using System;
 using System.Threading.Tasks;
-using Moq;
-using System.Linq;
-using Microsoft.Extensions.Logging.Abstractions;
 using AutoMapper;
-using Xunit;
-
-using turradgiver_bal.Services;
-using turradgiver_bal.Mappers;
+using Microsoft.Extensions.Logging.Abstractions;
 using turradgiver_bal.Dtos.Rates;
-
+using turradgiver_bal.Mappers;
+using turradgiver_bal.Services;
 using turradgiver_dal.Models;
 using turradgiver_dal.Repositories;
+using Xunit;
 
 namespace turradgiver_test
 {
@@ -38,17 +34,17 @@ namespace turradgiver_test
                 cfg.AddProfile(new RateMapperProfile());
             });
             _mapper = mapperConfiguration.CreateMapper();
-            
+
             // Repository
             _customRateRepo = new Repository<Rating>(_dbContext);
             _customAdRepo = new Repository<Ad>(_dbContext);
 
-            _sut = new RatesService(_customRateRepo,_customAdRepo, _mapper, logger);
+            _sut = new RatesService(_customRateRepo, _customAdRepo, _mapper, logger);
         }
 
 
         [Fact]
-        public async Task CreateAsync () 
+        public async Task CreateAsync()
         {
             // Arrange
             var createDto = new CreateRateDto()
@@ -62,7 +58,7 @@ namespace turradgiver_test
 
             // Act
             var resCreate = await _sut.CreateAsync(createDto, userId);
-            
+
             // Assert
             Assert.NotNull(resCreate.Data);
             Assert.True(resCreate.Success);

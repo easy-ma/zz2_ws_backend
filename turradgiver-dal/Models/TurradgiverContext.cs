@@ -25,7 +25,7 @@ namespace turradgiver_dal.Models
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 
-            
+
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseNpgsql(_configuration.GetConnectionString("Turradgiver"));

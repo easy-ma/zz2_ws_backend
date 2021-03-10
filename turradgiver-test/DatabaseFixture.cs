@@ -63,7 +63,7 @@ namespace turradgiver_test
             modelBuilder.Entity<RefreshToken>().HasData(refreshToken);
 
 
-            var ad1 = new Ad() 
+            var ad1 = new Ad()
             {
                 Id = new Guid("9fb9a8d5-773f-4ca7-86c2-99ef1dd45876"),
                 UserId = user1.Id,
@@ -75,7 +75,7 @@ namespace turradgiver_test
                 ImageURL = "MyUrl.png"
             };
 
-             var ad2 = new Ad() 
+            var ad2 = new Ad()
             {
                 Id = new Guid("9fb98545-773f-4ca7-86c2-99ef1dd45876"),
                 UserId = user1.Id,
@@ -87,7 +87,7 @@ namespace turradgiver_test
                 ImageURL = "MyUrl.png"
             };
 
-            var ad3 = new Ad() 
+            var ad3 = new Ad()
             {
                 Id = new Guid("66f6a39d-e550-400a-b3d9-e5a39b558523"),
                 UserId = user2.Id,
@@ -98,10 +98,11 @@ namespace turradgiver_test
                 Price = 50,
                 ImageURL = "MyUrl.png"
             };
- 
+
             modelBuilder.Entity<Ad>().HasData(ad1, ad2, ad3);
- 
-            var rate1 = new Rating() {
+
+            var rate1 = new Rating()
+            {
                 Id = new Guid("6eb1eb3f-c2db-47e9-8afc-d6691c0baccc"),
                 AdId = ad1.Id,
                 UserId = user1.Id,
@@ -110,8 +111,8 @@ namespace turradgiver_test
                 Title = "My Title",
             };
             modelBuilder.Entity<Rating>().HasData(rate1);
- 
- 
+
+
 
             // add another entity here
         }

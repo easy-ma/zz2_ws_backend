@@ -8,7 +8,7 @@ namespace turradgiver_bal.Services
 {
     public interface IRatesService
     {
-        Task<Response<IEnumerable<RateDto>>> GetRatesAsync(Guid AdId, GetCommentsDto page);
+        Task<Response<IEnumerable<RateDto>>> GetRatesAsync(Guid AdId, PageCommentDto page);
         Task<Response<RateDto>> CreateAsync(CreateRateDto createRateDto, Guid userId);
     }
 }
