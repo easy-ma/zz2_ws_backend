@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -32,15 +32,6 @@ namespace turradgiver_bal.Services
             _logger = logger;
         }
 
-        /// <summary>
-        /// Get all rates to the corresponding ad.
-        /// </summary>
-        /// <param name="createAdDto">The data of the ad to create</param>
-        /// <param name="userId">The userId who created the add</param>
-        /// <returns>Return rates in success</returns>
-        // public async Task<Response<Rating>> GetRatesAsync(Guid id){
-
-        // }
         public async Task<Response<RateDto>> CreateAsync(CreateRateDto createRateDto, Guid userId)
         {
             Response<RateDto> res = new Response<RateDto>();
@@ -89,9 +80,7 @@ namespace turradgiver_bal.Services
                 res.Message = "Ad doesn't exit";
                 return res;
             }
-            Expression<Func<Rating, bool>> exp = AdId != null
-                ? (e => e.AdId == AdId)
-                : (e => e.AdId == AdId);
+            Expression<Func<Rating, bool>> exp = e => e.AdId == AdId;
             var rates = (await _rateRepository.GetByRangeAsync((page.page-1)*2,2,exp));
             res.Data = _mapper.Map<List<RateDto>>(rates);
             
