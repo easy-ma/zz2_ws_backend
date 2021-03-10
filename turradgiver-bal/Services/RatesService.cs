@@ -48,6 +48,14 @@ namespace turradgiver_bal.Services
                 res.Message = "Add doesn't exist";
                 return res;
             }
+            int rates = (await _rateRepository.GetByConditionAsync((e) => e.UserId == userId)).Count();
+            if (rates > 0)
+            {
+                res.Success = false;
+                res.Message = "Already commented";
+                return res;
+            }
+
             Rating newRate = _mapper.Map<Rating>(createRateDto);
             newRate.UserId = userId;
             await _rateRepository.CreateAsync(newRate);
@@ -64,8 +72,7 @@ namespace turradgiver_bal.Services
         /// <returns>Return true if the ad has been update and false if not </returns>
         private async Task<bool> CalculateNewRateAsync(Guid AdId, int newRate)
         {
-            IEnumerable<RateDto> rates = (await GetRatesbyAdIdAsync(AdId)).Data;
-            int rateNumber = rates.Count<RateDto>();
+            int rateNumber = await GetRateCountbyAdIdAsync(AdId);
             Ad ad = await _adRepository.GetByIdAsync(AdId);
             if (ad == null)
             {
@@ -88,13 +95,9 @@ namespace turradgiver_bal.Services
         /// </summary>
         /// <param name="AdId">The id of the ad the user wants to get comments</param>
         /// <returns>Return a response of a list of comments/rate</returns>
-        private async Task<Response<IEnumerable<RateDto>>> GetRatesbyAdIdAsync(Guid AdId)
+        private async Task<int> GetRateCountbyAdIdAsync(Guid AdId)
         {
-            Response<IEnumerable<RateDto>> res = new Response<IEnumerable<RateDto>>();
-
-            var rates = await _rateRepository.GetByConditionAsync(e => e.AdId == AdId);
-            res.Data = _mapper.Map<List<RateDto>>(rates);
-            return res;
+            return (await _rateRepository.GetByConditionAsync((e) => e.AdId == AdId)).Count();
         }
 
         /// <summary>
