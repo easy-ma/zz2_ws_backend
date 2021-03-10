@@ -60,7 +60,7 @@ namespace turradgiver_api.Controllers.v1
             Response<AuthCredentialDto> res = await _authService.RefreshToken(exRefreshTokenDto);
             if (!res.Success)
             {
-                return BadRequest(res); 
+                return BadRequest(res);
             }
             return Ok(res);
         }

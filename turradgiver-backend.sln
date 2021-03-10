@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "turradgiver-bal", "turradgiver-bal\turradgiver-bal.csproj", "{085A7F05-7BE0-47B8-9990-A4A9FD3A7E4E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "turradgiver-test", "turradgiver-test\turradgiver-test.csproj", "{7C4FFE1C-0C42-4587-84D9-3FBB8A1D2BC4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{085A7F05-7BE0-47B8-9990-A4A9FD3A7E4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{085A7F05-7BE0-47B8-9990-A4A9FD3A7E4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{085A7F05-7BE0-47B8-9990-A4A9FD3A7E4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C4FFE1C-0C42-4587-84D9-3FBB8A1D2BC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C4FFE1C-0C42-4587-84D9-3FBB8A1D2BC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C4FFE1C-0C42-4587-84D9-3FBB8A1D2BC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C4FFE1C-0C42-4587-84D9-3FBB8A1D2BC4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

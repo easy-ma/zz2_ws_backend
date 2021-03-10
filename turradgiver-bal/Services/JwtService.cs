@@ -1,20 +1,10 @@
 #region usings
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Cryptography;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Text;
-using System.Linq;
 using System;
-
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Logging;
-
-using turradgiver_dal.Models;
-
-using turradgiver_bal.Dtos;
 using turradgiver_bal.Dtos.Auth;
 #endregion
 
@@ -26,7 +16,7 @@ namespace turradgiver_bal.Services
     public class JwtService : IJwtService
     {
         private readonly IConfiguration _configuration;
-        
+
         public JwtService(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -40,7 +30,7 @@ namespace turradgiver_bal.Services
         /// <param name="expMinutes">Number of minutes before the expiration of the token generated</param>
         /// <param name="claims">The claims to encode in the token, null if not provided</param>
         /// <returns>Return the string representation of the token</returns>
-        public TokenDto GenerateToken(byte[] secretKey,double expMinutes,IEnumerable<Claim> claims=null)
+        public TokenDto GenerateToken(byte[] secretKey, double expMinutes, IEnumerable<Claim> claims = null)
         {
             SymmetricSecurityKey securityKey = new SymmetricSecurityKey(secretKey);
             SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature);
@@ -51,10 +41,11 @@ namespace turradgiver_bal.Services
                 Expires = DateTime.Now.AddMinutes(expMinutes),
                 SigningCredentials = credentials
             };
-            
+
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            return new TokenDto(){
-                Token= tokenHandler.WriteToken(tokenHandler.CreateToken(token)),
+            return new TokenDto()
+            {
+                Token = tokenHandler.WriteToken(tokenHandler.CreateToken(token)),
                 Expires = (DateTime)token.Expires
             };
         }
@@ -65,22 +56,26 @@ namespace turradgiver_bal.Services
         /// <param name="refreshToken">RefreshToken to validate</param>
         /// <param name="secretKey">The secretKey used for th validation</param>
         /// <returns>Return true if the RefreshToken is validate, false if not</returns>
-        public bool ValidateToken(string refreshToken, byte[] secretKey){
-            TokenValidationParameters validationParameters= new TokenValidationParameters()
+        public bool ValidateToken(string refreshToken, byte[] secretKey)
+        {
+            TokenValidationParameters validationParameters = new TokenValidationParameters()
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(secretKey),
                 ValidateIssuer = false,
                 ValidateAudience = false,
-                ClockSkew= TimeSpan.Zero,
+                ClockSkew = TimeSpan.Zero,
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
             SecurityToken validatedToken = null;
-            try{
-                tokenHandler.ValidateToken(refreshToken,validationParameters, out validatedToken);
+            try
+            {
+                tokenHandler.ValidateToken(refreshToken, validationParameters, out validatedToken);
                 return true;
-            }catch(Exception){
+            }
+            catch (Exception)
+            {
                 return false;
             }
         }

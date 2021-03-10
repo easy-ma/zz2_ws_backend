@@ -1,16 +1,14 @@
-using System.Threading.Tasks;
 using System;
-using Xunit;
-using Moq;
+using System.Threading.Tasks;
 using AutoMapper;
+using Moq;
 using Newtonsoft.Json;
-
+using turradgiver_bal.Dtos.User;
+using turradgiver_bal.Mappers;
+using turradgiver_bal.Services;
 using turradgiver_dal.Models;
 using turradgiver_dal.Repositories;
-
-using turradgiver_bal.Services;
-using turradgiver_bal.Mappers;
-using turradgiver_bal.Dtos.User;
+using Xunit;
 
 namespace turradgiver_test
 {
@@ -18,11 +16,12 @@ namespace turradgiver_test
     {
         private readonly UserService _sut;
         private readonly Mock<IRepository<User>> _customUserRepoMock = new Mock<IRepository<User>>();
-        
-        public UserServiceTest(){
+
+        public UserServiceTest()
+        {
             var mapperConfiguration = new MapperConfiguration(cfg => { cfg.AddProfile(new UserMapperProfile()); });
             var mapper = mapperConfiguration.CreateMapper();
-            
+
             _sut = new UserService(_customUserRepoMock.Object, mapper);
         }
 
@@ -30,55 +29,59 @@ namespace turradgiver_test
         public async Task GetProfile_WhenUserExist()
         {
             // Arrange
-            Guid id = new Guid("b4ae46e1-41a3-49a2-bf59-76ced244cd30"); 
-            string username= "Babidiii";
+            Guid id = new Guid("b4ae46e1-41a3-49a2-bf59-76ced244cd30");
+            string username = "Babidiii";
             string email = "babdiii@babidiii.babidiii";
-            
-            var user = new User(){
+
+            var user = new User()
+            {
                 Username = username,
                 Email = email,
-                Id= id,
+                Id = id,
             };
-            var userDto = new UserDto {
+            var userDto = new UserDto
+            {
                 Username = username,
                 Email = email
             };
 
-            _customUserRepoMock.Setup( x => x.GetByIdAsync(id)).ReturnsAsync(user);
+            _customUserRepoMock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(user);
 
             // Act
-            var resGetProfile =  await _sut.GetProfile(id);
+            var resGetProfile = await _sut.GetProfile(id);
 
             // Assert
             Assert.NotNull(resGetProfile.Data);
             Assert.True(resGetProfile.Success);
             var obj1Str = JsonConvert.SerializeObject(resGetProfile.Data);
             var obj2Str = JsonConvert.SerializeObject(userDto);
-            Assert.Equal(obj1Str, obj2Str );
+            Assert.Equal(obj1Str, obj2Str);
         }
-        
+
         [Fact]
         public async Task GetProfile_WhenUserDoesNotExist()
         {
-             // Arrange
-            Guid id = new Guid("b4ae46e1-41a3-49a2-bf59-76ced244cd30"); 
-            string username= "Babidiii";
+            // Arrange
+            Guid id = new Guid("b4ae46e1-41a3-49a2-bf59-76ced244cd30");
+            string username = "Babidiii";
             string email = "babdiii@babidiii.babidiii";
-            
-            var user = new User(){
+
+            var user = new User()
+            {
                 Username = username,
                 Email = email,
-                Id= id,
+                Id = id,
             };
-            var userDto = new UserDto {
+            var userDto = new UserDto
+            {
                 Username = username,
                 Email = email
             };
 
-            _customUserRepoMock.Setup( x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(()=>null);
+            _customUserRepoMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(() => null);
 
             // Act
-            var resGetProfile =  await _sut.GetProfile(id);
+            var resGetProfile = await _sut.GetProfile(id);
 
             // Assert
             Assert.True(resGetProfile.Success);

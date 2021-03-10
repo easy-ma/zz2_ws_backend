@@ -1,15 +1,12 @@
 ﻿#region usings
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using turradgiver_bal.Dtos;
 using turradgiver_bal.Dtos.Auth;
 using turradgiver_dal.Models;
@@ -28,11 +25,11 @@ namespace turradgiver_bal.Services
         private readonly IConfiguration _configuration;
         private readonly IJwtService _jwtService;
 
-        public AuthService(IRepository<User> userRepository, IConfiguration configuration,IRepository<RefreshToken> refreshTokenRepository, IJwtService jwtService)
+        public AuthService(IRepository<User> userRepository, IConfiguration configuration, IRepository<RefreshToken> refreshTokenRepository, IJwtService jwtService)
         {
             _userRepository = userRepository;
             _configuration = configuration;
-            _refreshTokenRepository=refreshTokenRepository;
+            _refreshTokenRepository = refreshTokenRepository;
             _jwtService = jwtService;
         }
 
@@ -56,8 +53,8 @@ namespace turradgiver_bal.Services
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username)
             };
-            
-            return _jwtService.GenerateToken(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value), 30,claims);
+
+            return _jwtService.GenerateToken(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value), 30, claims);
         }
 
         /// <summary>
@@ -177,7 +174,7 @@ namespace turradgiver_bal.Services
         public async Task<Response<AuthCredentialDto>> RefreshToken(ExchangeRefreshTokenDto refreshDto)
         {
             Response<AuthCredentialDto> res = new Response<AuthCredentialDto>();
-            if(! _jwtService.ValidateToken(refreshDto.RefreshToken,Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value) ))
+            if (!_jwtService.ValidateToken(refreshDto.RefreshToken, Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value)))
             {
                 res.Success = false;
                 res.Message = "Invalid RefreshToken validate";
