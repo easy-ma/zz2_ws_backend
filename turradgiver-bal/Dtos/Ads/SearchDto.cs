@@ -17,7 +17,7 @@ namespace turradgiver_bal.Dtos.Ads
             }
             set
             {
-                this._search = value.ToLower();
+                this._search = (value ?? string.Empty).ToLower();
             }
         }
 
