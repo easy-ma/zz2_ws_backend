@@ -68,7 +68,7 @@ namespace turradgiver_bal.Services
         /// </summary>
         /// <param name="user">The user credentials use for the JWT generation</param>
         /// <returns>The AuthCredentialDtos</returns>
-        public async Task<AuthCredentialDto> Authenticate(User user)
+        private async Task<AuthCredentialDto> Authenticate(User user)
         {
             string token = GenerateJWToken(user).Token;
             string refreshToken = GenerateRefreshToken().Token;

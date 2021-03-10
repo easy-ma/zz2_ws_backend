@@ -10,7 +10,6 @@ namespace turradgiver_bal.Services
         Task<Response<AuthCredentialDto>> RegisterAsync(UserSignUpDto userSignUpDto);
         Task<Response<AuthCredentialDto>> LoginAsync(string email, string password);
         Task<Response<AuthCredentialDto>> RefreshToken(ExchangeRefreshTokenDto refreshDto);
-        Task<AuthCredentialDto> Authenticate(User user);
     }
 
 }
