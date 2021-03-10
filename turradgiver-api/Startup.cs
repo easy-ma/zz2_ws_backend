@@ -96,8 +96,7 @@ namespace turradgiver_api
                     ValidateAudience = false,
                     ClockSkew = TimeSpan.Zero,
                 };
-            }
-            );
+            });
 
             services.AddAutoMapper(typeof(UserMapperProfile), typeof(AdMapperProfile));
             // services.AddAutoMapper(typeof(AdMapperProfile));
