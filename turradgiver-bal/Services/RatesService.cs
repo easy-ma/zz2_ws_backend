@@ -89,8 +89,10 @@ namespace turradgiver_bal.Services
                 res.Message = "Ad doesn't exit";
                 return res;
             }
+            _logger.LogInformation(page.Page.ToString());
+
             Expression<Func<Rating, bool>> exp = e => e.AdId == AdId;
-            var rates = (await _rateRepository.GetByRangeAsync((page.page - 1) * 2, 2, exp));
+            var rates = await _rateRepository.GetByRangeAsync(2 * (page.Page - 1), 2, exp);
             res.Data = _mapper.Map<List<RateDto>>(rates);
 
             return res;

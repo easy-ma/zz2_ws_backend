@@ -121,17 +121,6 @@ namespace turradgiver_bal.Services
         }
 
         /// <summary>
-        /// Check wether a string contains another string case insensitive
-        /// </summary>
-        /// <param name="text">The text to check against</param>
-        /// <param name="value">The value to find in the text</param>
-        /// <returns>Whether the value was in the text or not</returns>
-        private bool CaseInsensitiveContains(string text, string value)
-        {
-            return text.IndexOf(value, StringComparison.CurrentCultureIgnoreCase) >= 0;
-        }
-
-        /// <summary>
         /// Returns all ads paginated and depending criterias
         /// </summary>
         /// <param name="criterias"></param>
