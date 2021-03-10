@@ -1,16 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace turradgiver_dal.Models
 {
     public partial class TurradgiverContext : DbContext
     {
+        private readonly IConfiguration _configuration;
+
         public TurradgiverContext()
         {
         }
 
-        public TurradgiverContext(DbContextOptions<TurradgiverContext> options)
+        public TurradgiverContext(DbContextOptions<TurradgiverContext> options, IConfiguration configuration)
             : base(options)
         {
+            _configuration = configuration;
         }
 
         public virtual DbSet<User> Users { get; set; }
@@ -20,9 +24,11 @@ namespace turradgiver_dal.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+
+            
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql("Server = tai.db.elephantsql.com; Port = 5432; Database = qrmsywrc; User Id = qrmsywrc; Password = 6bJzafq21RcePD2Md6WG-pcfiDqF8dzV");
+                optionsBuilder.UseNpgsql(_configuration.GetConnectionString("Turradgiver"));
             }
         }
     }
