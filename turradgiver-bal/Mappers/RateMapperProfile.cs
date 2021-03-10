@@ -2,7 +2,7 @@
 using turradgiver_bal.Dtos.Rates;
 using turradgiver_dal.Models;
 
-namespace turradgiver_api.Mappers
+namespace turradgiver_bal.Mappers
 {
     public class RateMapperProfile : Profile
     {

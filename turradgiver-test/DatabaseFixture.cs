@@ -101,8 +101,15 @@ namespace turradgiver_test
  
             modelBuilder.Entity<Ad>().HasData(ad1, ad2, ad3);
  
- 
- 
+            var rate1 = new Rating() {
+                Id = new Guid("6eb1eb3f-c2db-47e9-8afc-d6691c0baccc"),
+                AdId = ad1.Id,
+                UserId = user1.Id,
+                Rate = 2,
+                Comment = "My comment",
+                Title = "My Title",
+            };
+            modelBuilder.Entity<Rating>().HasData(rate1);
  
  
 
