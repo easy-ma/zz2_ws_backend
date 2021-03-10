@@ -41,7 +41,7 @@ namespace turradgiver_bal.Services
         public async Task<Response<RateDto>> CreateAsync(CreateRateDto createRateDto, Guid userId)
         {
             Response<RateDto> res = new Response<RateDto>();
-            bool succes = await HandleRateAsync(createRateDto.AdId, createRateDto.Rate);
+            bool succes = await CalculateNewRateAsync(createRateDto.AdId, createRateDto.Rate);
             if (succes == false)
             {
                 res.Success = false;
@@ -92,6 +92,7 @@ namespace turradgiver_bal.Services
         public async Task<Response<IEnumerable<RateDto>>> GetRatesbyAdIdAsync(Guid AdId)
         {
             Response<IEnumerable<RateDto>> res = new Response<IEnumerable<RateDto>>();
+
             var rates = await _rateRepository.GetByConditionAsync(e => e.AdId == AdId);
             res.Data = _mapper.Map<List<RateDto>>(rates);
             return res;
@@ -115,7 +116,7 @@ namespace turradgiver_bal.Services
             }
 
             Expression<Func<Rating, bool>> exp = e => e.AdId == AdId;
-            var rates = await _rateRepository.GetByRangeAsync(2 * (page.Page - 1), 2, exp);
+            List<Rating> rates = (await _rateRepository.IncludeAsync(r => r.User)).Where(exp).OrderByDescending(x => x.CreatedDate).Skip(2 * (page.Page - 1)).Take(2).ToList();
             res.Data = _mapper.Map<List<RateDto>>(rates);
 
             return res;

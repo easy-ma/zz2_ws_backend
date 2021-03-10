@@ -51,8 +51,12 @@ namespace turradgiver_api.Controllers.v1
             OperationId = "GetRates"
         )]
         [SwaggerResponse(200, "The rates for this ad", typeof(Response<IEnumerable<RateDto>>))]
-        public async Task<IActionResult> GetAll(Guid AdId, [FromQuery(Name="Page")] int page)
+        public async Task<IActionResult> GetAll(Guid AdId, [FromQuery(Name="Page")] int page = 1)
         {
+            if (page < 1)
+            {
+                return BadRequest(new Response<bool>() { Success = false, Message = "Page Number must be positive" });
+            }
             return Ok(await _rateService.GetRatesAsync(AdId, new GetCommentsDto() { Page = page }));
         }
     }

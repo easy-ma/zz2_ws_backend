@@ -12,13 +12,15 @@ namespace turradgiver_dal.Models
 
         [ForeignKey("User")]
         public Guid UserId { get; set; }
+        public virtual User User{ get; set; }
 
         [Column("Rate")]
         public int Rate { get; set; }
+
         [Column("Comment")]
         public string Comment { get; set; }
 
-        [Column("Name")]
-        public string Name { get; set; }
+        [Column("Title")]
+        public string Title { get; set; }
     }
 }
