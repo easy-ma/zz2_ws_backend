@@ -23,19 +23,27 @@ namespace turradgiver_test
         {
             base.OnModelCreating(modelBuilder);
 
-            var user1 = new User("Babidiii", "babidiii@babidiii.babidiii"){
+            var user1 = new User(){
+                Username = "Babidiii",
+                Email = "babidiii@babidiii.babidiii",
                 Id = new Guid("ffc46d9a-4502-4454-b1bf-dd65fc2b3069"),
                 Password = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes("Babidiii"))
             };
-            var user2 = new User("Khaaz", "khaaz@khaaz.khaaz"){
+            var user2 = new User(){
+                Username = "Khaaz",
+                Email = "khaaz@khaaz.khaaz",
                 Id = new Guid("01fb32fd-21f9-4124-9758-3e042ce83a81"),
                 Password = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes("Khaaz"))
             };
-            var user3 = new User("Xerstom", "xerstom@xerstom.xerstom"){
+            var user3 = new User(){
+                Username = "Xerstom",
+                Email = "xerstom@xerstom.xerstom",
                 Id = new Guid("098f568b-3d3c-4418-b300-aec1b67e06c9"),
                 Password = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes("Xerstom"))
             };
-            var user4 = new User("BasileNq", "basilenq@basilenq.basilenq"){
+            var user4 = new User(){
+                Username = "BasileNq",
+                Email = "basilenq@basilenq.basilenq",
                 Id = new Guid("728de876-cf01-4086-a031-fb7ae276c216"),
                 Password = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes("BasileNq"))
             };
@@ -55,3 +63,4 @@ namespace turradgiver_test
         }
     }
 }
+

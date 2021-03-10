@@ -34,7 +34,9 @@ namespace turradgiver_test
             string username= "Babidiii";
             string email = "babdiii@babidiii.babidiii";
             
-            var user = new User(username, email){
+            var user = new User(){
+                Username = username,
+                Email = email,
                 Id= id,
             };
             var userDto = new UserDto {
@@ -63,7 +65,9 @@ namespace turradgiver_test
             string username= "Babidiii";
             string email = "babdiii@babidiii.babidiii";
             
-            var user = new User(username, email){
+            var user = new User(){
+                Username = username,
+                Email = email,
                 Id= id,
             };
             var userDto = new UserDto {
