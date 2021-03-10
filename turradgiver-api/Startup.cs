@@ -76,8 +76,7 @@ namespace turradgiver_api
             services.AddScoped<IAdsService, AdsService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRatesService, RatesService>();
-
-
+            services.AddScoped<IJwtService, JwtService>();
 
             services.AddAuthentication(options =>
             {
@@ -96,11 +95,9 @@ namespace turradgiver_api
                     ValidateAudience = false,
                     ClockSkew = TimeSpan.Zero,
                 };
-            }
-            );
+            });
 
             services.AddAutoMapper(typeof(UserMapperProfile), typeof(AdMapperProfile));
-            // services.AddAutoMapper(typeof(AdMapperProfile));
 
             services.AddApiVersioning(options =>
             {

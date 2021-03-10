@@ -6,6 +6,7 @@ WORKDIR /src
 COPY ["turradgiver-api/turradgiver-api.csproj", "turradgiver-api/"]
 COPY ["turradgiver-bal/turradgiver-bal.csproj", "turradgiver-bal/"]
 COPY ["turradgiver-dal/turradgiver-dal.csproj", "turradgiver-dal/"]
+COPY ["turradgiver-test/turradgiver-test.csproj", "turradgiver-test/"]
 
 # Commented because of the volume mounted
 # COPY . .

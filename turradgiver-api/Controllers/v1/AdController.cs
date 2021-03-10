@@ -34,7 +34,6 @@ namespace turradgiver_api.Controllers.v1
         [HttpGet("{adId}")]
         public async Task<IActionResult> GetAd(Guid adId)
         {
-            _logger.LogInformation(adId.ToString());
             return Ok(await _adService.GetAdAsync(adId));
         }
 

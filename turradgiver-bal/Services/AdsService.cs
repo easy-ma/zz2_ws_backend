@@ -121,6 +121,17 @@ namespace turradgiver_bal.Services
         }
 
         /// <summary>
+        /// Check wether a string contains another string case insensitive
+        /// </summary>
+        /// <param name="text">The text to check against</param>
+        /// <param name="value">The value to find in the text</param>
+        /// <returns>Whether the value was in the text or not</returns>
+        private bool CaseInsensitiveContains(string text, string value)
+        {
+            return text.IndexOf(value, StringComparison.CurrentCultureIgnoreCase) >= 0;
+        }
+
+        /// <summary>
         /// Returns all ads paginated and depending criterias
         /// </summary>
         /// <param name="criterias"></param>
@@ -128,7 +139,7 @@ namespace turradgiver_bal.Services
         public async Task<Response<IEnumerable<AdDto>>> GetAdsAsync(SearchDto criterias)
         {
             Expression<Func<Ad, bool>> exp = criterias.Search != null
-                ? (e => e.Name.Contains(criterias.Search) || e.Description.Contains(criterias.Search))
+                ? (e => (e.Name ?? string.Empty).ToLower().Contains(criterias.Search) || (e.Description ?? string.Empty).ToLower().Contains(criterias.Search) || (e.Location ?? string.Empty).ToLower().Contains(criterias.Search))
                 : (e => true);
 
             return await Search(exp, criterias.Page);
@@ -142,7 +153,7 @@ namespace turradgiver_bal.Services
         public async Task<Response<IEnumerable<AdDto>>> GetUserAdsAsync(Guid userId, SearchDto criterias)
         {
             Expression<Func<Ad, bool>> exp = criterias.Search != null
-                ? (e => e.UserId == userId && e.Name.Contains(criterias.Search) || e.Description.Contains(criterias.Search))
+                ? (e => e.UserId == userId && ((e.Name ?? string.Empty).ToLower().Contains(criterias.Search) || (e.Description ?? string.Empty).ToLower().Contains(criterias.Search) || (e.Location ?? string.Empty).ToLower().Contains(criterias.Search)))
                 : (e => e.UserId == userId);
 
             return await Search(exp, criterias.Page);

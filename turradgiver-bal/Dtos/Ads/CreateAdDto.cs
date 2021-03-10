@@ -10,7 +10,7 @@ namespace turradgiver_bal.Dtos.Ads
     {
         [Required]
         [StringLength(50, MinimumLength = 5,
-        ErrorMessage = "Name should be minimum 3 characters and a maximum of 50 characters")]
+        ErrorMessage = "Name should be minimum 5 characters and a maximum of 50 characters")]
         [DataType(DataType.Text)]
         public string Name { get; set; }
 
@@ -19,6 +19,12 @@ namespace turradgiver_bal.Dtos.Ads
         ErrorMessage = "Description should be minimum 10 characters and a maximum of 200 characters")]
         [DataType(DataType.Text)]
         public string Description { get; set; }
+
+        [Required]
+        [StringLength(200, MinimumLength = 5,
+        ErrorMessage = "Location should be minimum 5 characters and a maximum of 200 characters")]
+        [DataType(DataType.Text)]
+        public string Location { get; set; }
 
         [Required]
         [Range(0, float.MaxValue, ErrorMessage = "Please enter valid float Number")]

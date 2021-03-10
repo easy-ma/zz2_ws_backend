@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using turradgiver_dal.Models;
@@ -9,9 +10,10 @@ using turradgiver_dal.Models;
 namespace turradgiver_dal.Migrations
 {
     [DbContext(typeof(TurradgiverContext))]
-    partial class TurradgiverContextModelSnapshot : ModelSnapshot
+    [Migration("20210309224639_Ad.Location")]
+    partial class AdLocation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,42 +64,6 @@ namespace turradgiver_dal.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Ads");
-                });
-
-            modelBuilder.Entity("turradgiver_dal.Models.Rating", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("Id");
-
-                    b.Property<Guid>("AdId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("text")
-                        .HasColumnName("Comment");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("CreatedDate");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text")
-                        .HasColumnName("Name");
-
-                    b.Property<int>("Rate")
-                        .HasColumnType("integer")
-                        .HasColumnName("Rate");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AdId");
-
-                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("turradgiver_dal.Models.RefreshToken", b =>
@@ -162,17 +128,6 @@ namespace turradgiver_dal.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("turradgiver_dal.Models.Rating", b =>
-                {
-                    b.HasOne("turradgiver_dal.Models.Ad", "Ad")
-                        .WithMany()
-                        .HasForeignKey("AdId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Ad");
                 });
 
             modelBuilder.Entity("turradgiver_dal.Models.RefreshToken", b =>
