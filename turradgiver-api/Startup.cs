@@ -68,6 +68,7 @@ namespace turradgiver_api
                     new string[] { }
                     }
                 });
+                c.EnableAnnotations();
 
             });
             services.AddDbContext<TurradgiverContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Turradgiver")));
