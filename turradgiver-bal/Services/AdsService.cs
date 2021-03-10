@@ -39,12 +39,14 @@ namespace turradgiver_bal.Services
         /// <param name="createAdDto">The data of the ad to create</param>
         /// <param name="userId">The userId who created the add</param>
         /// <returns>Return a success response if the ad is created</returns>
-        public async Task<Response<Ad>> CreateAsync(CreateAdDto createAdDto, Guid userId)
+        public async Task<Response<AdDto>> CreateAsync(CreateAdDto createAdDto, Guid userId)
         {
-            Response<Ad> res = new Response<Ad>();
-            res.Data = _mapper.Map<Ad>(createAdDto);
-            res.Data.UserId = userId;
-            await _adRepository.CreateAsync(res.Data);
+            Response<AdDto> res = new Response<AdDto>();
+            var ad = _mapper.Map<Ad>(createAdDto);
+            ad.UserId = userId;
+            await _adRepository.CreateAsync(ad);
+
+            res.Data = _mapper.Map<AdDto>(ad);
             return res;
         }
 
@@ -74,16 +76,16 @@ namespace turradgiver_bal.Services
         /// <param name="adId">The id of the ad to delete</param>
         /// <param name="userId">The userId who wanted to delete the ad</param>
         /// <returns>Return a success response if deleted</returns>
-        public async Task<Response<Ad>> RemoveUserAdAsync(Guid adId, Guid userId)
+        public async Task<Response<object>> RemoveUserAdAsync(Guid adId, Guid userId)
         {
-            Response<Ad> res = new Response<Ad>();
+            Response<object> res = new Response<object>();
             if (await CheckIfAdExistAndBelongToUserAsync(adId, userId))
             {
                 await _adRepository.DeleteByIdAsync(adId);
                 res.Message = "Remove succeed";
                 return res;
             }
-            return new Response<Ad>()
+            return new Response<object>()
             {
                 Success = false,
                 Message = "Ad not found for this user."

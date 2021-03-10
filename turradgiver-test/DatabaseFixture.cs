@@ -63,6 +63,25 @@ namespace turradgiver_test
             modelBuilder.Entity<RefreshToken>().HasData(refreshToken);
 
 
+            var ad = new Ad() 
+            {
+                Id = new Guid("9fb9a8d5-773f-4ca7-86c2-99ef1dd45876"),
+                UserId = user1.Id,
+                Name = "My Ad",
+                Description = "My Description",
+                Location = "My Location",
+                Rate = 0,
+                Price = 10,
+                ImageURL = "MyUrl.png"
+            };
+ 
+            modelBuilder.Entity<Ad>().HasData(ad);
+ 
+ 
+ 
+ 
+ 
+
             // add another entity here
         }
     }
