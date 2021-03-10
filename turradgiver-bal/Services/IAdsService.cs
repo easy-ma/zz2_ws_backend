@@ -10,7 +10,6 @@ namespace turradgiver_bal.Services
 {
     public interface IAdsService
     {
-        Task<Response<IQueryable<Ad>>> FilterAsync(string text);
         Task<Response<AdDto>> CreateAsync(CreateAdDto createAdDto, Guid userId);
         Task<Response<object>> RemoveUserAdAsync(Guid adId, Guid userId);
         Task<Response<AdDto>> GetAdAsync(Guid id);

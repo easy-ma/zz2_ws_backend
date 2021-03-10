@@ -63,7 +63,7 @@ namespace turradgiver_test
             modelBuilder.Entity<RefreshToken>().HasData(refreshToken);
 
 
-            var ad = new Ad() 
+            var ad1 = new Ad() 
             {
                 Id = new Guid("9fb9a8d5-773f-4ca7-86c2-99ef1dd45876"),
                 UserId = user1.Id,
@@ -74,8 +74,32 @@ namespace turradgiver_test
                 Price = 10,
                 ImageURL = "MyUrl.png"
             };
+
+             var ad2 = new Ad() 
+            {
+                Id = new Guid("9fb98545-773f-4ca7-86c2-99ef1dd45876"),
+                UserId = user1.Id,
+                Name = "My Ad 2",
+                Description = "My text about my ad",
+                Location = "My Location",
+                Rate = 0,
+                Price = 10,
+                ImageURL = "MyUrl.png"
+            };
+
+            var ad3 = new Ad() 
+            {
+                Id = new Guid("66f6a39d-e550-400a-b3d9-e5a39b558523"),
+                UserId = user2.Id,
+                Name = "Different Ad",
+                Description = "Different description",
+                Location = "My Location 2",
+                Rate = 0,
+                Price = 50,
+                ImageURL = "MyUrl.png"
+            };
  
-            modelBuilder.Entity<Ad>().HasData(ad);
+            modelBuilder.Entity<Ad>().HasData(ad1, ad2, ad3);
  
  
  

@@ -161,24 +161,5 @@ namespace turradgiver_bal.Services
             return await Search(exp, criterias.Page);
         }
 
-        /// <summary>
-        /// Get adds filtered depending on a text input
-        /// </summary>
-        /// <param name="text">The text to use to filter the ads</param>
-        /// <returns>All ads that match the string condition</returns>
-        public async Task<Response<IQueryable<Ad>>> FilterAsync(string text)
-        {
-            Response<IQueryable<Ad>> res = new Response<IQueryable<Ad>>();
-
-            IQueryable<Ad> data = await _adRepository.GetByConditionAsync(e => (e.Name).Contains(text) == true || (e.Description).Contains(text) == true);
-            if (!data.Any())
-            {
-                res.Success = false;
-                res.Message = "Ads not found";
-            }
-            res.Data = data;
-            res.Message = $"hmm {text} nice choice ;)";
-            return res;
-        }
     }
 }
