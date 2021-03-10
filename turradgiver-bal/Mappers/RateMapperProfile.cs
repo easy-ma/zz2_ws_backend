@@ -1,7 +1,6 @@
 using AutoMapper;
 using turradgiver_bal.Dtos.Rates;
 using turradgiver_dal.Models;
-using System.Linq;
 
 namespace turradgiver_api.Mappers
 {

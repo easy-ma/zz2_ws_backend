@@ -16,9 +16,9 @@ namespace turradgiver_dal.Models
         [Column("Rate")]
         public int Rate { get; set; }
         [Column("Comment")]
-        public string Comment {get;set;}
+        public string Comment { get; set; }
 
         [Column("Name")]
-        public string Name {get;set;}
+        public string Name { get; set; }
     }
 }

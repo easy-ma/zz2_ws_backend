@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using turradgiver_dal.Models;
+using System.Linq;
 using System.Linq.Expressions;
-using turradgiver_dal.Repositories;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using turradgiver_bal.Dtos;
 using turradgiver_bal.Dtos.Rates;
+using turradgiver_dal.Models;
+using turradgiver_dal.Repositories;
 
 
 namespace turradgiver_bal.Services
@@ -36,7 +36,8 @@ namespace turradgiver_bal.Services
         {
             Response<RateDto> res = new Response<RateDto>();
             bool succes = await HandleRate(createRateDto.AdId, createRateDto.Rate);
-            if (succes == false){
+            if (succes == false)
+            {
                 res.Success = false;
                 res.Message = "Add doesn't exist";
                 return res;
@@ -50,42 +51,50 @@ namespace turradgiver_bal.Services
             return res;
         }
 
-        public async Task<bool> HandleRate(Guid AdId, int newRate){
+        public async Task<bool> HandleRate(Guid AdId, int newRate)
+        {
             IEnumerable<RateDto> rates = (await GetRatesbyAdId(AdId)).Data;
             int rateNumber = rates.Count<RateDto>();
             Ad ad = await _adRepository.GetByIdAsync(AdId);
-            if( ad == null){
+            if (ad == null)
+            {
                 return false;
             }
-            ad.Rate = (rateNumber*ad.Rate + newRate)/(rateNumber+1);
-            try {
+            ad.Rate = (rateNumber * ad.Rate + newRate) / (rateNumber + 1);
+            try
+            {
                 await _adRepository.UpdateAsync(ad);
-            }catch(Exception){
+            }
+            catch (Exception)
+            {
                 return false;
             }
             return true;
 
-        } 
-        public async Task<Response<IEnumerable<RateDto>>> GetRatesbyAdId(Guid AdId){
-            Response<IEnumerable<RateDto>> res = new Response<IEnumerable<RateDto>>(); 
-            var rates = await _rateRepository.GetByConditionAsync(e => e.AdId == AdId );
+        }
+        public async Task<Response<IEnumerable<RateDto>>> GetRatesbyAdId(Guid AdId)
+        {
+            Response<IEnumerable<RateDto>> res = new Response<IEnumerable<RateDto>>();
+            var rates = await _rateRepository.GetByConditionAsync(e => e.AdId == AdId);
             res.Data = _mapper.Map<List<RateDto>>(rates);
             return res;
         }
-        public async Task<Response<IEnumerable<RateDto>>> GetRatesAsync(Guid AdId, GetCommentsDto page){
+        public async Task<Response<IEnumerable<RateDto>>> GetRatesAsync(Guid AdId, GetCommentsDto page)
+        {
             Response<IEnumerable<RateDto>> res = new Response<IEnumerable<RateDto>>();
             Ad ad = await _adRepository.GetByIdAsync(AdId);
-            if (ad == null){
+            if (ad == null)
+            {
                 res.Success = false;
                 res.Message = "Ad doesn't exit";
                 return res;
             }
             Expression<Func<Rating, bool>> exp = e => e.AdId == AdId;
-            var rates = (await _rateRepository.GetByRangeAsync((page.page-1)*2,2,exp));
+            var rates = (await _rateRepository.GetByRangeAsync((page.page - 1) * 2, 2, exp));
             res.Data = _mapper.Map<List<RateDto>>(rates);
-            
+
             return res;
         }
-        
+
     }
 }
