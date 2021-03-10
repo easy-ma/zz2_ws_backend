@@ -62,6 +62,7 @@ namespace turradgiver_test
                 Token = "MyToken",
                 Expires = DateTime.Now
             };
+            // Mock this methods even if the output of GenerateToken is change because it will result with an exception for nullref on an object 
             _customConfigMock.Setup( x => x.GetSection(It.IsAny<string>()).Value).Returns("jwtkeyyyyyyyyyyyyyyyyyyyyyyy");
             _customJWTServMock.Setup( x => x.GenerateToken(It.IsAny<byte[]>(),It.IsAny<double>(),It.IsAny<IEnumerable<Claim>>())).Returns(tok);
 
@@ -74,57 +75,178 @@ namespace turradgiver_test
             Assert.Equal(resRegister.Data.Token, tok.Token);
             Assert.Equal(resRegister.Data.RefreshToken, tok.Token);
         }
+        
+        [Fact]
+        public async Task Register_WhenEmailExist(){
+            //Arrange
+            var signUpDto = new UserSignUpDto{
+                Email="babidiii@babidiii.babidiii",
+                Username = "Kermit",
+                Password = "Kermit"
+            };
 
-        // [Fact]
-        // public async Task Login_WhenUserExists()
-        // {
-        //     // Arrange
-        //     // Task<Response<AuthCredentialDto>> RegisterAsync(UserSignUpDto userSignUpDto);
-        //     // Task<Response<AuthCredentialDto>> LoginAsync(string email, string password);
-        //     // Task<Response<AuthCredentialDto>> RefreshToken(ExchangeRefreshTokenDto refreshDto);
-            
-        //     // Guid id = new Guid("b4ae46e1-41a3-49a2-bf59-76ced244cd30"); 
-        //     // string username= "Babidiii";
-        //     string email = "babdiii@babidiii.babidiii";
-        //     string pwd = "Babidiii";
+            var tok = new TokenDto (){
+                Token = "MyToken",
+                Expires = DateTime.Now
+            };
+            // Mock this methods even if the output of GenerateToken is change because it will result with an exception for nullref on an object 
+            _customConfigMock.Setup( x => x.GetSection(It.IsAny<string>()).Value).Returns("jwtkeyyyyyyyyyyyyyyyyyyyyyyy");
+            _customJWTServMock.Setup( x => x.GenerateToken(It.IsAny<byte[]>(),It.IsAny<double>(),It.IsAny<IEnumerable<Claim>>())).Returns(tok);
 
-        //     // var user = new User(username, email){
-        //     //     Id= id,
-        //     //     Password = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(pwd))
-        //     // };
-        //     // List<User> users = new List<User>() {user};
-        //     // users.Add(user);
-        //     // users.Add(new User("test","test"));
-        //     // IQueryable<User> queryableUsers = users.AsQueryable();
-        //     var tok = new TokenDto (){
-        //         Token = "MyToken",
-        //         Expires = DateTime.Now
-        //     };
-            
-        //     // Mock<AuthService> _customAuthServiceMock = new Mock<AuthService>();
-        //     // _customUserRepoMock.Setup( x => x.GetByConditionAsync(It.IsAny<Expression<Func<User, bool>>>() )).ReturnsAsync(queryableUsers);
-        //     // _customJWTServMock.Setup( x => x.GenerateToken(It.IsAny<byte[]>(),It.IsAny<double>(),It.IsAny<IEnumerable<Claim>>())).Returns(tok);
-        //     // byte[] secretKey,double expMinutes,IEnumerable<Claim> claims =null
-            
-        //     // Act
-        //     var resLogin =  await _sut.LoginAsync(email, pwd);
-
-
-        //     // // Assert
-        //     Assert.NotNull(resLogin.Data);
-        //     Assert.True(resLogin.Success);
-        //     Assert.Equal(resLogin.Data.Token, tok.Token );
-        //     Assert.Equal(resLogin.Data.RefreshToken, tok.Token );
-        //     // var obj1Str = JsonConvert.SerializeObject(resGetProfile.Data);
-        //     // var obj2Str = JsonConvert.SerializeObject(userDto);
-        // }
-
-           // Arrange
-            
             // Act
+            var resRegister =  await _sut.RegisterAsync(signUpDto);
             
             // Assert
+            Assert.Null(resRegister.Data);
+            Assert.False(resRegister.Success);
+        }
+
+
+        [Fact]
+        public async Task Login_WhenUserExists()
+        {
+            // Arrange
+            string email = "babidiii@babidiii.babidiii";
+            string pwd = "Babidiii";
+
+            var tok = new TokenDto (){
+                Token = "MyToken",
+                Expires = DateTime.Now
+            };
             
-       
+             _customConfigMock.Setup( x => x.GetSection(It.IsAny<string>()).Value).Returns("jwtkeyyyyyyyyyyyyyyyyyyyyyyy");
+            _customJWTServMock.Setup( x => x.GenerateToken(It.IsAny<byte[]>(),It.IsAny<double>(),It.IsAny<IEnumerable<Claim>>())).Returns(tok);
+            
+            // Act
+            var resLogin =  await _sut.LoginAsync(email, pwd);
+
+            // // Assert
+            Assert.NotNull(resLogin.Data);
+            Assert.True(resLogin.Success);
+            Assert.Equal(resLogin.Data.Token, tok.Token );
+            Assert.Equal(resLogin.Data.RefreshToken, tok.Token );
+        }
+
+        [Fact]
+        public async Task Login_WhenUserDoesNotExist()
+        {
+            // Arrange
+            string email = "Je@suis.japonaiiiiiiiiiiiis";
+            string pwd = "Babitoc";
+
+            var tok = new TokenDto (){
+                Token = "MyToken",
+                Expires = DateTime.Now
+            };
+            
+             _customConfigMock.Setup( x => x.GetSection(It.IsAny<string>()).Value).Returns("jwtkeyyyyyyyyyyyyyyyyyyyyyyy");
+            _customJWTServMock.Setup( x => x.GenerateToken(It.IsAny<byte[]>(),It.IsAny<double>(),It.IsAny<IEnumerable<Claim>>())).Returns(tok);
+            
+            // Act
+            var resLogin =  await _sut.LoginAsync(email, pwd);
+
+            // // Assert
+            Assert.Null(resLogin.Data);
+            Assert.False(resLogin.Success);
+        }
+
+        [Fact]
+        public async Task Login_WhenUserPasswordIsIncorrect()
+        {
+            // Arrange
+            string email = "babidiii@babidiii.babidiii";
+            string pwd = "Babitoc";
+            var tok = new TokenDto (){
+                Token = "MyToken",
+                Expires = DateTime.Now
+            };
+            
+             _customConfigMock.Setup( x => x.GetSection(It.IsAny<string>()).Value).Returns("jwtkeyyyyyyyyyyyyyyyyyyyyyyy");
+            _customJWTServMock.Setup( x => x.GenerateToken(It.IsAny<byte[]>(),It.IsAny<double>(),It.IsAny<IEnumerable<Claim>>())).Returns(tok);
+            
+            // Act
+            var resLogin =  await _sut.LoginAsync(email, pwd);
+
+            // // Assert
+            Assert.Null(resLogin.Data);
+            Assert.False(resLogin.Success);
+        }
+
+        [Fact]
+        public async Task RefreshToken_WhenTokenIsInvalid()
+        {
+            // Arrange
+            string refreshToken = "MyBadRefreshToken";
+            var refreshTokenDto = new ExchangeRefreshTokenDto {
+                RefreshToken = refreshToken
+            };
+            var tok = new TokenDto (){
+                Token = "MyToken",
+                Expires = DateTime.Now
+            };
+ 
+             _customConfigMock.Setup( x => x.GetSection(It.IsAny<string>()).Value).Returns("jwtkeyyyyyyyyyyyyyyyyyyyyyyy");
+            _customJWTServMock.Setup( x => x.GenerateToken(It.IsAny<byte[]>(),It.IsAny<double>(),It.IsAny<IEnumerable<Claim>>())).Returns(tok);
+            _customJWTServMock.Setup( x => x.ValidateToken(It.IsAny<string>(),It.IsAny<byte[]>())).Returns(false);
+            
+            // Act
+            var resRefreshToken =  await _sut.RefreshToken(refreshTokenDto);
+
+            // // Assert
+            Assert.Null(resRefreshToken.Data);
+            Assert.False(resRefreshToken.Success);
+        }
+
+        [Fact]
+        public async Task RefreshToken_WhenTokenIsNotInTheDatabase()
+        {
+            // Arrange
+            string refreshToken = "MyBadRefreshToken";
+            var refreshTokenDto = new ExchangeRefreshTokenDto {
+                RefreshToken = refreshToken
+            };
+            var tok = new TokenDto (){
+                Token = "MyToken",
+                Expires = DateTime.Now
+            };
+ 
+             _customConfigMock.Setup( x => x.GetSection(It.IsAny<string>()).Value).Returns("jwtkeyyyyyyyyyyyyyyyyyyyyyyy");
+            _customJWTServMock.Setup( x => x.GenerateToken(It.IsAny<byte[]>(),It.IsAny<double>(),It.IsAny<IEnumerable<Claim>>())).Returns(tok);
+            _customJWTServMock.Setup( x => x.ValidateToken(It.IsAny<string>(),It.IsAny<byte[]>())).Returns(true);
+            
+            // Act
+            var resRefreshToken =  await _sut.RefreshToken(refreshTokenDto);
+
+            // // Assert
+            Assert.Null(resRefreshToken.Data);
+            Assert.False(resRefreshToken.Success);
+        }
+
+        [Fact]
+        public async Task RefreshToken_WhenTokenValid()
+        {
+            // Arrange
+            string refreshToken = "babidiii-token";
+            var refreshTokenDto = new ExchangeRefreshTokenDto {
+                RefreshToken = refreshToken
+            };
+            var tok = new TokenDto (){
+                Token = "MyToken",
+                Expires = DateTime.Now
+            };
+ 
+             _customConfigMock.Setup( x => x.GetSection(It.IsAny<string>()).Value).Returns("jwtkeyyyyyyyyyyyyyyyyyyyyyyy");
+            _customJWTServMock.Setup( x => x.GenerateToken(It.IsAny<byte[]>(),It.IsAny<double>(),It.IsAny<IEnumerable<Claim>>())).Returns(tok);
+            _customJWTServMock.Setup( x => x.ValidateToken(It.IsAny<string>(),It.IsAny<byte[]>())).Returns(true);
+            
+            // Act
+            var resRefreshToken =  await _sut.RefreshToken(refreshTokenDto);
+
+            // // Assert
+            Assert.NotNull(resRefreshToken.Data);
+            Assert.True(resRefreshToken.Success);
+            Assert.Equal(resRefreshToken.Data.Token, tok.Token );
+            Assert.Equal(resRefreshToken.Data.RefreshToken, tok.Token );
+        }      
     }
 }
