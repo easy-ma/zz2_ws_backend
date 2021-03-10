@@ -5,7 +5,7 @@ namespace turradgiver_dal.Models
     [Table("Users")]
     public class User : BaseModel
     {
-        public User(string username, string email)
+        public User(string username, string email) : base()
         {
             Username = username;
             Email = email;

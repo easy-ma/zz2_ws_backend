@@ -26,12 +26,10 @@ namespace turradgiver_bal.Services
     public class JwtService : IJwtService
     {
         private readonly IConfiguration _configuration;
-        private readonly ILogger<JwtService> _logger;
-
-        public JwtService(IConfiguration configuration, ILogger<JwtService> logger)
+        
+        public JwtService(IConfiguration configuration)
         {
             _configuration = configuration;
-            _logger = logger;
         }
 
         /// <summary>
