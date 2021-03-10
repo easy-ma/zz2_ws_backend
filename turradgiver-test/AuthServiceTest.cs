@@ -34,7 +34,7 @@ namespace turradgiver_test
         private readonly IRepository<RefreshToken> _customRefreshTokenRepo;
 
         private readonly Mock<IConfiguration> _customConfigMock = new Mock<IConfiguration>();
-        private readonly IJwtService _customJWTService;
+        private readonly Mock<IJwtService> _customJWTServMock = new Mock<IJwtService>();
 
         public AuthServiceTest(){
             // IRepository<User> userRepository, IConfiguration configuration,IRepository<RefreshToken> refreshTokenRepository, ILogger<AuthService> logger
@@ -43,8 +43,8 @@ namespace turradgiver_test
             _customUserRepo =  new Repository<User>(_dbContext);
             _customRefreshTokenRepo = new Repository<RefreshToken>(_dbContext);
             
-            _customJWTService = new JwtService(_customConfigMock.Object);
-            _sut = new AuthService(_customUserRepo,_customConfigMock.Object, _customRefreshTokenRepo, _customJWTService);
+            // _customJWTService = new JwtService(_customConfigMock.Object);
+            _sut = new AuthService(_customUserRepo,_customConfigMock.Object, _customRefreshTokenRepo, _customJWTServMock.Object);
         }
 
 
@@ -57,14 +57,22 @@ namespace turradgiver_test
                 Username = "Kermit",
                 Password = "Kermit"
             };
-            
+
+            var tok = new TokenDto (){
+                Token = "MyToken",
+                Expires = DateTime.Now
+            };
+            _customConfigMock.Setup( x => x.GetSection(It.IsAny<string>()).Value).Returns("jwtkeyyyyyyyyyyyyyyyyyyyyyyy");
+            _customJWTServMock.Setup( x => x.GenerateToken(It.IsAny<byte[]>(),It.IsAny<double>(),It.IsAny<IEnumerable<Claim>>())).Returns(tok);
+
             // Act
             var resRegister =  await _sut.RegisterAsync(signUpDto);
-            _customConfigMock.Setup( x => x.GetSection(It.IsAny<string>()).Value).Returns("jwtkey");
-
+            
             // Assert
             Assert.NotNull(resRegister.Data);
             Assert.True(resRegister.Success);
+            Assert.Equal(resRegister.Data.Token, tok.Token);
+            Assert.Equal(resRegister.Data.RefreshToken, tok.Token);
         }
 
         // [Fact]
