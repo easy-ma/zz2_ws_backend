@@ -6,13 +6,6 @@ namespace turradgiver_dal.Models
     [Table("Ratings")]
     public class Rating : BaseModel
     {
-        public Rating(int rate, string comment, string name)
-        {
-            Rate = rate;
-            Name = name;
-            Comment = comment;
-        }
-
         [ForeignKey("Ads")]
         public Guid AdId { get; set; }
         public virtual Ad Ad { get; set; }
