@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -33,8 +33,6 @@ namespace turradgiver_test
             // _customJWTService = new JwtService(_customConfigMock.Object);
             _sut = new AuthService(_customUserRepo, _customConfigMock.Object, _customRefreshTokenRepo, _customJWTServMock.Object);
         }
-
-
 
         [Fact]
         public async Task Register_WhenEmailDoesNotExist()

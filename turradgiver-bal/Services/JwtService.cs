@@ -1,4 +1,4 @@
-#region usings
+﻿#region usings
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -15,13 +15,6 @@ namespace turradgiver_bal.Services
     /// </summary>
     public class JwtService : IJwtService
     {
-        private readonly IConfiguration _configuration;
-
-        public JwtService(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-
         /// <summary>
         /// Generate the token from claims provided, with a specific ammount of time for expirtation provided as parameter
         /// And with a secretKey received as parameter

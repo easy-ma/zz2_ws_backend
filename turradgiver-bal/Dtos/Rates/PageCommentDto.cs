@@ -4,7 +4,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace turradgiver_bal.Dtos.Rates
 {
-    public class GetCommentsDto
+    /// <summary>
+    /// Dto for comment pagination
+    /// </summary>
+    public class PageCommentDto
     {
 
         [Range(1, int.MaxValue, ErrorMessage = "Please enter valid page Number")]

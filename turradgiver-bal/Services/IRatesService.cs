@@ -10,6 +10,5 @@ namespace turradgiver_bal.Services
     {
         Task<Response<IEnumerable<RateDto>>> GetRatesAsync(Guid AdId, GetCommentsDto page);
         Task<Response<RateDto>> CreateAsync(CreateRateDto createRateDto, Guid userId);
-
     }
 }

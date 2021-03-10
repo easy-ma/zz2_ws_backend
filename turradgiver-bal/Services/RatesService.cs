@@ -42,14 +42,13 @@ namespace turradgiver_bal.Services
         {
             Response<RateDto> res = new Response<RateDto>();
             bool succes = await CalculateNewRateAsync(createRateDto.AdId, createRateDto.Rate);
-            if (succes == false)
+            if (!succes)
             {
                 res.Success = false;
                 res.Message = "Add doesn't exist";
                 return res;
             }
-            Rating newRate = new Rating();
-            newRate = _mapper.Map<Rating>(createRateDto);
+            Rating newRate = _mapper.Map<Rating>(createRateDto);
             newRate.UserId = userId;
             await _rateRepository.CreateAsync(newRate);
             res.Data = _mapper.Map<RateDto>(newRate);
@@ -104,7 +103,7 @@ namespace turradgiver_bal.Services
         /// <param name="AdId">The id of the ad the user wants to get comments</param>
         /// <param name="page">The number of the page</param>
         /// <returns>Return a response of a list (length between 1 and 2)of comments/rate</returns>
-        public async Task<Response<IEnumerable<RateDto>>> GetRatesAsync(Guid AdId, GetCommentsDto page)
+        public async Task<Response<IEnumerable<RateDto>>> GetRatesAsync(Guid AdId, PageCommentDto page)
         {
             Response<IEnumerable<RateDto>> res = new Response<IEnumerable<RateDto>>();
             Ad ad = await _adRepository.GetByIdAsync(AdId);
