@@ -63,7 +63,7 @@ namespace turradgiver_bal.Services
         /// <param name="AdId">The id of the ad the user wants to comment</param>
         /// <param name="newRate">rate choose by the user</param>
         /// <returns>Return true if the ad has been update and false if not </returns>
-        public async Task<bool> CalculateNewRateAsync(Guid AdId, int newRate)
+        private async Task<bool> CalculateNewRateAsync(Guid AdId, int newRate)
         {
             IEnumerable<RateDto> rates = (await GetRatesbyAdIdAsync(AdId)).Data;
             int rateNumber = rates.Count<RateDto>();
@@ -89,7 +89,7 @@ namespace turradgiver_bal.Services
         /// </summary>
         /// <param name="AdId">The id of the ad the user wants to get comments</param>
         /// <returns>Return a response of a list of comments/rate</returns>
-        public async Task<Response<IEnumerable<RateDto>>> GetRatesbyAdIdAsync(Guid AdId)
+        private async Task<Response<IEnumerable<RateDto>>> GetRatesbyAdIdAsync(Guid AdId)
         {
             Response<IEnumerable<RateDto>> res = new Response<IEnumerable<RateDto>>();
 

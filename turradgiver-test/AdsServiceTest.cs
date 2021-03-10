@@ -19,7 +19,7 @@ namespace turradgiver_test
     {
         private readonly AdsService _sut;
         private readonly DbContextFixture _dbContext;
-        private readonly IRepository<Ad> _customUserRepo;
+        private readonly IRepository<Ad> _customAdRepo;
         private readonly IMapper _mapper;
 
         public AdsServiceTest()
@@ -39,9 +39,9 @@ namespace turradgiver_test
             _mapper = mapperConfiguration.CreateMapper();
             
             // Repository
-            _customUserRepo = new Repository<Ad>(_dbContext);
+            _customAdRepo = new Repository<Ad>(_dbContext);
 
-            _sut = new AdsService(_customUserRepo, _mapper, logger);
+            _sut = new AdsService(_customAdRepo, _mapper, logger);
         }
 
 
