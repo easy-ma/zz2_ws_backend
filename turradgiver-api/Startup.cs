@@ -65,7 +65,7 @@ namespace turradgiver_api
                         Id = "Bearer"
                     }
                     },
-                    new string[] { }
+                    Array.Empty<string>()
                     }
                 });
                 c.EnableAnnotations();
@@ -81,7 +81,6 @@ namespace turradgiver_api
 
             services.AddAuthentication(options =>
             {
-                // options.AuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -114,12 +113,6 @@ namespace turradgiver_api
                 options.DefaultApiVersion = new ApiVersion(1, 0);
             }
             );
-
-            // services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-            // services.AddSwaggerGen(c =>
-            // {
-            //     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Turradgiver api", Version = "v1" });
-            // });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -132,7 +125,6 @@ namespace turradgiver_api
                 app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"); });
             }
 
-            // app.UseHttpsRedirection();
             app.UseRouting();
 
             app.UseCors();

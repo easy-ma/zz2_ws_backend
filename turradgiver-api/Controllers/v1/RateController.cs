@@ -57,7 +57,7 @@ namespace turradgiver_api.Controllers.v1
             {
                 return BadRequest(new Response<bool>() { Success = false, Message = "Page Number must be positive" });
             }
-            return Ok(await _rateService.GetRatesAsync(AdId, new GetCommentsDto() { Page = page }));
+            return Ok(await _rateService.GetRatesAsync(AdId, new PageCommentDto() { Page = page }));
         }
     }
 

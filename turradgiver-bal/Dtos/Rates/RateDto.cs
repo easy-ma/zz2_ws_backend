@@ -3,6 +3,9 @@
 
 namespace turradgiver_bal.Dtos.Rates
 {
+    /// <summary>
+    /// Dto for rate sent back to frontend
+    /// </summary>
     public class RateDto
     {
         public DateTime CreatedDate { get; set; }

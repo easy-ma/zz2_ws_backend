@@ -15,7 +15,7 @@ namespace turradgiver_dal.Repositories
     {
 
         private readonly TurradgiverContext _context;
-        private DbSet<T> _entities;
+        private readonly DbSet<T> _entities;
         public Repository(TurradgiverContext context)
         {
             _context = context;

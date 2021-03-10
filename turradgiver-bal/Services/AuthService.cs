@@ -88,7 +88,7 @@ namespace turradgiver_bal.Services
         /// </summary>
         /// <param name="password">The password to hash</param>
         /// <returns>The hash of the password in bytes</returns>
-        private byte[] HashPassword(string password)
+        private static byte[] HashPassword(string password)
         {
             return SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(password));
         }
