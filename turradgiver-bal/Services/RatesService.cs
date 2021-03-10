@@ -31,6 +31,7 @@ namespace turradgiver_bal.Services
             _mapper = mapper;
             _logger = logger;
         }
+		
         /// <summary>
         /// Create a rate/comment from the data receive
         /// </summary>
@@ -40,7 +41,7 @@ namespace turradgiver_bal.Services
         public async Task<Response<RateDto>> CreateAsync(CreateRateDto createRateDto, Guid userId)
         {
             Response<RateDto> res = new Response<RateDto>();
-            bool succes = await HandleRate(createRateDto.AdId, createRateDto.Rate);
+            bool succes = await HandleRateAsync(createRateDto.AdId, createRateDto.Rate);
             if (succes == false)
             {
                 res.Success = false;
@@ -55,15 +56,16 @@ namespace turradgiver_bal.Services
             res.Success = succes;
             return res;
         }
+
         /// <summary>
         /// Update the rate of an ad
         /// </summary>
         /// <param name="AdId">The id of the ad the user wants to comment</param>
         /// <param name="newRate">rate choose by the user</param>
         /// <returns>Return true if the ad has been update and false if not </returns>
-        public async Task<bool> HandleRate(Guid AdId, int newRate)
+        public async Task<bool> CalculateNewRateAsync(Guid AdId, int newRate)
         {
-            IEnumerable<RateDto> rates = (await GetRatesbyAdId(AdId)).Data;
+            IEnumerable<RateDto> rates = (await GetRatesbyAdIdAsync(AdId)).Data;
             int rateNumber = rates.Count<RateDto>();
             Ad ad = await _adRepository.GetByIdAsync(AdId);
             if (ad == null)
@@ -87,13 +89,14 @@ namespace turradgiver_bal.Services
         /// </summary>
         /// <param name="AdId">The id of the ad the user wants to get comments</param>
         /// <returns>Return a response of a list of comments/rate</returns>
-        public async Task<Response<IEnumerable<RateDto>>> GetRatesbyAdId(Guid AdId)
+        public async Task<Response<IEnumerable<RateDto>>> GetRatesbyAdIdAsync(Guid AdId)
         {
             Response<IEnumerable<RateDto>> res = new Response<IEnumerable<RateDto>>();
             var rates = await _rateRepository.GetByConditionAsync(e => e.AdId == AdId);
             res.Data = _mapper.Map<List<RateDto>>(rates);
             return res;
         }
+
         /// <summary>
         /// Retrieve one or two rates/comments corresponding to an ad according to the page
         /// </summary>
@@ -110,7 +113,6 @@ namespace turradgiver_bal.Services
                 res.Message = "Ad doesn't exit";
                 return res;
             }
-            _logger.LogInformation(page.Page.ToString());
 
             Expression<Func<Rating, bool>> exp = e => e.AdId == AdId;
             var rates = await _rateRepository.GetByRangeAsync(2 * (page.Page - 1), 2, exp);

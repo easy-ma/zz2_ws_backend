@@ -53,7 +53,6 @@ namespace turradgiver_api.Controllers.v1
         [SwaggerResponse(200, "The rates for this ad", typeof(Response<IEnumerable<RateDto>>))]
         public async Task<IActionResult> GetAll(Guid AdId, [FromQuery(Name="Page")] int page)
         {
-            _logger.LogInformation(page.ToString());
             return Ok(await _rateService.GetRatesAsync(AdId, new GetCommentsDto() { Page = page }));
         }
     }
