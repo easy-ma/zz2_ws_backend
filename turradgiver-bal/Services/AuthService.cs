@@ -99,7 +99,7 @@ namespace turradgiver_bal.Services
         /// <param name="password">The raw password to test</param>
         /// <param name="userHashPassword">The user hash password use in order to test the password</param>
         /// <returns>return a boolean, true if the password is valid, false if not.</returns>
-        private Boolean CheckPassword(string password, byte[] userHashPassword)
+        private static Boolean CheckPassword(string password, byte[] userHashPassword)
         {
             string hashPassword = Encoding.UTF8.GetString(HashPassword(password));
             string userPassword = Encoding.UTF8.GetString(userHashPassword);

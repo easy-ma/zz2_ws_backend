@@ -31,7 +31,7 @@ namespace turradgiver_dal.Repositories
         {
             if (entity == null)
             {
-                throw new ArgumentNullException("[Add]: null entity");
+                throw new ArgumentNullException("entity");
             }
             await Task.Run(() => _entities.Add(entity));
             await _context.SaveChangesAsync();
@@ -46,7 +46,7 @@ namespace turradgiver_dal.Repositories
         {
             if (entity == null)
             {
-                throw new ArgumentNullException("[Remove]: null entity");
+                throw new ArgumentNullException("entity");
             }
             await Task.Run(() => _entities.Remove(entity));
             await _context.SaveChangesAsync();
@@ -97,11 +97,11 @@ namespace turradgiver_dal.Repositories
         /// </summary>
         /// <param name="skip">The starting index of entities to get</param>
         /// <param name="number">The number of entities to get</param>
-        /// <param name="expression">The expression to test the entities against</param>
+        /// <param name="include">The expression to test the entities against</param>
         /// <returns>The entities that were found</returns>
-        public async Task<IQueryable<T>> GetByRangeAsync(int skip, int number, Expression<Func<T, bool>> expression)
+        public async Task<IQueryable<T>> GetByRangeAsync(int skip, int number, Expression<Func<T, bool>> include)
         {
-            return await Task.Run(() => _entities.Where(expression).OrderByDescending(x => x.CreatedDate).Skip(skip).Take(number).AsNoTracking());
+            return await Task.Run(() => _entities.Where(include).OrderByDescending(x => x.CreatedDate).Skip(skip).Take(number).AsNoTracking());
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace turradgiver_dal.Repositories
         {
             if (entity == null)
             {
-                throw new ArgumentNullException("[Update]: null entity");
+                throw new ArgumentNullException("entity");
             }
             await Task.Run(() => _entities.Update(entity));
             await _context.SaveChangesAsync();
@@ -135,11 +135,11 @@ namespace turradgiver_dal.Repositories
         /// <summary>
         /// Include the linked entity from the id foreign key
         /// </summary>
-        /// <param name="expression"></param>
+        /// <param name="include"></param>
         /// <returns></returns>
-        public async Task<IQueryable<T>> IncludeAsync(Expression<Func<T, object>> expression)
+        public async Task<IQueryable<T>> IncludeAsync(Expression<Func<T, object>> include)
         {
-            return await Task.Run(() => _entities.Include(expression));
+            return await Task.Run(() => _entities.Include(include));
         }
     }
 }
