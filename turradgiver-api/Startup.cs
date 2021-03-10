@@ -75,6 +75,8 @@ namespace turradgiver_api
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAdsService, AdsService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IJwtService, JwtService>();
+
 
 
             services.AddAuthentication(options =>
@@ -96,8 +98,7 @@ namespace turradgiver_api
                 };
             });
 
-            services.AddAutoMapper(typeof(UserMapperProfile), typeof(AdMapperProfile));
-            // services.AddAutoMapper(typeof(AdMapperProfile));
+            services.AddAutoMapper(typeof(UserMapperProfile),typeof(AdMapperProfile));
 
             services.AddApiVersioning(options =>
             {

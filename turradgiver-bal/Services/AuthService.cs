@@ -26,71 +26,14 @@ namespace turradgiver_bal.Services
         private readonly IRepository<User> _userRepository;
         private readonly IRepository<RefreshToken> _refreshTokenRepository;
         private readonly IConfiguration _configuration;
-        private readonly ILogger<AuthService> _logger;
+        private readonly IJwtService _jwtService;
 
-        public AuthService(IRepository<User> userRepository, IConfiguration configuration, IRepository<RefreshToken> refreshTokenRepository, ILogger<AuthService> logger)
+        public AuthService(IRepository<User> userRepository, IConfiguration configuration,IRepository<RefreshToken> refreshTokenRepository, IJwtService jwtService)
         {
             _userRepository = userRepository;
             _configuration = configuration;
-            _refreshTokenRepository = refreshTokenRepository;
-            _logger = logger;
-        }
-
-        /// <summary>
-        /// Generate the token from claims provided, with a specific ammount of time for expirtation provided as parameter
-        /// And with a secretKey received as parameter
-        /// </summary>
-        /// <param name="secretKey">The secretKey used for the creation of the singninCredentials</param>
-        /// <param name="expMinutes">Number of minutes before the expiration of the token generated</param>
-        /// <param name="claims">The claims to encode in the token, null if not provided</param>
-        /// <returns>Return the string representation of the token</returns>
-        private TokenDto GenerateToken(byte[] secretKey, double expMinutes, IEnumerable<Claim> claims = null)
-        {
-            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(secretKey);
-            SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature);
-
-            SecurityTokenDescriptor token = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddMinutes(expMinutes),
-                SigningCredentials = credentials
-            };
-
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            return new TokenDto()
-            {
-                Token = tokenHandler.WriteToken(tokenHandler.CreateToken(token)),
-                Expires = (DateTime)token.Expires
-            };
-        }
-
-        /// <summary>
-        /// Validate the refreshToken 
-        /// </summary>
-        /// <param name="refreshToken">RefreshToken to validate</param>
-        /// <returns>Return true if the RefreshToken is validate, false if not</returns>
-        public bool ValidateToken(string refreshToken)
-        {
-            TokenValidationParameters validationParameters = new TokenValidationParameters()
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value)),
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ClockSkew = TimeSpan.Zero,
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken validatedToken = null;
-            try
-            {
-                tokenHandler.ValidateToken(refreshToken, validationParameters, out validatedToken);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            _refreshTokenRepository=refreshTokenRepository;
+            _jwtService = jwtService;
         }
 
         /// <summary>
@@ -99,7 +42,7 @@ namespace turradgiver_bal.Services
         /// <returns>Return the RefreshToken as string</returns>
         private TokenDto GenerateRefreshToken()
         {
-            return GenerateToken(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value), 1440);
+            return _jwtService.GenerateToken(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value), 1440);
         }
 
         /// <summary>
@@ -113,7 +56,8 @@ namespace turradgiver_bal.Services
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username)
             };
-            return GenerateToken(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value), 30, claims);
+            
+            return _jwtService.GenerateToken(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value), 30,claims);
         }
 
         /// <summary>
@@ -233,7 +177,7 @@ namespace turradgiver_bal.Services
         public async Task<Response<AuthCredentialDto>> RefreshToken(ExchangeRefreshTokenDto refreshDto)
         {
             Response<AuthCredentialDto> res = new Response<AuthCredentialDto>();
-            if (!ValidateToken(refreshDto.RefreshToken))
+            if(! _jwtService.ValidateToken(refreshDto.RefreshToken,Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JWTKey").Value) ))
             {
                 res.Success = false;
                 res.Message = "Invalid RefreshToken validate";

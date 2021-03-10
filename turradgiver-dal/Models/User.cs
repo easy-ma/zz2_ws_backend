@@ -8,6 +8,12 @@ namespace turradgiver_dal.Models
     [Table("Users")]
     public class User : BaseModel
     {
+        public User(string username, string email) : base()
+        {
+            Username = username;
+            Email = email;
+        }
+
         [Column("username")]
         public string Username { get; set; }
 

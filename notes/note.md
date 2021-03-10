@@ -189,3 +189,5 @@ No need to update the `startup.cs` in order to add a new Scope it will be handle
 ## Access token data
 
 https://docs.microsoft.com/en-us/dotnet/api/system.security.claims.claimsidentity?view=net-5.0
+
+https://github.com/domaindrivendev/Swashbuckle.AspNetCore#swashbuckleaspnetcoreannotations
