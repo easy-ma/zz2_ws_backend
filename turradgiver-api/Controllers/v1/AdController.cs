@@ -1,10 +1,13 @@
 ﻿#region usings
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.AspNetCore.Annotations;
 using turradgiver_api.Utils;
+using turradgiver_bal.Dtos;
 using turradgiver_bal.Dtos.Ads;
 using turradgiver_bal.Services;
 #endregion 
@@ -26,12 +29,24 @@ namespace turradgiver_api.Controllers.v1
         }
 
         [HttpGet]
+        [SwaggerOperation(
+            Summary = "Get all products",
+            Description = "Get all products that meet criterias (page and search text)",
+            OperationId = "GetAds"
+        )]
+        [SwaggerResponse(200, "All elements that met criterias", typeof(Response<IEnumerable<AdDto>>))]
         public async Task<IActionResult> GetAll([FromQuery] SearchDto criterias)
         {
             return Ok(await _adService.GetAdsAsync(criterias));
         }
 
         [HttpGet("{adId}")]
+        [SwaggerOperation(
+            Summary = "Get a specific ad",
+            Description = "Get a specific ad via its id",
+            OperationId = "GetAd"
+        )]
+        [SwaggerResponse(200, "The ad", typeof(Response<AdDto>))]
         public async Task<IActionResult> GetAd(Guid adId)
         {
             return Ok(await _adService.GetAdAsync(adId));
@@ -39,6 +54,12 @@ namespace turradgiver_api.Controllers.v1
 
         [Authorize]
         [HttpPost]
+        [SwaggerOperation(
+            Summary = "Create an ad",
+            Description = "Create an ad with the provided input",
+            OperationId = "CreateAd"
+        )]
+        [SwaggerResponse(200, "The created ad", typeof(Response<AdDto>))]
         public async Task<IActionResult> Create([FromBody] CreateAdDto createAdDto)
         {
             Guid userId = HttpContext.GetUserId();
@@ -47,6 +68,13 @@ namespace turradgiver_api.Controllers.v1
 
         [Authorize]
         [HttpDelete("{adId}")]
+        [SwaggerOperation(
+            Summary = "Remove a specific ad",
+            Description = "Remove a specific ad via its id",
+            OperationId = "RemoveAd"
+        )]
+        [SwaggerResponse(200, "It successfully deleted the ad", typeof(Response<bool>))]
+        [SwaggerResponse(400, "The ad could not be deleted", typeof(Response<bool>))]
         public async Task<IActionResult> Remove(Guid adId)
         {
             Guid userId = HttpContext.GetUserId();
