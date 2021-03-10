@@ -72,7 +72,6 @@ namespace turradgiver_dal.Repositories
         {
             return await Task.Run(() => _entities.FirstOrDefault(entity => entity.Id == id));
         }
-
         /// <summary>
         /// Get all elements from the DB
         /// </summary>

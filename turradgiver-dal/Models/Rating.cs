@@ -4,14 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace turradgiver_dal.Models
 {
     [Table("Ratings")]
-    class Rating
+    public class Rating : BaseModel
     {
-        public Rating(int rate, string date)
-        {
-            Rate = rate;
-            Date = date;
-        }
-
         [ForeignKey("Ads")]
         public Guid AdId { get; set; }
         public virtual Ad Ad { get; set; }
@@ -21,9 +15,10 @@ namespace turradgiver_dal.Models
 
         [Column("Rate")]
         public int Rate { get; set; }
+        [Column("Comment")]
+        public string Comment { get; set; }
 
-        [Column("Date")]
-        public string Date { get; set; }
-
+        [Column("Name")]
+        public string Name { get; set; }
     }
 }

@@ -75,9 +75,8 @@ namespace turradgiver_api
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAdsService, AdsService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRatesService, RatesService>();
             services.AddScoped<IJwtService, JwtService>();
-
-
 
             services.AddAuthentication(options =>
             {
