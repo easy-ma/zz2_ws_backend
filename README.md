@@ -56,6 +56,8 @@ docker-compose -f docker-compose.yml up .
 The docker-compose file is made for development with watch mode for autoreload.  
 Feel free to change the dockerfile and add production target.
 
+You will also need to update the connection string from the example in [appsetting.json](https://github.com/easy-ma/zz2_ws_backend/blob/main/turradgiver-api/appsettings.json) to the database you are using. After that you will have to use dotnet-ef inside the container in order to init or make new migrations.
+
 ## Swagger
 
 The swagger instance is accessible on `http://localhost:5001/swagger/index.html`
